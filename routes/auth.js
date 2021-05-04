@@ -12,10 +12,10 @@ const isLoggedIn = require('../middleware/isLoggedIn');
 router.get('/', isLoggedIn, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    res.json({ success: true, user });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ success: false, msg: 'Server Error.' });
   }
 });
 
@@ -31,7 +31,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -39,20 +39,25 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ msg: 'User not registered.' });
+        return res
+          .status(400)
+          .json({ success: false, msg: 'User is not registered.' });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Wrong Password.' });
+        return res.status(400).json({ success: false, msg: 'Wrong Password.' });
       }
 
       //check user is verified or not
-      if(!user.isVerified) {
-        return res.status(401).send({msg: 'Your Email has not been verified. Please click on resend'})
+      if (!user.isVerified) {
+        return res
+          .status(401)
+          .send({
+            msg: 'Your Email has not been verified. Please click on resend',
+          });
       }
-
 
       const payload = {
         user: {
@@ -64,10 +69,10 @@ router.post(
         expiresIn: '720h',
       });
 
-    res.json({ token , msg: 'User successfully logged in!'});
+      res.json({ success: true, token, msg: 'User successfully logged in!' });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).json({ success: false, msg: 'Server Error.' });
     }
   }
 );

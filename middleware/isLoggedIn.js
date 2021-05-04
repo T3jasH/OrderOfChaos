@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
   if (!token) {
     return res
       .status(401)
-      .json({ msg: 'No token found, authorization denied.' });
+      .json({success: false, msg: 'No token found. Please log in again.' });
   }
 
   try {
@@ -16,6 +16,6 @@ module.exports = function (req, res, next) {
     req.user = decoded.user;
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not Valid' });
+    res.status(401).json({success: false, msg: 'Token is not valid. Please log in again.' });
   }
 };

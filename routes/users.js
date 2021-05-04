@@ -25,7 +25,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({success: false, errors: errors.array() });
     }
 
     const { name, email, password, regno, username, college } = req.body;
@@ -34,7 +34,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ msg: 'User already exists.' });
+        return res.status(400).json({success:false ,msg: 'User already exists.' });
       }
 
       user = await User.findOne({ username });
@@ -42,7 +42,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ msg: 'Please choose a different username.' });
+          .json({success: false, msg: 'Please choose a different username.' });
       }
 
       user = new User({
@@ -70,7 +70,7 @@ router.post(
           subject: "Email verify token",
           message
         });
-        res.status(200).json({success: true, msg: "Email sent"});
+        res.status(200).json({success: true, msg: "Email Sent."});
 
       } catch(err) {
         console.log(err);
@@ -92,7 +92,7 @@ router.post(
       // res.json({ token });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error.')
+      res.status(500).json({success: false, msg: 'Server Error.'});
     }
   }
 );
@@ -110,18 +110,18 @@ router.get('/confirmation/:email/:token', async(req, res, next) => {
 
     // const  = await User.findOne({token});
     if(!user) {
-      return res.status(401).json({msg: 'Your verification link may have expired . Please click on resend to verify your Email'});
+      return res.status(401).json({success:false,msg: 'Your verification link may have expired. Please click on resend to verify your Email.'});
     }
 
     if(user.isVerified) {
-      return res.status(200).send('User has been already verified. Please Login');
+      return res.status(200).json({success:true,msg:'User has been already verified. Continue to Login.'});
     } else {
       user.isVerified = true;
       await user.save(function(err) {
         if(err) {
-          return res.status(500).json({msg: err.message});
+          return res.status(500).json({success:false,msg: err.message});
         } else {
-          return res.status(200).json('Your account has be successfully verified');
+          return res.status(200).json({success:true,msg:'Your account has been successfully verified.'});
         }
       });
     }
@@ -134,11 +134,11 @@ router.get('/confirmation/:email/:token', async(req, res, next) => {
 router.post('/resendEmail',async (req,res,next)=> {
     const user = User.findOne({email: req.body.email});
     if(!user) {
-      return res.status(400).json({status: "error", msg: 'Unable to find a user with that email'});
+      return res.status(400).json({success: false, msg: 'Unable to find a user with that email.'});
     }
 
     if(user.isVerified) {
-      return res.status(200).json({status: "success", msg: "This account has already been verified. Please Login"});
+      return res.status(200).json({success: true, msg: "This account has already been verified. Continue to Login."});
     }
 
     //send verification link
@@ -152,13 +152,13 @@ router.post('/resendEmail',async (req,res,next)=> {
           subject: "Email verify token",
           message
         });
-        res.status(200).json({success: true, msg: "Email sent"});
+        res.status(200).json({success: true, msg: "Email sent."});
 
       } catch(err) {
         console.log(err);
         user.verifyToken = undefined;
         await user.save();
-        res.status(500).json({status: 'error', msg: 'Technical Issue!, Please click on resend to verify your Email.'})
+        res.status(500).json({success:false, msg: 'Technical Issue!, Please click on resend to verify your Email.'})
       }
 });
 
