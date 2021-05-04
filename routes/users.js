@@ -63,13 +63,15 @@ router.post(
       await user.save({validateBeforeSave: false});
 
 
-      const message = `Hello + ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+      const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
       try {
-        await sendEmail({
-          email: user.email,
-          subject: "Email verify token",
-          message
-        });
+        const message = {
+          to: user.email,
+          from: process.env.FROM_EMAIL_NEW,
+          subject: "Verification",
+          text: msg,
+        }
+        await sendEmail(message);
         res.status(200).json({success: true, msg: "Email Sent."});
 
       } catch(err) {
@@ -132,7 +134,7 @@ router.get('/confirmation/:email/:token', async(req, res, next) => {
 // @desc      Resend Email
 // @access    Public
 router.post('/resendEmail',async (req,res,next)=> {
-    const user = User.findOne({email: req.body.email});
+    const user = await User.findOne({email: req.body.email});
     if(!user) {
       return res.status(400).json({success: false, msg: 'Unable to find a user with that email.'});
     }
@@ -145,13 +147,15 @@ router.post('/resendEmail',async (req,res,next)=> {
     const verifyToken = user.getVerifiedToken();
     await user.save({validateBeforeSave: false});
 
-    const message = `Hello + ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+    const msg = `Hello + ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
       try {
-        await sendEmail({
-          email: user.email,
-          subject: "Email verify token",
-          message
-        });
+        const message = {
+          to: user.email,
+          from: process.env.FROM_EMAIL_NEW,
+          subject: "Verification",
+          text: msg,
+        }
+        await sendEmail(message);
         res.status(200).json({success: true, msg: "Email sent."});
 
       } catch(err) {
