@@ -4,6 +4,7 @@ const fs = require('fs')
 const morgan = require('morgan')
 const path = require('path')
 const connectDB = require('./config/db');
+const app = express();
 
 // Load Config
 dotenv.config({ path: './config.env' });
@@ -11,7 +12,8 @@ dotenv.config({ path: './config.env' });
 // Connect Database
 connectDB();
 
-const app = express();
+// Init middleware
+app.use(express.json({ extended: false }));
 
 app.use(morgan('dev', {
   skip: function (req,res) {return res.statusCode<400}
