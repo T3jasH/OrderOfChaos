@@ -48,6 +48,12 @@ router.post(
         return res.status(400).json({ msg: 'Wrong Password.' });
       }
 
+      //check user is verified or not
+      if(!user.isVerified) {
+        return res.status(401).send({msg: 'Your Email has not been verified. Please click on resend'})
+      }
+
+
       const payload = {
         user: {
           id: user.id,
@@ -55,10 +61,10 @@ router.post(
       };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: '1m',
+        expiresIn: '720h',
       });
 
-      res.json({ token });
+    res.json({ token , msg: 'User successfully logged in!'});
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const sendEmail = require('../utils/sendEmail');
 
 // @route     POST api/users
 // @desc      Register a user
@@ -57,24 +58,109 @@ router.post(
 
       user.password = await bcrypt.hash(password, salt);
 
-      await user.save();
+      //Get verify token
+      const verifyToken = user.getVerifiedToken();
+      await user.save({validateBeforeSave: false});
 
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
 
-      const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: '1m',
-      });
+      const message = `Hello + ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Email verify token",
+          message
+        });
+        res.status(200).json({success: true, msg: "Email sent"});
 
-      res.json({ token });
+      } catch(err) {
+        console.log(err);
+        user.verifyToken = undefined;
+
+        await user.save();
+      }
+
+      // const payload = {
+      //   user: {
+      //     id: user.id,
+      //   },
+      // };
+
+      // const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      //   expiresIn: '720h',
+      // });
+
+      // res.json({ token });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error.')
     }
   }
 );
+
+
+
+// @route     GET api/users/confirmation/:email/:token
+// @desc      Email Verify Confirmation
+// @access    Public
+router.get('/confirmation/:email/:token', async(req, res, next) => {
+    const user = await User.findOne({verifyToken : req.params.token});
+    // if(!token) {
+    //   return res.status(400).send({msg: 'Your verification link may have expired. Please click on resend to verify your Email'});
+    // }
+
+    // const  = await User.findOne({token});
+    if(!user) {
+      return res.status(401).json({msg: 'Your verification link may have expired . Please click on resend to verify your Email'});
+    }
+
+    if(user.isVerified) {
+      return res.status(200).send('User has been already verified. Please Login');
+    } else {
+      user.isVerified = true;
+      await user.save(function(err) {
+        if(err) {
+          return res.status(500).json({msg: err.message});
+        } else {
+          return res.status(200).json('Your account has be successfully verified');
+        }
+      });
+    }
+});
+
+
+// @route     POST api/users/resendEmail
+// @desc      Resend Email
+// @access    Public
+router.post('/resendEmail',async (req,res,next)=> {
+    const user = User.findOne({email: req.body.email});
+    if(!user) {
+      return res.status(400).json({status: "error", msg: 'Unable to find a user with that email'});
+    }
+
+    if(user.isVerified) {
+      return res.status(200).json({status: "success", msg: "This account has already been verified. Please Login"});
+    }
+
+    //send verification link
+    const verifyToken = user.getVerifiedToken();
+    await user.save({validateBeforeSave: false});
+
+    const message = `Hello + ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Email verify token",
+          message
+        });
+        res.status(200).json({success: true, msg: "Email sent"});
+
+      } catch(err) {
+        console.log(err);
+        user.verifyToken = undefined;
+        await user.save();
+        res.status(500).json({status: 'error', msg: 'Technical Issue!, Please click on resend to verify your Email.'})
+      }
+});
+
 
 module.exports = router;
