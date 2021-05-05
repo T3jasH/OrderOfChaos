@@ -47,7 +47,7 @@ router.post(
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ success: false, msg: 'Wrong Password.' });
+        return res.status(400).json({ success: false, msg: 'Incorrect Password' });
       }
 
       //check user is verified or not
@@ -55,7 +55,7 @@ router.post(
         return res
           .status(401)
           .send({
-            msg: 'Your Email has not been verified. Please click on resend',
+            msg: 'Your Email has not been verified. Please click on resend.',
           });
       }
 
@@ -72,7 +72,7 @@ router.post(
       res.json({ success: true, token, msg: 'User successfully logged in!' });
     } catch (err) {
       console.error(err.message);
-      res.status(500).json({ success: false, msg: 'Server Error.' });
+      res.status(500).json({ success: false, msg: 'Server Error' });
     }
   }
 );

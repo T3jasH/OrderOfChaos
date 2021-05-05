@@ -57,23 +57,12 @@ router.post(
         college,
       });
 
-      // const salt = await bcrypt.genSalt(10);
-
-      // user.password = await bcrypt.hash(password, salt);
-
       //Get verify token
       const verifyToken = user.getVerifiedToken();
       await user.save({ validateBeforeSave: false });
-
       const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
       try {
-        const message = {
-          to: user.email,
-          from: process.env.FROM_EMAIL_NEW,
-          subject: 'Verification',
-          text: msg,
-        };
-        await sendEmail(message);
+        await sendEmail(user.email, msg, 'Verify Email');
         res.status(200).json({ success: true, msg: 'Email Sent.' });
       } catch (err) {
         console.log(err);
@@ -81,21 +70,9 @@ router.post(
 
         await user.save();
       }
-
-      // const payload = {
-      //   user: {
-      //     id: user.id,
-      //   },
-      // };
-
-      // const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      //   expiresIn: '720h',
-      // });
-
-      // res.json({ token });
     } catch (err) {
       console.error(err.message);
-      res.status(500).json({ success: false, msg: 'Server Error.' });
+      res.status(500).json({ success: false, msg: 'Server Error' });
     }
   }
 );
@@ -105,11 +82,6 @@ router.post(
 // @access    Public
 router.get('/confirmation/:email/:token', async (req, res, next) => {
   const user = await User.findOne({ verifyToken: req.params.token });
-  // if(!token) {
-  //   return res.status(400).send({msg: 'Your verification link may have expired. Please click on resend to verify your Email'});
-  // }
-
-  // const  = await User.findOne({token});
   if (!user) {
     return res.status(401).json({
       success: false,
@@ -121,7 +93,7 @@ router.get('/confirmation/:email/:token', async (req, res, next) => {
   if (user.isVerified) {
     return res.status(200).json({
       success: true,
-      msg: 'User has been already verified. Continue to Login.',
+      msg: 'User has already been verified. Continue to Login.',
     });
   } else {
     user.isVerified = true;
@@ -131,7 +103,7 @@ router.get('/confirmation/:email/:token', async (req, res, next) => {
       } else {
         return res.status(200).json({
           success: true,
-          msg: 'Your account has been successfully verified.',
+          msg: 'Your account has successfully been verified.',
         });
       }
     });
@@ -162,13 +134,7 @@ router.post('/resendEmail', async (req, res, next) => {
 
   const msg = `Hello Participant \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
   try {
-    const message = {
-      to: user.email,
-      from: process.env.FROM_EMAIL_NEW,
-      subject: 'Verification',
-      text: msg,
-    };
-    await sendEmail(message);
+    await sendEmail(user.email, msg, 'Verify Email');
     res.status(200).json({ success: true, msg: 'Email sent.' });
   } catch (err) {
     console.log(err);
@@ -191,7 +157,7 @@ router.post('/forgotpassword', async (req, res, next) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, msg: 'There is no user with that email' });
+        .json({ success: false, msg: 'There is no user with that email.' });
     }
 
     //Get reset token
@@ -201,19 +167,13 @@ router.post('/forgotpassword', async (req, res, next) => {
     //Create reset url
     const resetUrl = `http://localhost:5000/api/users/resetpassword/${resetToken}`;
 
-    const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetToken}`;
+    const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetUrl}`;
 
     try {
-      const message = {
-        to: user.email,
-        from: process.env.FROM_EMAIL_NEW,
-        subject: 'Reset Password.',
-        text: msg,
-      };
-      await sendEmail(message);
+      await sendEmail(user.email, msg, 'Reset Password');
       return res
         .status(200)
-        .json({ success: true, msg: 'Email sent for password reset' });
+        .json({ success: true, msg: 'Email sent for password reset.' });
     } catch (err) {
       console.log(err);
       user.resetPasswordToken = undefined;
@@ -223,15 +183,40 @@ router.post('/forgotpassword', async (req, res, next) => {
 
       return res
         .status(500)
-        .json({ success: false, msg: 'Email could not be sent' });
+        .json({ success: false, msg: 'Technical Issue!, Please click on forgot password again.' });
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ success: false, msg: 'Server Error.' });
+    res.status(500).json({ success: false, msg: 'Server Error' });
   }
 });
 
-// @route     PUT api/users/resetpassword/:resettoken
+// @route     GET api/users/resetpassword/:resettoken
+// @desc      Reset Password Page
+// @access    Public
+router.get('/resetpassword/:resettoken', async (req, res) => {
+  try {
+    const resetPasswordToken = req.params.resettoken;
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          msg: 'Invalid Token. Try forgot password again.',
+        });
+    }
+    return res.json({ success: true, resettoken: resetPasswordToken });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ success: false, msg: 'Server Error' });
+  }
+});
+
+// @route     POST api/users/resetpassword/:resettoken
 // @desc      Reset Password
 // @access    Public
 router.post(
@@ -243,22 +228,14 @@ router.post(
       return res.status(400).json({ success: false, errors: errors.array() });
     }
     try {
-      // const resetPasswordToken = crypto
-      //   .createHash("sha256")
-      //   .update(req.params.resettoken)
-      //   .digest("hex");
-      // console.log(resetPasswordToken);
-      // console.log(req.params);
-      // console.log(req.params.resettoken);
       const resetPasswordToken = req.params.resettoken;
-      // console.log(resetPasswordToken);
       const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpire: { $gt: Date.now() },
       });
 
       if (!user) {
-        return res.status(400).json({ success: false, msg: 'Invalid Token' });
+        return res.status(400).json({ success: false, msg: 'Invalid Token.Try forgot password again.' });
       }
       //set new password
       user.password = req.body.password;
@@ -266,10 +243,10 @@ router.post(
       user.resetPasswordExpire = undefined;
       await user.save();
 
-      res.status(200).json({ success: true, msg: 'Reset Password done' });
+      res.status(200).json({ success: true, msg: 'Reset Password successful.' });
     } catch (err) {
       console.log(err.message);
-      res.status(500).json({ success: false, msg: 'Server Error.' });
+      res.status(500).json({ success: false, msg: 'Server Error' });
     }
   }
 );
