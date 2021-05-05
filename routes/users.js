@@ -56,6 +56,20 @@ router.post(
         username,
         college,
       });
+      //Initializing noOfAttempts 
+      let totalQues=30
+      for(let i=0;i<totalQues;i++)
+      {
+        user.noOfAttempts.push({
+          isSolved:false,
+          isLocked:true,
+          quesId:i+1,
+          attempts:0
+        })
+      }
+      // const salt = await bcrypt.genSalt(10);
+
+      // user.password = await bcrypt.hash(password, salt);
 
       //Get verify token
       const verifyToken = user.getVerifiedToken();

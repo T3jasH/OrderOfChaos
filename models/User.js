@@ -36,6 +36,7 @@ const UserSchema = mongoose.Schema({
   remAttack: {
     type: Number,
     default: 0,
+    max:3
   },
   attackers: [
     {
@@ -55,14 +56,23 @@ const UserSchema = mongoose.Schema({
   ],
   noOfAttempts: [
     {
+      //initialised wen user registers
       quesId: {
         type: Number,
         required: true,
       },
       attempts: {
         type: Number,
-        default: -1,
+        default: 0,
       },
+      isSolved:{
+        type:Boolean,
+        default:false
+      },
+      isLocked:{
+        type:Boolean,
+        default:true
+      }
     },
   ],
   isAdmin: {
