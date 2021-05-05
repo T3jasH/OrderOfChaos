@@ -3,17 +3,17 @@ const sgMail = require("@sendgrid/mail");
 
 sgMail.setApiKey(process.env.API_KEY);
 
-const sendEmail = async (to,text,subject) => {
+const sendEmail = async (to, text, subject) => {
     try {
-        const message ={
+        const message = {
             to,
             from: {
                 name: process.env.FROM_NAME_NEW,
                 email: process.env.FROM_EMAIL_NEW,
             },
             subject,
-            text
-        }
+            text,
+        };
         await sgMail.send(message);
     } catch (err) {
         console.log(err.message);
@@ -35,11 +35,9 @@ const sendEmail = async (to,text,subject) => {
     //     text: options.message,
     // };
 
-
     // const info = await transporter.sendMail(message);
 
     // console.log("Message sent: %s", info.messageId);
-
-}
+};
 
 module.exports = sendEmail;
