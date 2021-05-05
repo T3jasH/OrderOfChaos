@@ -247,11 +247,14 @@ router.post(
       //   .createHash("sha256")
       //   .update(req.params.resettoken)
       //   .digest("hex");
-        // console.log(resetPasswordToken);
-        console.log(req.params.resettoken);
+      // console.log(resetPasswordToken);
+      // console.log(req.params);
+      // console.log(req.params.resettoken);
+      const resetPasswordToken = req.params.resettoken;
+      // console.log(resetPasswordToken);
       const user = await User.findOne({
-        resetPasswordToken:req.params.resettoken,
-        // resetPasswordExpire: { $gt: Date.now() },
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
       });
 
       if (!user) {
