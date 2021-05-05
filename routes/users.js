@@ -60,7 +60,7 @@ router.post(
       //Get verify token
       const verifyToken = user.getVerifiedToken();
       await user.save({ validateBeforeSave: false });
-      const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+      const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.verifyToken}  \n\nThank You!\n`;
       try {
         await sendEmail(user.email, msg, 'Verify Email');
         res.status(200).json({ success: true, msg: 'Email Sent.' });
@@ -80,7 +80,7 @@ router.post(
 // @route     GET api/users/confirmation/:email/:token
 // @desc      Email Verify Confirmation
 // @access    Public
-router.get('/confirmation/:email/:token', async (req, res, next) => {
+router.get('/confirmation/:token', async (req, res, next) => {
   const user = await User.findOne({ verifyToken: req.params.token });
   if (!user) {
     return res.status(401).json({
@@ -132,7 +132,7 @@ router.post('/resendEmail', async (req, res, next) => {
   const verifyToken = user.getVerifiedToken();
   await user.save({ validateBeforeSave: false });
 
-  const msg = `Hello Participant \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.email}/${user.verifyToken}  \n\nThank You!\n`;
+  const msg = `Hello Participant \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.verifyToken}  \n\nThank You!\n`;
   try {
     await sendEmail(user.email, msg, 'Verify Email');
     res.status(200).json({ success: true, msg: 'Email sent.' });
