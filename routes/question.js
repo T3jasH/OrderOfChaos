@@ -19,7 +19,7 @@ router.get('/:id', isLoggedIn, isRunning, async (req, res) => {
         if (!user.noOfAttempts[req.params.id - 1].isLocked) {
             let selQues = await Question.findOne({
                 quesId: req.params.id,
-            });
+            }).select('-answer');
             res.send({
                 sucess: true,
                 msg: 'Question found and sent successfully.',
@@ -59,6 +59,11 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
         let attemptsTillNow = user.noOfAttempts[pos].attempts;
         //if not solved then only shld be allowed to solve
         //TODO:check if IP is matching
+        if (user.noOfAttempts[pos].isLocked)
+            return res.json({
+                success: false,
+                msg: 'Unlock the question first',
+            });
         if (!user.noOfAttempts[pos].isSolved) {
             if (selQues.answer.replace(/\r\n/gm, '\n').trim() === sol.trim()) {
                 //first attempt correct answer give power only if less than 4 stored attacks
@@ -73,6 +78,8 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
                                     remAttack: user.remAttack + 1,
                                     score: actualPoints + user.score,
                                     [`noOfAttempts.${pos}.isSolved`]: true,
+                                    [`noOfAttempts.${pos}.attempts`]:
+                                        user.noOfAttempts[pos].attempts + 1,
                                     lastCorrSub: new Date(),
                                 },
                             }
@@ -91,6 +98,8 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
                             $set: {
                                 score: actualPoints + user.score,
                                 [`noOfAttempts.${pos}.isSolved`]: true,
+                                [`noOfAttempts.${pos}.attempts`]:
+                                    user.noOfAttempts[pos].attempts + 1,
                                 lastCorrSub: new Date(),
                             },
                         }
