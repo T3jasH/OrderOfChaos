@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isRunning = require("../middleware/isRunning");
-const isIpValid = require("../middleware/isIpValid");
 const Question = require("../models/Question");
 const User = require("../models/User");
 
@@ -12,10 +11,18 @@ const User = require("../models/User");
 // Response should contain question's data.
 
 router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
-    let selQues = await Question.findOne({
-        quesId: req.params.id,
+    let userid = req.user.id;
+    let user = await User.findOne({
+        _id: userid,
     });
-    res.send(selQues);
+    if (!user.noOfAttempts[pos].isLocked) {
+        let selQues = await Question.findOne({
+            quesId: req.params.id,
+        });
+        res.send({ sucess: true, msg: selQues });
+    } else {
+        res.send({ success: false, msg: "question is locked" });
+    }
 });
 
 // @route     POST api/question/:id
@@ -24,16 +31,19 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
 // Check the output and change score of the user as required.
 // In response send success (boolean).
 
-router.post("/:id", isLoggedIn, isRunning, isIpValid, async (req, res) => {
+router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
+    //TODO:compare IP before submitting
+
     //if first attempt and solved then attack given
     let selQues = await Question.findOne({
         quesId: req.params.id,
     });
-    let answer = req.body.answer;
     let userid = req.user.id;
     let user = await User.findOne({
         _id: userid,
     });
+    let sol = req.body.answer;
+    sol = sol.replace(/\r\n/gm, "\n");
     let pos = req.params.id - 1;
     let actualPoints = selQues.points;
     let deduction = selQues.penalty;
@@ -41,7 +51,7 @@ router.post("/:id", isLoggedIn, isRunning, isIpValid, async (req, res) => {
     //if not solved then only shld be allowed to solve
     //TODO:check if IP is matching
     if (!user.noOfAttempts[pos].isSolved) {
-        if (answer == selQues.answer) {
+        if (selQues.answer.replace(/\r\n/gm, "\n").trim() === sol.trim()) {
             //first attempt correct answer give power only if less than 4 stored attacks
             if (user.remAttack <= 3) {
                 if (attemptsTillNow == 0) {
@@ -134,8 +144,8 @@ router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
             }
         );
     } else {
-        if (user.score > selQues.unlockCost) {
-            // console.log(user.score + ">" + selQues.unlockCost);
+        if (user.score >= selQues.unlockCost) {
+            // console.log(user.score + ">=" + selQues.unlockCost);
             let locked = user.noOfAttempts[pos].isLocked;
             if (locked) {
                 await User.updateOne(
