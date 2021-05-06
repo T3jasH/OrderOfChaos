@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const isLoggedIn = require("../middleware/isLoggedIn");
-const isAdmin = require("../middleware/isAdmin");
-const Question = require("../models/Question");
+const isLoggedIn = require('../middleware/isLoggedIn');
+const isAdmin = require('../middleware/isAdmin');
+const Question = require('../models/Question');
 // @route     POST question
 // @desc      Post question
 // @access    Private to admin
-router.post("/", isLoggedIn, isAdmin, async (req, res) => {
-    console.log("inside add question");
+router.post('/', isLoggedIn, isAdmin, async (req, res) => {
+    console.log('inside add question');
     let newQuestion = new Question({
         quesId: req.body.quesId,
         name: req.body.name,
@@ -26,7 +26,7 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
     });
     try {
         let ques = await newQuestion.save();
-        res.json(ques);
+        res.json({ success: true, msg: 'Question submitted successfully.' });
     } catch (error) {
         res.send(error);
     }
