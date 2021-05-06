@@ -39,15 +39,7 @@ app.use("/api/contest", require("./routes/contest"));
 app.use("/api/leaderboard", require("./routes/leaderboard"));
 app.use("/api/question", require("./routes/question"));
 
-//Test
-app.get('/hello',(req,res)=>{
-  return res.send("hello")
-})
-
-
 
 const PORT = process.env.PORT || 5000;
-
-
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}.`));
