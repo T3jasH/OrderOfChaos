@@ -78,7 +78,7 @@ router.post(
             //Get verify token
             const verifyToken = user.getVerifiedToken();
             await user.save({ validateBeforeSave: false });
-            const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.verifyToken}  \n\nThank You!\n`;
+            const msg = `Hello ${req.body.name} \n\n Please verify your account by clicking the link: \n${req.protocol}://${req.get('host')}/api/users/confirmation/${user.verifyToken}  \n\nThank You!\n`;
             try {
                 await sendEmail(user.email, msg, "Verify Email");
                 res.status(200).json({ success: true, msg: "Email Sent." });
@@ -152,8 +152,8 @@ router.post("/resendEmail", async (req, res, next) => {
     //send verification link
     const verifyToken = user.getVerifiedToken();
     await user.save({ validateBeforeSave: false });
-
-    const msg = `Hello Participant \n\n Please verify your account by clicking the link: \nhttp://${req.headers.host}/api/users/confirmation/${user.verifyToken}  \n\nThank You!\n`;
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/users/confirmation/${user.verifyToken}`;
+    const msg = `Hello Participant \n\n Please verify your account by clicking the link: \n ${resetUrl} \n\nThank You!\n`;
     try {
         await sendEmail(user.email, msg, "Verify Email");
         res.status(200).json({ success: true, msg: "Email sent." });
@@ -188,7 +188,7 @@ router.post("/forgotpassword", async (req, res, next) => {
         await user.save({ validateBeforeSave: false });
 
         //Create reset url
-        const resetUrl = `http://localhost:5000/api/users/resetpassword/${resetToken}`;
+        const resetUrl = `${req.protocol}://${req.get('host')}/api/users/resetpassword/${resetToken}`;
 
         const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetUrl}`;
 
