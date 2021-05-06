@@ -56,7 +56,7 @@ const UserSchema = mongoose.Schema({
     ],
     noOfAttempts: [
         {
-            //initialised wen user registers
+            //initialised when user registers
             quesId: {
                 type: Number,
                 required: true,
@@ -90,6 +90,9 @@ const UserSchema = mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false,
+    },
+    ipaddress: {
+        type: String,
     },
     verifyToken: String,
     resetPasswordToken: String,

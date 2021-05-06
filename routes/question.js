@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isRunning = require("../middleware/isRunning");
+const isIpValid = require("../middleware/isIpValid");
 const Question = require("../models/Question");
 const User = require("../models/User");
 
@@ -23,7 +24,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
 // Check the output and change score of the user as required.
 // In response send success (boolean).
 
-router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
+router.post("/:id", isLoggedIn, isRunning, isIpValid, async (req, res) => {
     //if first attempt and solved then attack given
     let selQues = await Question.findOne({
         quesId: req.params.id,
@@ -38,6 +39,7 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
     let deduction = selQues.penalty;
     let attemptsTillNow = user.noOfAttempts[pos].attempts;
     //if not solved then only shld be allowed to solve
+    //TODO:check if IP is matching
     if (!user.noOfAttempts[pos].isSolved) {
         if (answer == selQues.answer) {
             //first attempt correct answer give power only if less than 4 stored attacks
@@ -106,6 +108,9 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
     }
 });
 
+//ip in backend
+// When user unlocks first question, along with marking isActive, you need take ip.
+//Then for every submission, check if it's same ip.
 router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
     let userid = req.user.id;
     // console.log(userid);
@@ -116,31 +121,48 @@ router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
     let selQues = await Question.findOne({
         quesId: req.params.id,
     });
-    if (user.score > selQues.unlockCost) {
-        // console.log(user.score + ">" + selQues.unlockCost);
-        let locked = user.noOfAttempts[pos].isLocked;
-        if (locked) {
-            await User.updateOne(
-                {
-                    _id: req.user.id,
+    if (!user.isActive) {
+        //TODO: take ip
+        await User.updateOne(
+            {
+                _id: req.user.id,
+            },
+            {
+                $set: {
+                    isActive: true,
                 },
-                {
-                    $set: {
-                        [`noOfAttempts.${pos}.isLocked`]: false,
-                        score: user.score - selQues.unlockCost,
-                    },
-                }
-            );
-            //redirect to api/question/:id (GET)
-            res.send({ success: true, msg: "unlocking the question" });
-        } else {
-            res.send({ success: false, msg: "question is already unlocked" });
-        }
+            }
+        );
     } else {
-        res.send({
-            sucess: false,
-            msg: "Less points cannot unlock this question",
-        });
+        if (user.score > selQues.unlockCost) {
+            // console.log(user.score + ">" + selQues.unlockCost);
+            let locked = user.noOfAttempts[pos].isLocked;
+            if (locked) {
+                await User.updateOne(
+                    {
+                        _id: req.user.id,
+                    },
+                    {
+                        $set: {
+                            [`noOfAttempts.${pos}.isLocked`]: false,
+                            score: user.score - selQues.unlockCost,
+                        },
+                    }
+                );
+                //redirect to api/question/:id (GET)
+                res.send({ success: true, msg: "unlocking the question" });
+            } else {
+                res.send({
+                    success: false,
+                    msg: "question is already unlocked",
+                });
+            }
+        } else {
+            res.send({
+                sucess: false,
+                msg: "Less points cannot unlock this question",
+            });
+        }
     }
 });
 
