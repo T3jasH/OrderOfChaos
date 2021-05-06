@@ -87,7 +87,7 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
                     }
                     return res.send({
                         success: true,
-                        msg: `Question solved.You have ${user.remAttack} attacks left.`,
+                        msg: `Question solved.You have ${user.remAttack+1} attacks left.`,
                     });
                 } else {
                     await User.updateOne(
@@ -169,36 +169,35 @@ router.get('/locked/:id', isLoggedIn, isRunning, async (req, res) => {
                     },
                 }
             );
-        } else {
-            if (user.score >= selQues.unlockCost) {
-                // console.log(user.score + ">=" + selQues.unlockCost);
-                let locked = user.noOfAttempts[pos].isLocked;
-                if (locked) {
-                    await User.updateOne(
-                        {
-                            _id: req.user.id,
+        }
+        if (user.score >= selQues.unlockCost) {
+            // console.log(user.score + ">=" + selQues.unlockCost);
+            let locked = user.noOfAttempts[pos].isLocked;
+            if (locked) {
+                await User.updateOne(
+                    {
+                        _id: req.user.id,
+                    },
+                    {
+                        $set: {
+                            [`noOfAttempts.${pos}.isLocked`]: false,
+                            score: user.score - selQues.unlockCost,
                         },
-                        {
-                            $set: {
-                                [`noOfAttempts.${pos}.isLocked`]: false,
-                                score: user.score - selQues.unlockCost,
-                            },
-                        }
-                    );
-                    //redirect to api/question/:id (GET)
-                    res.send({ success: true, msg: 'Unlocking the question' });
-                } else {
-                    res.send({
-                        success: false,
-                        msg: 'Question is already unlocked',
-                    });
-                }
+                    }
+                );
+                //redirect to api/question/:id (GET)
+                res.send({ success: true, msg: 'Unlocking the question' });
             } else {
                 res.send({
-                    sucess: false,
-                    msg: 'Less points cannot unlock this question.',
+                    success: false,
+                    msg: 'Question is already unlocked',
                 });
             }
+        } else {
+            res.send({
+                sucess: false,
+                msg: 'Less points cannot unlock this question.',
+            });
         }
     } catch (err) {
         console.log(err.message);
