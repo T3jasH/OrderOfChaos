@@ -36,15 +36,16 @@ const RegisterPage: React.FC = () => {
       .then((res) => res.json())
       .catch((err) => console.log(err))
       .then((data) => {
-        if (data.errors) {
-          console.log(data.errors[0]);
-          handleStatus(data.errors[0].msg);
-        } else if (data.success) {
-          handleStatus(data.msg);
-        } else if (data.msg === "User already exists") {
-          handleStatus(data.msg);
+        console.log(data)
+        if(data.success){
+          handleStatus(data.msg)
         }
-        console.log(data);
+        else if(data.errors){
+          handleStatus(data.errors[0])
+        }
+        else{
+          handleStatus(data.msg)
+        }
       });
   };
 

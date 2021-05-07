@@ -3,14 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter as Router } from "react-router-dom";
-import { isImportOrExportSpecifier } from "typescript";
+import { BrowserRouter as Router } from "react-router-dom"
+import AuthProvider from "./context/Auth";
+import QuestionListProvider  from "./context/QuestionContext";
 
-import AuthProvider from "./context/AuthContext";
 ReactDOM.render(
   <Router>
     <AuthProvider>
-      <App />
+      <QuestionListProvider>
+          <App/>
+      </QuestionListProvider>
     </AuthProvider>
   </Router>,
   document.getElementById("root")

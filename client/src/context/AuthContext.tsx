@@ -1,4 +1,4 @@
-import React, { useState, useContext, ReactElement } from "react";
+import React, {useContext, ReactElement } from "react";
 import useLocalStorageState from "../hooks/useLocalStorage";
 
 export type Nullable<T> = T | null;
@@ -52,7 +52,7 @@ export default function AuthProvider({ children }: Props): ReactElement {
   };
 
   const logout = async () => {
-    localStorage.removeItem("iecseshortcodeuser");
+    localStorage.removeItem("iecseOrderOfChaosUser");
 
     setCurrentUser(null);
   };
