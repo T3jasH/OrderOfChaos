@@ -71,9 +71,7 @@ router.post(
                     attempts: 0,
                 });
             }
-            // const salt = await bcrypt.genSalt(10);
-
-            // user.password = await bcrypt.hash(password, salt);
+            
 
             //Get verify token
             const verifyToken = user.getVerifiedToken();
