@@ -78,15 +78,12 @@ router.post(
             //Get verify token
             const verifyToken = user.getVerifiedToken();
             await user.save({ validateBeforeSave: false });
-            const msg = `Hello ${
-                req.body.name
-            } \n\n Please verify your account by clicking the link: \n${
-                req.protocol
-            }://${req.get('host')}/api/users/confirmation/${
-                user.verifyToken
-            }  \n\nThank You!\n`;
+            const resp = 'https://mail.iecsemanipal.com/codeevent/verifyaccount';
+            const resetUrl = `${req.protocol}://${req.get(
+              "host"
+            )}/api/users/confirmation/${user.verifyToken}`;
             try {
-                await sendEmail(user.email, msg, 'Verify Email');
+                await sendEmail(resp, user.email,user.name,resetUrl);
                 res.status(200).json({ success: true, msg: 'Email Sent.' });
             } catch (err) {
                 console.log(err);
@@ -161,9 +158,10 @@ router.post('/resendEmail', async (req, res, next) => {
     const resetUrl = `${req.protocol}://${req.get(
         'host'
     )}/api/users/confirmation/${user.verifyToken}`;
+    const resp = 'https://mail.iecsemanipal.com/codeevent/verifyaccount';
     const msg = `Hello Participant \n\n Please verify your account by clicking the link: \n ${resetUrl} \n\nThank You!\n`;
     try {
-        await sendEmail(user.email, msg, 'Verify Email');
+        await sendEmail(resp, user.email, user.name, resetUrl);
         res.status(200).json({ success: true, msg: 'Email sent.' });
     } catch (err) {
         console.log(err);
@@ -201,9 +199,9 @@ router.post('/forgotpassword', async (req, res, next) => {
         )}/api/users/resetpassword/${resetToken}`;
 
         const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetUrl}`;
-
+        const resp = 'https://mail.iecsemanipal.com/codeevent/resetpassword';
         try {
-            await sendEmail(user.email, msg, 'Reset Password');
+            await sendEmail(resp, user.email,user.name,resetUrl);
             return res
                 .status(200)
                 .json({ success: true, msg: 'Email sent for password reset.' });
