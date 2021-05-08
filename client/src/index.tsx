@@ -4,15 +4,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom"
-import AuthProvider from "./context/Auth";
+import AuthProvider from "./context/AuthContext";
 import QuestionListProvider  from "./context/QuestionContext";
+import PlayerProvider from "./context/PlayerContext";
 
 ReactDOM.render(
   <Router>
     <AuthProvider>
-      <QuestionListProvider>
-          <App/>
-      </QuestionListProvider>
+      <PlayerProvider>
+        <QuestionListProvider>
+            <App/>
+        </QuestionListProvider>
+      </PlayerProvider>
     </AuthProvider>
   </Router>,
   document.getElementById("root")

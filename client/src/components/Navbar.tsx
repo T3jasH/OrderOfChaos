@@ -1,21 +1,18 @@
-import React from "react";
-import { useAuth } from "../context/AuthContext";
+import React, {useContext} from "react";
+import {AuthContext} from "../context/AuthContext";
+import { AuthActionTypes } from "../context/AuthReducer";
 
-const Navbar = () => {
-  const value = useAuth();
-  const user = value?.currentUser;
-  const logout = value?.logout;
+const Navbar:React.FC = () => {
+  const auth = useContext(AuthContext)
+ 
 
-  const handleLogout = () => {
-    if (logout) logout();
-  };
 
   return (
     <div>
-      {user ? (
+      {auth.state.token ? (
         <div>
           <div>You are logged in </div>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={e => auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})}>Logout</button>
         </div>
       ) : (
         <div>Login dude</div>

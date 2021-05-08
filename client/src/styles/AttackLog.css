@@ -1,0 +1,14 @@
+.attack-log{
+    position: absolute;
+    top: 5rem;
+    left: 0px;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+}
+.attack{
+    width: 18vw;
+    height: 4rem;
+    margin-bottom: 1.5 rem;
+    background-color: #f23d49;
+}

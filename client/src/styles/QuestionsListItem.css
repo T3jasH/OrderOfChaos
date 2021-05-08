@@ -1,0 +1,33 @@
+.question {
+    height: 10vh;
+    width : 70vw;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.difficulty{
+    position: absolute;
+    right: 2vw;
+    bottom: 3vh;
+}
+
+.question-name{
+    position: absolute;
+    font-size: 24;
+    font-weight: 600;
+    right: 50%;
+    top: 2vh;
+}
+.unlock-btn{
+    position: absolute;
+    right: 50%;
+    bottom: 1rem;
+    cursor: pointer;
+}
+.points-cost{
+    position: relative;
+    margin-top: 1rem;
+}

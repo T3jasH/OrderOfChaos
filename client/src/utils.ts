@@ -1,10 +1,8 @@
+import { AuthActionTypes } from "./context/AuthReducer";
+import { PlayerActionTypes } from "./context/PlayerReducer";
+import {QuestionActionTypes} from "./context/QuestionReducer"
 
-export const getContestDetails = async (auth : any) => {
-    console.log(auth)
-    if(auth.state.token === null){
-        auth?.dispatch({type : "GET_TOKEN", payload : []});
-    }
-    console.log(auth.state.token)
+export const getContestDetails = async (auth : any, questions : any, player : any) => {
     fetch("/api/contest", {
         method : "GET",
         headers : {
@@ -12,9 +10,29 @@ export const getContestDetails = async (auth : any) => {
             "x-auth-token" : auth.state.token
         }
     })
-    .then(resp => resp.json())
+    .then(resp => {
+        if(resp.status === 401){
+            auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
+        }
+        return resp.json()
+    })
     .catch(err => console.log(err))
     .then(data => {
-        console.log(data)
+        if(!data.success){
+            return;
+        }
+        
+        questions.dispatch({type : QuestionActionTypes.GET_QUESTIONS, payload : data.data.questions})
+        auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : {
+            isStarted : true, 
+            isAdmin : data.data.user.isAdmin
+        }})
+        player.dispatch({type : PlayerActionTypes.GET_USER, payload : {
+            score : data.data.user.score,
+            attacks : data.data.user.attackers, 
+            attacksLeft : data.data.user.remAttack
+        }})
+        console.log("FETCHED CONTEST DETAILS")
+        console.log(data.data.user.attackers)
     })
 }

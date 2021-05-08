@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import "../styles/RegisterPage.css";
-import {AuthContext} from "../context/Auth"
+import {AuthContext} from "../context/AuthContext"
 import {AuthActionTypes} from "../context/AuthReducer"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 const LoginPage: React.FC = () => {
@@ -10,7 +10,7 @@ const LoginPage: React.FC = () => {
   const [password, handlePassword] = useState<string>("");
   const [status, handleStatus] = useState<string | null>(null);
   const auth = useContext(AuthContext)
-
+  const history = useHistory()
   
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,8 +28,7 @@ const LoginPage: React.FC = () => {
     if(data.success){
       handleStatus(null)
       auth.dispatch({type : AuthActionTypes.LOGIN, payload : { token : data.data.token} })
-      console.log(auth, auth.state)
-
+      history.push("/")
     }
     else {
       handleStatus(data.msg)

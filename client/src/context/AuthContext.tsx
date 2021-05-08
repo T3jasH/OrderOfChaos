@@ -1,69 +1,26 @@
-import React, {useContext, ReactElement } from "react";
-import useLocalStorageState from "../hooks/useLocalStorage";
+import {Auth, authReducer, AuthAction} from "./AuthReducer"
+import React from "react"
 
-export type Nullable<T> = T | null;
-
-export interface IUser {
-  token: string;
+const authDefaultState : Auth = {
+    token: null,
+    isAdmin : false,
+    isStarted : true
 }
 
-interface Props {
-  children: ReactElement;
+export interface AuthContextModel {
+    state: Auth
+    dispatch: React.Dispatch<AuthAction>
 }
 
-export interface Value {
-  currentUser: Nullable<IUser>;
-  setCurrentUser: any;
-  register: (email: string, password: string) => Promise<any>;
-  login: (email: string, password: string) => Promise<any>;
-  logout: () => Promise<any>;
+export const AuthContext = React.createContext<AuthContextModel>({} as AuthContextModel)
+
+const AuthProvider : React.FC = ({children}) => {
+
+    const [state, dispatch] = React.useReducer(authReducer, authDefaultState) 
+
+    return <AuthContext.Provider value={{state, dispatch}}>
+        {children}
+    </AuthContext.Provider>
 }
 
-const AuthContext = React.createContext<Nullable<Value>>(null);
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-export default function AuthProvider({ children }: Props): ReactElement {
-  const [currentUser, setCurrentUser] = useLocalStorageState(
-    "iecseshortcodeuser",
-    null
-  );
-
-  const register = async (email: string, password: string) => {};
-
-  const login = async (email: string, password: string) => {
-    const response = await fetch("/api/auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email, password: password }),
-      credentials: "include",
-    });
-
-    const data = await response.json();
-    if (data.success === true) {
-      setCurrentUser({ token: data.token });
-      return data;
-    }
-    return data;
-  };
-
-  const logout = async () => {
-    localStorage.removeItem("iecseOrderOfChaosUser");
-
-    setCurrentUser(null);
-  };
-
-  const value: Value = {
-    currentUser,
-    setCurrentUser,
-    register,
-    login,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+export default AuthProvider;
