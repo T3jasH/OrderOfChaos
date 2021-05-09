@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/RegisterPage.css";
-import axios from "axios";
 
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { AuthActionTypes } from "../context/AuthReducer";
 
 const RegisterPage: React.FC = () => {
   const [email, handleEmail] = useState<string>("");
@@ -12,6 +13,13 @@ const RegisterPage: React.FC = () => {
   const [name, handleName] = useState<string>("");
   const [phoneNo, handlePhoneNo] = useState<string>("");
   const [status, handleStatus] = useState<string | null>(null);
+  const auth = useContext(AuthContext)
+
+  useEffect(() => {
+    if(auth.state.token === null){
+      auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
+    }
+  }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +30,7 @@ const RegisterPage: React.FC = () => {
       password: password,
       username: username,
       college: "MIT",
+      phoneNo: phoneNo
     };
     // axios.post("/api/users", body)
     // .then(response => console.log(response))
@@ -48,6 +57,12 @@ const RegisterPage: React.FC = () => {
         }
       });
   };
+
+  console.log(auth.state.token)
+
+  if(auth.state.token !== null && auth.state.token !== "x"){
+    return <Redirect to="/" />
+  }
 
   return (
     <div className="register-page">

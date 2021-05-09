@@ -1,7 +1,7 @@
 .questions-page{
     height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
+    max-width: 100vw;
+    overflow-x: none;
     z-index: -1;
 }
 .header{

@@ -21,8 +21,9 @@ const QuestionPage : React.FC = () => {
         }
     })
 
+
     useEffect(() => {
-        if(auth.state.token)
+        if(auth.state.token !== null && auth.state.token !== "x")
         getContestDetails(auth, questions, player)
     }, [auth.state.token])
 
@@ -32,7 +33,11 @@ const QuestionPage : React.FC = () => {
         }
     }, [questions.state])
 
-    
+    if(auth.state.token === "x"){
+        return <Redirect to="/login" />
+    }
+
+    console.log(auth.state.token)
 
     if(isLoading){
         return <div>
@@ -50,7 +55,7 @@ const QuestionPage : React.FC = () => {
                Order of Chaos
            </button>
            <button style={{cursor : "default"}}>
-               Score  {player.state.score}
+               Score : {player.state.score}
            </button>
            <button>
                Leaderboard

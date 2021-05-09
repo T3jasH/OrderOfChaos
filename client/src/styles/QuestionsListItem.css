@@ -11,7 +11,7 @@
 .difficulty{
     position: absolute;
     right: 2vw;
-    bottom: 3vh;
+    top: 1vh;
 }
 
 .question-name{
@@ -22,12 +22,19 @@
     top: 2vh;
 }
 .unlock-btn{
+    font-weight: 800;
     position: absolute;
-    right: 50%;
-    bottom: 1rem;
-    cursor: pointer;
+    right: 2vw;
+    bottom: 1vh;
 }
-.points-cost{
-    position: relative;
-    margin-top: 1rem;
+.points{
+    position: absolute;
+    top: 1vh;
+    left: 1vw;
+}
+
+.cost{
+    position: absolute;
+    bottom: 1vh;
+    left: 1vw;
 }

@@ -1,0 +1,34 @@
+.admin{
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+textarea{
+    resize: none;
+    margin-left: 3vw;
+    border: 2px solid black;
+    box-shadow: none;
+    outline: none;
+    font-size: 20px;
+}
+
+h3{
+    margin-left: 3vw;
+}
+.short{
+    width: 40vw;
+    height: 1.5rem;
+    border-radius: 25px;
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.long{
+    width: 80vw;
+    height: 20vh;
+    border-radius: 30px;
+    margin-top: 1rem;
+    padding: 10px;
+}

@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useDebugValue, useEffect } from "react";
 import "../styles/RegisterPage.css";
 import {AuthContext} from "../context/AuthContext"
 import {AuthActionTypes} from "../context/AuthReducer"
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 
 
 const LoginPage: React.FC = () => {
@@ -11,6 +11,17 @@ const LoginPage: React.FC = () => {
   const [status, handleStatus] = useState<string | null>(null);
   const auth = useContext(AuthContext)
   const history = useHistory()
+
+  useEffect(() => {
+    if(auth.state.token === null){
+      auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
+    }
+  },  [])
+
+  if(auth.state.token !== "x" && auth.state.token !== null){
+    return <Redirect to = "/" />
+  }
+  
   
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +46,7 @@ const LoginPage: React.FC = () => {
     }
 
   };
+
 
   return (
     <div className="register-page">

@@ -51,7 +51,7 @@ const QuestionListItem : React.FC<props>  = ({question}) => {
         history.push(`question/${question.quesId}`)
     }
 
-    return <div className="question" style={{
+    return <div className="question" style={{  
         backgroundColor : bgcolor,
         opacity : question.isLocked? 0.85 : 1,
         cursor : question.isLocked ? "default" : "pointer"
@@ -66,10 +66,10 @@ const QuestionListItem : React.FC<props>  = ({question}) => {
             }} >
             Unlock
         </button>
-        <p className="points-cost">
+        <p className="points">
             Points : {question.points}
         </p>
-        <p className="points-cost" style={{visibility : question.isLocked ? "visible" : "hidden"}}>
+        <p className="cost" style={{visibility : question.isLocked ? "visible" : "hidden"}}>
             Unlock cost : {question.unlockCost}
         </p>
         <p className="difficulty">
