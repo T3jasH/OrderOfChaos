@@ -25,16 +25,14 @@ export const authReducer = (state: Auth, action: AuthAction) => {
       console.log("LOOK HERE");
       console.log(action.payload);
       return {
-        token: action.payload.token,
-        isAdmin: action.payload.isAdmin,
-        id: action.payload._id,
-        isStarted: true,
+        ...state, 
+        token : action.payload.token
       };
     case "LOGOUT":
       localStorage.removeItem("iecseOrderOfChaosUser");
       return {
         ...state,
-        token: null,
+        token: "x",
       };
     case "GET_TOKEN":
       let token = localStorage.getItem("iecseOrderOfChaosUser");
@@ -47,10 +45,10 @@ export const authReducer = (state: Auth, action: AuthAction) => {
       };
     case "GET_AUTH":
       return {
-        token: localStorage.getItem("iecseOrderOfChaos"),
+        ...state,
         isAdmin: action.payload.isAdmin,
         isStarted: action.payload.isStarted,
-        id: action.payload._id,
+        id: action.payload.id,
       };
     default:
       return state;

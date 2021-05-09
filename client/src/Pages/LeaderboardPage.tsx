@@ -2,6 +2,7 @@ import { LeanDocument } from "mongoose";
 import react, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
+import { getUser } from "../utils";
 
 export interface IleaderboardPlayers {
   username: string;
@@ -13,7 +14,7 @@ export interface IleaderboardPlayers {
 export interface Iattacker {
   seen: boolean;
   username: string;
-  date: string;
+  date: string;   
   _id: string;
 }
 const LeaderboardPage = () => {
@@ -23,6 +24,19 @@ const LeaderboardPage = () => {
     IleaderboardPlayers[]
   >();
   const [leaderboardLoading, setLeaderboardLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (auth.state.token === null) {
+      auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] });
+    }
+  });
+
+  useEffect(() => {
+    if (auth.state.token !== null && auth.state.token !== "x"){
+      getLeaderboard(auth);
+      getUser(auth)
+    }
+  }, [auth.state.token]);
 
   const getLeaderboard = (auth: any) => {
     fetch("/api/leaderboard", {
@@ -43,16 +57,7 @@ const LeaderboardPage = () => {
       .catch((e) => console.log(e));
   };
 
-  useEffect(() => {
-    if (auth.state.token === null) {
-      auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] });
-    }
-  });
-
-  useEffect(() => {
-    if (auth.state.token !== null && auth.state.token !== "x")
-      getLeaderboard(auth);
-  }, [auth.state.token]);
+ 
 
   const handleAttack = () => {
     console.log("lmao");

@@ -33,11 +33,11 @@ export const getContestDetails = async (
         payload: data.data.questions,
       });
       auth.dispatch({
-        type: AuthActionTypes.GET_TOKEN,
+        type: AuthActionTypes.GET_AUTH,
         payload: {
           isStarted: true,
           isAdmin: data.data.user.isAdmin,
-          _id: data.data.user._id.toString(),
+          id: data.data.user._id.toString(),
         },
       });
       player.dispatch({
@@ -49,6 +49,36 @@ export const getContestDetails = async (
         },
       });
       console.log("FETCHED CONTEST DETAILS");
-      console.log(data.data.user.attackers);
+      console.log(data.data.user);
     });
 };
+
+export const getUser = async (auth : any) => {
+  if(auth.state.token)
+  fetch("/api/auth", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": auth.state.token,
+    },
+  })
+  .then(resp => {
+    if(resp.status === 401){
+      auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
+    }
+    return resp.json()
+  })
+  .catch(err => console.log(err))
+  .then(data => {
+    if(data.success){
+      auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
+        id : data.data.user._id,
+        isAdmin : data.data.user.isAdmin,
+        isStarted : data.data.user.isStarted
+      }})
+    }
+    else{
+      console.log(data)
+    }
+  })
+}

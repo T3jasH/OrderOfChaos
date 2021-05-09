@@ -27,11 +27,20 @@ export const questionReducer = (state : Question[], action : QuestionAction) => 
         case "GET_QUESTIONS":
             return action.payload
         case "SET_UNLOCKED": {
-            state[action.payload.id].isLocked = false
-            return state
+            return state.map(question => {
+                if(question.quesId === action.payload.id){
+                    question.isLocked = false;
+                }
+                return question;
+            })
         }
         case "SET_SOLVED": {
-            return state[action.payload.id].isSolved = true
+            return state.map(question => {
+                if(question.quesId === action.payload.id){
+                    question.isSolved = true;
+                }
+                return question;
+            })
         }
         default:
             return state
