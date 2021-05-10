@@ -1,7 +1,7 @@
 .question {
-    height: 10vh;
+    height: 6.5rem;
     width : 70vw;
-    padding: 15px;
+    padding: 0px;
     margin-bottom: 15px;
     position: relative;
     overflow: hidden;
@@ -10,21 +10,24 @@
 
 .difficulty{
     position: absolute;
-    right: 2vw;
-    top: 1vh;
+    right: 1vw;
+    top: 0.5vh;
+}
+
+p{
+    margin: 0;
 }
 
 .question-name{
     position: absolute;
     font-size: 24;
     font-weight: 600;
-    right: 50%;
+    right: 45%;
     top: 2vh;
 }
 .unlock-btn{
-    font-weight: 800;
     position: absolute;
-    right: 2vw;
+    right: 1vw;
     bottom: 1vh;
 }
 .points{

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect} from "react";
 import { QuestionContext } from "../context/QuestionContext";
 import { AuthContext } from "../context/AuthContext";
 import { Redirect, useHistory } from "react-router";
@@ -13,7 +13,6 @@ const QuestionPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const player = useContext(PlayerContext);
   const history = useHistory();
-  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (auth.state.token === null) {
@@ -28,10 +27,7 @@ const QuestionPage: React.FC = () => {
 
   useEffect(() => {
     if (questions.state[0]) {
-      setLoading(false);
-
-      console.log("LOGGING QUESTION DATAK");
-      console.log(questions.state);
+      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
     }
   }, [questions.state]);
 
@@ -39,7 +35,9 @@ const QuestionPage: React.FC = () => {
     return <Redirect to="/login" />;
   }
 
-  if (isLoading) {
+  console.log(auth.state.token);
+
+  if (auth.state.loading) {
     return <div>insert loading animation here</div>;
   }
 
@@ -68,7 +66,12 @@ const QuestionPage: React.FC = () => {
         >
           Logout
         </button>
-        <button>Rules</button>
+        <button onClick={e => {
+          history.push("/rules")
+        }}>
+          Rules
+        </button>
+        {console.log(auth.state, questions.state)}
       </div>
       <div className="questions-container">
         {questions.state.map((item, index) => (

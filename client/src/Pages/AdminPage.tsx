@@ -3,6 +3,7 @@ import { Redirect } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/AdminPage.css"
+import { getUser } from "../utils"
 
 const AdminPage : React.FC = () => {
 
@@ -18,7 +19,6 @@ const AdminPage : React.FC = () => {
     const [points, handlePoints] = useState<number | null>(null)
     const [unlockScore, handleUnlockScore] = useState<number | null>(null)
     const [errorMsg, setErrorMsg] = useState<null | string>(null)
-    const [loading, setLoading] = useState<boolean>(true)
 
     const auth = useContext(AuthContext)
     useEffect(() => {
@@ -28,37 +28,10 @@ const AdminPage : React.FC = () => {
     }, [])
 
     useEffect(()=>{
-        if(auth.state.token !== null) {
-            fetch("/api/auth/", {
-                method : "GET",
-                headers : {
-                    "Content-type" : "application/json",
-                    "x-auth-token" : auth.state.token
-                }
-            })
-            .then(resp => {
-                if(resp.status === 401){
-                    auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
-                }
-                return resp.json()
-            })
-            .catch(err => console.log(err))
-            .then(data => {
-                console.log(data)
-                if(data.success)
-                auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
-                    isAdmin : data.data.user.isAdmin,
-                    isStarted : true
-                }})
-                else{
-                    console.log(data.msg)
-                }
-                setLoading(false)
-            })
-        }
+        getUser(auth)     
     }, [auth.state.token])
 
-    const handleSubmit = async (e:any) => {
+    const handleSubmit = async () => {
         console.log("Submit")
         if(auth.state.token)
         fetch("/api/admin/", {
@@ -76,8 +49,8 @@ const AdminPage : React.FC = () => {
                         tags: "",
                         statement: statement,
                         constraints: constraints,
-                        inpFormat: "",
-                        outFormat: "",
+                        inpFormat: "  ",
+                        outFormat: "  ",
                         samInput: sampleInput,
                         samOutput: sampleOutput,
                         testcase: tcInput,
@@ -95,27 +68,20 @@ const AdminPage : React.FC = () => {
         })
         .catch(err => console.log(err))
         .then(data => {
+            console.log(data)
             if(data.success){
-                setErrorMsg(null)
-                handleQuesId(null)
-                handlePoints(null)
-                handleSampleInput("")
-                handleSampleOutput("")
-                handlePenalty(null)
-                handleTcInput("")
-                handleTcOuput("")
-                handleConstraints("")
-                handleUnlockScore(null)
-                handleStatement("")
-                handleName("")
+                setErrorMsg(data.msg)
+            }
+            else if(data.errors){
+                setErrorMsg(data.errors[0])
             }
             else{
-                setErrorMsg(data.msg)
+                setErrorMsg("DB error")
             }
         })
     }    
 
-    if(loading){
+    if(auth.state.loading){
         return <div>insert loading animation here</div>
     }
 
@@ -123,16 +89,12 @@ const AdminPage : React.FC = () => {
         return <Redirect to="/login" />
     }
 
+    //CHECK ADMIN OR NOT
     if(auth.state.token !== null && auth.state.token !== "x" && !auth.state.isAdmin){
-        return <Redirect to = "/"/>
+        return <Redirect to="/" />
     }
 
     return <div className="admin">
-        {   errorMsg?
-            <b> {errorMsg} </b>
-            :
-            null
-        }
         <h3>Name</h3>
         <textarea className="short" name="name" onChange={e => handleName(e.target.value)} />
         <h3>Question Id</h3>
@@ -159,6 +121,11 @@ const AdminPage : React.FC = () => {
         <button onClick={handleSubmit}>
             <h3>Submit</h3>
         </button>
+        {   errorMsg?
+            <b> {errorMsg} </b>
+            :
+            null
+        }
     </div>
 }
 

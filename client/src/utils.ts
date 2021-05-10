@@ -2,7 +2,6 @@ import { AuthActionTypes } from "./context/AuthReducer";
 import { PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
 
-import { PlayerContextModel } from "./context/PlayerContext";
 
 export const getContestDetails = async (
   auth: any,
@@ -51,47 +50,36 @@ export const getContestDetails = async (
         },
       });
       console.log("FETCHED CONTEST DETAILS");
-      console.log(data.data.user);
     });
 };
 
-export const getUser = async (auth: any, player: PlayerContextModel) => {
-  if (auth.state.token)
-    fetch("/api/auth", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": auth.state.token,
-      },
-    })
-      .then((resp) => {
-        if (resp.status === 401) {
-          auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: [] });
-        }
-        return resp.json();
-      })
-      .catch((err) => console.log(err))
-      .then((data) => {
-        if (data.success) {
-          console.log("PLAYASERK");
-          console.log({ data });
-          auth.dispatch({
-            type: AuthActionTypes.GET_AUTH,
-            payload: {
-              id: data.data.user._id,
-              isAdmin: data.data.user.isAdmin,
-              isStarted: data.data.user.isStarted,
-            },
-          });
-          player.dispatch({
-            type: PlayerActionTypes.GET_USER,
-            payload: {
-              score: data.data.user.score,
-              attacksLeft: data.data.user.remAttack,
-            },
-          });
-        } else {
-          console.log(data);
-        }
-      });
-};
+export const getUser = async (auth : any) => {
+  if(auth.state.token)
+  fetch("/api/auth", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": auth.state.token,
+    },
+  })
+  .then(resp => {
+    if(resp.status === 401){
+      auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
+    }
+    return resp.json()
+  })
+  .catch(err => console.log(err))
+  .then(data => {
+    if(data.success){
+      auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
+        id : data.data.user._id,
+        isAdmin : data.data.user.isAdmin,
+        isStarted : data.data.user.isStarted
+      }})
+      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+    }
+    else{
+      console.log(data)
+    }
+  })
+}

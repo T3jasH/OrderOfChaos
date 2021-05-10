@@ -1,14 +1,31 @@
-.attack-log{
+#attack-nav{
     position: absolute;
-    top: 5rem;
+    padding: 0;
+    height: 100%;
+    top: 3rem;
     left: 0px;
-    width: 20vw;
+    width: 4vw;
     display: flex;
     flex-direction: column;
-}
-.attack{
-    width: 18vw;
-    height: 4rem;
-    margin-bottom: 1.5 rem;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: #f23d49;
+    transition: width 500ms ease-out;
+}
+
+.attack-list{
+    list-style: none;
+    padding: 0px;
+    margin: 0px 0px 0px 5px;
+
+}
+
+.attack{
+    width: 18vw; 
+    height: 5rem;
+    margin-bottom: 0.5rem;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

@@ -3,6 +3,7 @@ export interface Auth {
   isAdmin: boolean;
   isStarted: boolean;
   id: string;
+  loading: boolean
 }
 
 export enum AuthActionTypes {
@@ -10,6 +11,7 @@ export enum AuthActionTypes {
   LOGOUT = "LOGOUT",
   GET_TOKEN = "GET_TOKEN",
   GET_AUTH = "GET_AUTH",
+  SET_LOADING = "SET_LOADING"
 }
 
 export interface AuthAction {
@@ -50,6 +52,11 @@ export const authReducer = (state: Auth, action: AuthAction) => {
         isStarted: action.payload.isStarted,
         id: action.payload.id,
       };
+    case "SET_LOADING":
+      return {
+        ...state, 
+        loading : false
+      }
     default:
       return state;
   }

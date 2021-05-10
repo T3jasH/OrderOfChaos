@@ -2,19 +2,13 @@ import React, {
   useEffect,
   useContext,
   useState,
-  TextareaHTMLAttributes,
 } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
-
 import { PlayerContext } from "../context/PlayerContext";
-
 import { useParams } from "react-router-dom";
 import { getUser } from "../utils";
-import { playerReducer } from "../context/PlayerReducer";
-
 import rehypeRaw from "rehype-raw";
-
 import ReactMarkdown from "react-markdown";
 
 export interface IQuestion {
@@ -29,7 +23,6 @@ export interface IQuestion {
   samOutput: string;
   statement: string;
   tags: string[];
-
   testcase: string;
   unlockCost: number;
   _id: string;
@@ -41,7 +34,6 @@ const QuestionPage = () => {
 
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [questionData, setQuestionData] = useState<IQuestion | null>(null);
-  const [getQuestionLoading, setGetQuestionLoading] = useState<boolean>(true);
 
   const [submitMessage, setSubmitMessage] = useState<string>("");
   useEffect(() => {
@@ -62,7 +54,7 @@ const QuestionPage = () => {
           console.log("printing data:");
           setQuestionData(data.data.question);
           console.log(typeof questionData?.statement);
-          setGetQuestionLoading(false);
+          auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
           console.log(data);
         })
         .catch((e) => {
@@ -76,7 +68,7 @@ const QuestionPage = () => {
   useEffect(() => {
     if (auth.state.token === null) {
       auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] });
-      getUser(auth, player);
+      getUser(auth);
     }
   });
 
@@ -108,7 +100,7 @@ const QuestionPage = () => {
     }
   };
 
-  if (getQuestionLoading) return <div>loading...</div>;
+  if (auth.state.loading) return <div>loading...</div>;
   return (
     <div>
       <h1>Solve please</h1>

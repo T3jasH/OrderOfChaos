@@ -1,12 +1,9 @@
-import userEvent from "@testing-library/user-event";
-import { LeanDocument } from "mongoose";
-import react, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
 import { getUser } from "../utils";
-
 import { PlayerContext } from "../context/PlayerContext";
-import { PlayerActionTypes, playerReducer } from "../context/PlayerReducer";
+import { PlayerActionTypes} from "../context/PlayerReducer";
 import LeaderboardHeader from "../components/LeaderboardHeader";
 
 export interface IleaderboardPlayers {
@@ -40,14 +37,10 @@ const LeaderboardPage = () => {
   useEffect(() => {
     if (auth.state.token !== null && auth.state.token !== "x") {
       getLeaderboard(auth);
-      if (auth.state.id == "") {
-        getUser(auth, contextPlayer);
-      }
+      getUser(auth)
     }
   }, [auth.state.token]);
-
-  console.log(contextPlayer);
-
+  //console.log(auth.state)
   const getLeaderboard = (auth: any) => {
     fetch("/api/leaderboard", {
       method: "GET",

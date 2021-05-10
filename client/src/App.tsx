@@ -7,6 +7,7 @@ import LoginPage from "./Pages/LoginPage";
 import AdminPage from "./Pages/AdminPage";
 import LeaderboardPage from "./Pages/LeaderboardPage";
 import QuestionPage from "./Pages/QuestionPage";
+import RulesPage from "./Pages/RulesPage";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
       />
       <Route path="/admin" component={() => <AdminPage />} />
       <Route path="/" exact component={() => <QuestionsPage />} />
+      <Route path="/rules" component={() => <RulesPage/>} />
     </div>
   );
 };
