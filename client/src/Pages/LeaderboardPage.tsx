@@ -3,8 +3,10 @@ import { AuthContext } from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
 import { getUser } from "../utils";
 import { PlayerContext } from "../context/PlayerContext";
-import { PlayerActionTypes} from "../context/PlayerReducer";
+import { PlayerActionTypes } from "../context/PlayerReducer";
 import LeaderboardHeader from "../components/LeaderboardHeader";
+
+import { useHistory } from "react-router-dom";
 
 export interface IleaderboardPlayers {
   username: string;
@@ -37,7 +39,7 @@ const LeaderboardPage = () => {
   useEffect(() => {
     if (auth.state.token !== null && auth.state.token !== "x") {
       getLeaderboard(auth);
-      getUser(auth)
+      getUser(auth);
     }
   }, [auth.state.token]);
   //console.log(auth.state)
@@ -65,7 +67,8 @@ const LeaderboardPage = () => {
     }
 
     if (auth.state.token) {
-      fetch("/api/leaderboard/id", {
+      console.log("Is this getting called");
+      fetch(`/api/leaderboard/${id}`, {
         method: "POST",
         headers: {
           "x-auth-token": auth.state.token,
@@ -79,6 +82,7 @@ const LeaderboardPage = () => {
             type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
             payload: contextPlayer.state.attacksLeft - 1,
           });
+          getLeaderboard(auth);
         })
         .catch((e) => console.log(e));
     }
