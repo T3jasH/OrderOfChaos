@@ -51,7 +51,7 @@ const attackUser = async (req, res) => {
         if (attackerid === id)
             return res.json({
                 success: false,
-                msg: 'Why do you want to attack yourself?!?',
+                msg: 'Why do you want to attack yourself?!?',  
             });
         // console.log(id);
         if (attacker.remAttack > 0) {

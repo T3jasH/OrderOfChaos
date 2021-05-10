@@ -48,12 +48,15 @@ const QuestionPage: React.FC = () => {
   return (
     <div className="questions-page">
       <div className="header">
-        <button style={{ marginLeft: "5vw" }}>Order of Chaos</button>
+        <button style={{ marginLeft: "2vw" }}>Order of Chaos</button>
         <button
           onClick={() => history.push("/leaderboard")}
           style={{ cursor: "default" }}
         >
           Score : {player.state.score}
+        </button>
+        <button>
+          Attacks Left : {player.state.attacksLeft}
         </button>
         <button onClick={() => history.push("/leaderboard")}>
           Leaderboard
@@ -71,6 +74,7 @@ const QuestionPage: React.FC = () => {
         }}>
           Rules
         </button>
+
         {console.log(auth.state, questions.state)}
       </div>
       <div className="questions-container">
@@ -79,7 +83,7 @@ const QuestionPage: React.FC = () => {
         ))}
       </div>
 
-      {player.state.attacks.length ? <AttackLog /> : null}
+      <AttackLog />
     </div>
   );
 };

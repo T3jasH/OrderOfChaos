@@ -1,4 +1,4 @@
-import React, { useState, useContext, useDebugValue, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../styles/RegisterPage.css";
 import {AuthContext} from "../context/AuthContext"
 import {AuthActionTypes} from "../context/AuthReducer"
@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
       history.push("/")
     }
     else {
-      handleStatus(data.msg)
+      handleStatus("Invalid credentials")
     }
 
   };

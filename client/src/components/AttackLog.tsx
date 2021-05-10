@@ -17,7 +17,7 @@ const AttackLog : React.FC = () => {
         else{
             document.getElementById("attack-nav")?.setAttribute("style", "width : 4vw;");
             const items = document.getElementsByClassName("attack")
-            for(var i=0; i<items.length; i++){
+            for(i=0; i<items.length; i++){
                 items[i].setAttribute("style", "display : none;");
             }
         }
@@ -37,6 +37,7 @@ const AttackLog : React.FC = () => {
             onClick={handleNavbar}
             >ic</li>
         {
+            attacks.length?
             attacks.map((item)=>{
                 var t = parseInt( ((Date.now() - (new Date(item.date)).getTime()) / (1000 * 60)) as unknown as string )
                 var s = " minutes ago"
@@ -50,6 +51,7 @@ const AttackLog : React.FC = () => {
                     </li>)
             }
             )
+            : null
         }
         </ul>
     </nav>
