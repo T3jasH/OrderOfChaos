@@ -41,7 +41,9 @@ const QuestionPage = () => {
 
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [questionData, setQuestionData] = useState<IQuestion | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [getQuestionLoading, setGetQuestionLoading] = useState<boolean>(true);
+
+  const [submitMessage, setSubmitMessage] = useState<string>("");
   useEffect(() => {
     console.log("LOGGING AUTH");
     console.log(auth);
@@ -60,7 +62,7 @@ const QuestionPage = () => {
           console.log("printing data:");
           setQuestionData(data.data.question);
           console.log(typeof questionData?.statement);
-          setLoading(false);
+          setGetQuestionLoading(false);
           console.log(data);
         })
         .catch((e) => {
@@ -81,9 +83,32 @@ const QuestionPage = () => {
   const { id }: any = useParams();
   const markdown = "<b> Play bold </b>";
 
-  // const handleAnswerSubmit = (e: React.FormEvent<TextareaHTMLAttributes>)
+  const handleAnswerSubmit = () => {
+    if (auth.state.token) {
+      fetch(`/api/question/${id}`, {
+        method: "POST",
+        headers: {
+          "x-auth-token": auth.state.token,
+          "Content-type": "application/json",
+        },
 
-  if (loading) return <div>loading...</div>;
+        body: JSON.stringify({ answer: userAnswer }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("printing data:");
+          console.log(data);
+          setSubmitMessage(data.msg);
+        })
+        .catch((e) => {
+          console.log(e);
+
+          console.log("Am i getting an error");
+        });
+    }
+  };
+
+  if (getQuestionLoading) return <div>loading...</div>;
   return (
     <div>
       <h1>Solve please</h1>
@@ -95,15 +120,17 @@ const QuestionPage = () => {
         // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
       )}
 
-      <form>
-        <textarea
-          cols={30}
-          rows={10}
-          onChange={(e) => setUserAnswer(e.target.value)}
-        >
-          Put your output here
-        </textarea>
-      </form>
+      <textarea
+        cols={30}
+        rows={10}
+        onChange={(e) => setUserAnswer(e.target.value)}
+      >
+        Put your output here
+      </textarea>
+      <button style={{ backgroundColor: "cyan" }} onClick={handleAnswerSubmit}>
+        Submit Wisely
+      </button>
+      {submitMessage !== "" && <div>{submitMessage}</div>}
     </div>
   );
 };
