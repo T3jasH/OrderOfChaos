@@ -29,14 +29,15 @@ const QuestionPage: React.FC = () => {
   useEffect(() => {
     if (questions.state[0]) {
       setLoading(false);
+
+      console.log("LOGGING QUESTION DATAK");
+      console.log(questions.state);
     }
   }, [questions.state]);
 
   if (auth.state.token === "x") {
     return <Redirect to="/login" />;
   }
-
-  console.log(auth.state.token);
 
   if (isLoading) {
     return <div>insert loading animation here</div>;
@@ -68,7 +69,6 @@ const QuestionPage: React.FC = () => {
           Logout
         </button>
         <button>Rules</button>
-        {console.log(auth.state, questions.state)}
       </div>
       <div className="questions-container">
         {questions.state.map((item, index) => (

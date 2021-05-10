@@ -25,7 +25,9 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "react-markdown": "^6.0.2",
+    "rehype-raw": "^5.1.0"
   },
   "devDependencies": {
     "concurrently": "^6.0.2",
