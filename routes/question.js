@@ -209,4 +209,29 @@ router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
     }
 });
 
+router.get(
+    "/noofscorrectsubmission/:qid",
+    isLoggedIn,
+    isRunning,
+    async (req, res) => {
+        try {
+            let pos = req.params.qid;
+            let cnt = 0;
+            let users = await User.find({});
+            // console.log(users);
+            let solvedusers = [];
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].noOfAttempts[pos - 1].isSolved) {
+                    cnt++;
+                    solvedusers.push({ name: users[i].name });
+                }
+            }
+            console.log(solvedusers);
+            return res.send({ success: true, data: cnt });
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).json({ success: false, msg: "Server Error" });
+        }
+    }
+);
 module.exports = router;

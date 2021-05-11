@@ -1,21 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const isLoggedIn = require('../middleware/isLoggedIn');
+const { check, validationResult } = require("express-validator");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const isLoggedIn = require("../middleware/isLoggedIn");
 
 // @route     GET api/auth
 // @desc      Get logged in user
 // @access    Private
-router.get('/', isLoggedIn, async (req, res) => {
+router.get("/", isLoggedIn, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json({ success: true, msg: 'User found', data: { user } });
+        const user = await User.findById(req.user.id).select("-password");
+        res.json({ success: true, msg: "User found", data: { user } });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ success: false, msg: 'Server Error.' });
+        res.status(500).json({ success: false, msg: "Server Error." });
     }
 });
 
@@ -23,10 +23,10 @@ router.get('/', isLoggedIn, async (req, res) => {
 // @desc      Auth user and get token
 // @access    Public
 router.post(
-    '/',
+    "/",
     [
-        check('email', 'Please enter your email address.').isEmail(),
-        check('password', 'Please enter your password.'),
+        check("email", "Please enter your email address.").isEmail(),
+        check("password", "Please enter your password."),
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -43,7 +43,7 @@ router.post(
             if (!user) {
                 return res
                     .status(400)
-                    .json({ success: false, msg: 'User is not registered.' });
+                    .json({ success: false, msg: "User is not registered." });
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
@@ -51,14 +51,14 @@ router.post(
             if (!isMatch) {
                 return res
                     .status(400)
-                    .json({ success: false, msg: 'Incorrect Password' });
+                    .json({ success: false, msg: "Incorrect Password" });
             }
 
             //check user is verified or not
             if (!user.isVerified) {
                 return res.status(401).send({
                     msg:
-                        'Your Email has not been verified. Please click on resend.',
+                        "Your Email has not been verified. Please click on resend.",
                 });
             }
 
@@ -69,17 +69,17 @@ router.post(
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: '720h',
+                expiresIn: "720h",
             });
 
             res.json({
                 success: true,
-                msg: 'User successfully logged in!',
+                msg: "User successfully logged in!",
                 data: { token },
             });
         } catch (err) {
             console.error(err.message);
-            res.status(500).json({ success: false, msg: 'Server Error' });
+            res.status(500).json({ success: false, msg: "Server Error" });
         }
     }
 );
