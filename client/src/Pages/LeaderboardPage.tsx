@@ -6,7 +6,6 @@ import { PlayerContext } from "../context/PlayerContext";
 import { PlayerActionTypes } from "../context/PlayerReducer";
 import LeaderboardHeader from "../components/LeaderboardHeader";
 
-import { useHistory } from "react-router-dom";
 
 export interface IleaderboardPlayers {
   username: string;
@@ -41,7 +40,7 @@ const LeaderboardPage = () => {
       getLeaderboard(auth);
       getUser(auth);
     }
-  }, [auth.state.token]);
+  }, [auth.state.token]);   
   //console.log(auth.state)
   const getLeaderboard = (auth: any) => {
     fetch("/api/leaderboard", {
@@ -96,8 +95,8 @@ const LeaderboardPage = () => {
         <div>
           <LeaderboardHeader />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {leaderboardPlayers?.map((player) => (
-              <div
+            {leaderboardPlayers?.map((player) => {
+              return <div
                 style={{
                   display: "flex",
                   width: "50%",
@@ -110,6 +109,7 @@ const LeaderboardPage = () => {
                 <div style={{ width: "300px" }}>{player.username}</div>
                 <div style={{ width: "300px" }}>{player.score}</div>
                 <div style={{ width: "300px" }}>{player.attackers.length}</div>
+
                 {player._id !== auth.state.id && (
                   <button
                     style={{ backgroundColor: "cyan" }}
@@ -119,7 +119,7 @@ const LeaderboardPage = () => {
                   </button>
                 )}
               </div>
-            ))}
+              })}
           </div>
         </div>
       )}

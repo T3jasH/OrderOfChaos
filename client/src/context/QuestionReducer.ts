@@ -4,11 +4,11 @@ export interface Question {
     quesId: number
     points : number
     isLocked : boolean
-    isSolved : boolean
-    tags : string[]    
+    isSolved : boolean    
     unlockCost : number
     penalty : number
-    atttempts : number    
+    attempts : number    
+    solved : number
 }
 
 export enum  QuestionActionTypes {
@@ -25,6 +25,7 @@ export interface QuestionAction {
 export const questionReducer = (state : Question[], action : QuestionAction) => {
     switch (action.type){
         case "GET_QUESTIONS":
+            console.log("PAYLOAD ", action.payload)
             return action.payload
         case "SET_UNLOCKED": {
             return state.map(question => {

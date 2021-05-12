@@ -26,8 +26,8 @@ export const getContestDetails = async (
       if (!data.success) {
         return;
       }
-      console.log("LOGGING AUTH DATA:");
-      console.log(data.data.user._id);
+      console.log("LOGGING CONTEST DATA:");
+      console.log(data.data);
 
       questions.dispatch({
         type: QuestionActionTypes.GET_QUESTIONS,

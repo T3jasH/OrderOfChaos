@@ -16,6 +16,7 @@ export enum PlayerActionTypes{
     UPDATE_ATTACKS_LEFT = "UPDATE_ATTACKS_LEFT",
     UPDATE_ATTACKS = "UPDATE_ATTACKS",
     GET_USER = "GET_USER",
+    SET_SEEN = "SET_SEEN"
 }
 
 export interface PlayerAction {
@@ -47,6 +48,15 @@ export const playerReducer = (state : Player, action : PlayerAction) => {
                 ...state,
                 score: action.payload.score
            }
+        case "SET_SEEN":
+            let attacks = state.attacks
+            for(var i=0; i<attacks.length; i++){
+                attacks[i].seen = true;
+            }
+            return{
+                ...state, 
+                attacks
+            }
         default:
             return state
     }

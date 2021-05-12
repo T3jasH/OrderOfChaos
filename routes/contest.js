@@ -46,6 +46,7 @@ const getContest = async (req, res) => {
 
         let resp = {
             questions: quesUser,
+            user : user
         };
         // console.log(resp);
         res.send({

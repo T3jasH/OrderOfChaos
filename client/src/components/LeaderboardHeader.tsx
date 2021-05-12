@@ -15,6 +15,7 @@ const LeaderboardHeader = () => {
       <div style={{ width: "300px" }}>Username</div>
       <div style={{ width: "300px" }}>Score</div>
       <div style={{ width: "300px" }}>Times attacked</div>
+      
     </div>
   );
 };

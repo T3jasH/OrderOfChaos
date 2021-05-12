@@ -72,8 +72,8 @@ const QuestionListItem : React.FC<props>  = ({question}) => {
         <p className="cost" style={{visibility : question.isLocked ? "visible" : "hidden"}}>
             Unlock cost : {question.unlockCost}
         </p>
-        <p className="difficulty">
-            {difficulty}
+        <p className="attempts">
+            {question.attempts}
         </p>
     </div>
 }
