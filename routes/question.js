@@ -68,7 +68,7 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
             if (selQues.answer.replace(/\r\n/gm, "\n").trim() === sol.trim()) {
                 //first attempt correct answer give power only if less than 4 stored attacks
                 if (user.remAttack < 3) {
-                    if (attemptsTillNow == 0) {
+                    if (attemptsTillNow < selQues.difficulty) {
                         await User.updateOne(
                             {
                                 _id: req.user.id,
@@ -113,6 +113,10 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
                         });
                     }
                 }
+                await Question.updateOne(
+                    { quesId: selQues.quesId },
+                    { $set: { solved: selQues.solved + 1 } }
+                );
             } else {
                 //WA
                 await User.updateOne(
@@ -209,29 +213,5 @@ router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
     }
 });
 
-router.get(
-    "/noofscorrectsubmission/:qid",
-    isLoggedIn,
-    isRunning,
-    async (req, res) => {
-        try {
-            let pos = req.params.qid;
-            let cnt = 0;
-            let users = await User.find({});
-            // console.log(users);
-            let solvedusers = [];
-            for (let i = 0; i < users.length; i++) {
-                if (users[i].noOfAttempts[pos - 1].isSolved) {
-                    cnt++;
-                    solvedusers.push({ name: users[i].name });
-                }
-            }
-            console.log(solvedusers);
-            return res.send({ success: true, data: cnt });
-        } catch (err) {
-            console.log(err.message);
-            res.status(500).json({ success: false, msg: "Server Error" });
-        }
-    }
-);
+
 module.exports = router;

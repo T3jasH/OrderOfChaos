@@ -38,7 +38,7 @@ app.use("/api/admin", require("./routes/admin"));
 app.use("/api/contest", require("./routes/contest"));
 app.use("/api/leaderboard", require("./routes/leaderboard"));
 app.use("/api/question", require("./routes/question"));
-
+app.use("/api/attacklogs", require("./routes/timelog"));
 
 const PORT = process.env.PORT || 5000;
 

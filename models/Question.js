@@ -14,7 +14,6 @@ const QuestionSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    tags: [{ type: String }],
     statement: {
         type: String,
         required: true,
@@ -55,6 +54,15 @@ const QuestionSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
+    difficulty:{
+        type:Number,
+        enum:[1,2,3],
+        required:true
+    },
+    solved:{
+        type:Number,
+        default:0
+    }
 });
 
 module.exports = mongoose.model("question", QuestionSchema);

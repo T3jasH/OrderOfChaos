@@ -7,12 +7,31 @@ const Question = require('../models/Question');
 // @desc      Post question
 // @access    Private to admin
 router.post('/', isLoggedIn, isAdmin, async (req, res) => {
-    console.log('inside add question');
-    let newQuestion = new Question({
+    // console.log('inside add question');
+
+    // console.log(req.body);
+    let points, unlockCost, penalty;
+    switch (req.body.difficulty) {
+        case "1":
+            points = process.env.POINTS_EASY;
+            unlockCost = process.env.UNLOCK_EASY;
+            penalty = process.env.PENALTY_EASY;
+            break;
+        case "2":
+            points = process.env.POINTS_MED;
+            unlockCost = process.env.UNLOCK_MED;
+            penalty = process.env.PENALTY_MED;
+            break;
+        case "3":
+            points = process.env.POINTS_HARD;
+            unlockCost = process.env.UNLOCK_HARD;
+            penalty = process.env.PENALTY_HARD;
+            break;
+    }
+
+    const newQuestion = new Question({
         quesId: req.body.quesId,
         name: req.body.name,
-        points: req.body.points,
-        tags: req.body.tags,
         statement: req.body.statement,
         constraints: req.body.constraints,
         inpFormat: req.body.inpFormat,
@@ -21,14 +40,20 @@ router.post('/', isLoggedIn, isAdmin, async (req, res) => {
         samOutput: req.body.samOutput,
         testcase: req.body.testcase,
         answer: req.body.answer,
-        unlockCost: req.body.unlockCost,
-        penalty: req.body.penalty,
+        difficulty: req.body.difficulty,
+        unlockCost: unlockCost,
+        penalty: penalty,
+        points: points,
     });
     try {
-        let ques = await newQuestion.save();
-        res.json({ success: true, msg: 'Question submitted successfully.' });
+        await newQuestion.save();
+        res.json({
+            success: true,
+            msg: 'Question submitted successfully.',
+        });
     } catch (error) {
-        res.send(error);
+        console.log(error);
+        res.status(500).json({ success: false, msg: "Server Error" });
     }
 });
 
