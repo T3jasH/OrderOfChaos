@@ -31,6 +31,14 @@
   },
   "devDependencies": {
     "concurrently": "^6.0.2",
-    "nodemon": "^2.0.7"
-  }
+    "nodemon": "^2.0.7",
+    "prettier": "2.2.1"
+
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": false
+}
 }

@@ -15,7 +15,6 @@ interface props {
 const QuestionListItem : React.FC<props>  = ({question}) => {
 
     const bgcolor = question.isLocked ? "#996b91" : question.isSolved? "#42eb6c" : question.points === 100 ? "yellow" : question.points === 200 ? "#03e3fc" : "#f5404c";
-    const difficulty = question.points === 100 ? "easy" : question.points === 200 ? "medium" : "hard";
     const token = useContext(AuthContext).state.token
     const questions = useContext(QuestionContext)
     const player = useContext(PlayerContext)
@@ -73,7 +72,7 @@ const QuestionListItem : React.FC<props>  = ({question}) => {
             Unlock cost : {question.unlockCost}
         </p>
         <p className="attempts">
-            {question.attempts}
+            {question.solved}
         </p>
     </div>
 }

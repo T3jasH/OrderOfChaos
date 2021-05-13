@@ -39,8 +39,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
 // @access    Private
 // Check the output and change score of the user as required.
 // In response send success (boolean).
-
-router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
+router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
     try {
         //TODO:compare IP before submitting
         //if first attempt and solved then attack given
@@ -52,23 +51,24 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
             _id: userid,
         });
         let sol = req.body.answer;
-        sol = sol.replace(/\r\n/gm, "\n");
+        sol = sol.replace(/\r\n/gm, '\n');
         let pos = req.params.id - 1;
         let actualPoints = selQues.points;
         let deduction = selQues.penalty;
         let attemptsTillNow = user.noOfAttempts[pos].attempts;
+        let difficulty = selQues.difficulty;
         //if not solved then only shld be allowed to solve
         //TODO:check if IP is matching
         if (user.noOfAttempts[pos].isLocked)
-            return res.json({
+            return res.status(400).json({
                 success: false,
-                msg: "Unlock the question first",
+                msg: 'Unlock the question first',
             });
         if (!user.noOfAttempts[pos].isSolved) {
-            if (selQues.answer.replace(/\r\n/gm, "\n").trim() === sol.trim()) {
+            if (selQues.answer.replace(/\r\n/gm, '\n').trim() === sol.trim()) {
                 //first attempt correct answer give power only if less than 4 stored attacks
                 if (user.remAttack < 3) {
-                    if (attemptsTillNow < selQues.difficulty) {
+                    if (attemptsTillNow < difficulty) {
                         await User.updateOne(
                             {
                                 _id: req.user.id,
@@ -84,15 +84,11 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
                                 },
                             }
                         );
-                        return res.send({
+                        res.json({
                             success: true,
-                            msg: `Question solved.You have ${
-                                user.remAttack + 1
-                            } attacks left.`,
+                            msg: `Question solved and Attack added`,
                         });
                     } else {
-                        //attempts!=0
-                        //attacks=2
                         await User.updateOne(
                             {
                                 _id: req.user.id,
@@ -107,11 +103,32 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
                                 },
                             }
                         );
-                        return res.send({
+
+                        res.json({
                             success: true,
-                            msg: `Question solved finally .`,
+                            msg: `Question Solved.`,
                         });
                     }
+                } else {
+                    await User.updateOne(
+                        {
+                            _id: req.user.id,
+                        },
+                        {
+                            $set: {
+                                score: actualPoints + user.score,
+                                [`noOfAttempts.${pos}.isSolved`]: true,
+                                [`noOfAttempts.${pos}.attempts`]:
+                                    user.noOfAttempts[pos].attempts + 1,
+                                lastCorrSub: new Date(),
+                            },
+                        }
+                    );
+
+                    res.json({
+                        success: true,
+                        msg: 'Question Solved. Maximum attack reached.',
+                    });
                 }
                 await Question.updateOne(
                     { quesId: selQues.quesId },
@@ -131,9 +148,9 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
                         },
                     }
                 );
-                return res.send({
+                return res.status(400).json({
                     success: false,
-                    msg: "Wrong answer.",
+                    msg: 'Wrong answer.',
                 });
             }
             // console.log("currscore=" + currScore);
@@ -143,13 +160,14 @@ router.post("/:id", isLoggedIn, isRunning, async (req, res) => {
             // console.log("attempts=" + (attemptsTillNow + 1));
         } else {
             //dont allow to click submit button ideally
-            return res.send({ success: false, msg: "Already solved." });
+            return res.json({ success: false, msg: 'Already solved.' });
         }
     } catch (err) {
         console.log(err.message);
-        res.status(500).json({ success: false, msg: "Server Error" });
+        res.status(500).json({ success: false, msg: 'Server Error' });
     }
 });
+
 
 //ip in backend
 // When user unlocks first question, along with marking isActive, you need take ip.

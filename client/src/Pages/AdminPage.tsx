@@ -14,10 +14,8 @@ const AdminPage : React.FC = () => {
     const [tcInput, handleTcInput] = useState<string>("")
     const [tcOutput, handleTcOuput] = useState<string>("")
     const [constraints, handleConstraints] = useState<string>("")
-    const [penalty, handlePenalty] = useState<number | null>(null)
+    const [difficulty, handleDifficulty] = useState<number | null>(null)
     const [quesId, handleQuesId] = useState<number | null>(null)
-    const [points, handlePoints] = useState<number | null>(null)
-    const [unlockScore, handleUnlockScore] = useState<number | null>(null)
     const [errorMsg, setErrorMsg] = useState<null | string>(null)
 
     const auth = useContext(AuthContext)
@@ -45,7 +43,6 @@ const AdminPage : React.FC = () => {
                     {
                         quesId: quesId,
                         name: name,
-                        points: points,
                         tags: "",
                         statement: statement,
                         constraints: constraints,
@@ -55,8 +52,7 @@ const AdminPage : React.FC = () => {
                         samOutput: sampleOutput,
                         testcase: tcInput,
                         answer: tcOutput,
-                        unlockCost: unlockScore,
-                        penalty: penalty,
+                        difficulty: difficulty
                     }
                 )
         })
@@ -99,12 +95,8 @@ const AdminPage : React.FC = () => {
         <textarea className="short" name="name" onChange={e => handleName(e.target.value)} />
         <h3>Question Id</h3>
         <textarea className="short" name="quesId" onChange={e => handleQuesId(e.target.value as unknown as number)} />
-        <h3>Points</h3>
-        <textarea className="short" name="points" onChange={e => handlePoints(e.target.value as unknown as number)} />
-        <h3>Penalty</h3>
-        <textarea className="short" name="penalty" onChange={e => handlePenalty(e.target.value as unknown as number)} />
-        <h3>Unlock Cost</h3>
-        <textarea className="short" name="cost" onChange={e => handleUnlockScore(e.target.value as unknown as number)} />
+        <h3>Difficulty</h3>
+        <textarea className="short" name="penalty" onChange={e => handleDifficulty(e.target.value as unknown as number)} />
         <h3>Statement</h3>
         <textarea className="long" name="statement" onChange={e => handleStatement(e.target.value)} />
         <h3>Constraints</h3>
