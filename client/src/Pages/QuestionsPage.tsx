@@ -48,16 +48,10 @@ const QuestionPage: React.FC = () => {
     return <Redirect to="/login" />;
   }
 
-  console.log(auth.state.token);
-
   if (auth.state.loading) {
     return <div>insert loading animation here</div>;
   }
-
-  if (auth.state.token === "x") {
-    return <Redirect to="/login" />;
-  }
-
+  
   return (
     <div className="questions-page">
       <div className="header">
