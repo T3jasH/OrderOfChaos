@@ -2,7 +2,6 @@ import { AuthActionTypes } from "./context/AuthReducer";
 import { PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
 
-
 export const getContestDetails = async (
   auth: any,
   questions: any,
@@ -51,7 +50,10 @@ export const getContestDetails = async (
       });
       console.log("FETCHED CONTEST DETAILS");
     });
+  
 };
+
+
 
 export const getUser = async (auth : any) => {
   if(auth.state.token)
@@ -76,10 +78,24 @@ export const getUser = async (auth : any) => {
         isAdmin : data.data.user.isAdmin,
         isStarted : data.data.user.isStarted
       }})
-      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
     }
     else{
       console.log(data)
     }
   })
 }
+
+export const getLeaderboard = async (auth: any) => {
+  let leaderboard = null
+  const resp = await fetch("/api/leaderboard", {
+    method: "GET",
+    headers: {
+      "x-auth-token": auth.state.token,
+      "Content-type": "application/json",
+    },
+  })
+  const data = await resp.json()
+  leaderboard = data.data.ranks
+  return leaderboard
+   
+};

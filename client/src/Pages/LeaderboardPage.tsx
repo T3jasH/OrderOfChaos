@@ -4,8 +4,8 @@ import { AuthActionTypes } from "../context/AuthReducer";
 import { getUser } from "../utils";
 import { PlayerContext } from "../context/PlayerContext";
 import { PlayerActionTypes } from "../context/PlayerReducer";
+import {getLeaderboard} from "../utils"
 import LeaderboardHeader from "../components/LeaderboardHeader";
-
 
 export interface IleaderboardPlayers {
   username: string;
@@ -27,8 +27,6 @@ const LeaderboardPage = () => {
   const [leaderboardPlayers, setLeaderboardPlayers] = useState<
     IleaderboardPlayers[]
   >();
-  const [leaderboardLoading, setLeaderboardLoading] = useState<boolean>(true);
-
   useEffect(() => {
     if (auth.state.token === null) {
       auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] });
@@ -37,27 +35,26 @@ const LeaderboardPage = () => {
 
   useEffect(() => {
     if (auth.state.token !== null && auth.state.token !== "x") {
-      getLeaderboard(auth);
+      getLeaderboard(auth)
+      .then(data =>{
+        setLeaderboardPlayers(data)
+      })
       getUser(auth);
     }
   }, [auth.state.token]);   
-  //console.log(auth.state)
-  const getLeaderboard = (auth: any) => {
-    fetch("/api/leaderboard", {
-      method: "GET",
-      headers: {
-        "x-auth-token": auth.state.token,
-        "Content-type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log({ data });
-        setLeaderboardPlayers(data.data.ranks);
-        setLeaderboardLoading(false);
-      })
-      .catch((e) => console.log(e));
-  };
+  
+  useEffect(() => {
+    if(leaderboardPlayers?.length){
+      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+    }
+  }, [leaderboardPlayers])
+
+  const scroll = () => {
+    if(window.location.hash){
+      console.log(String(window.location.hash).substring(1, String(window.location.hash).length))
+      document.getElementById(String(window.location.hash).substring(1, String(window.location.hash).length))?.scrollIntoView({behavior : "smooth"})
+    }
+  }
 
   const handleAttack = (id: string) => {
     if (contextPlayer.state.attacksLeft <= 0) {
@@ -81,18 +78,24 @@ const LeaderboardPage = () => {
             type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
             payload: contextPlayer.state.attacksLeft - 1,
           });
-          getLeaderboard(auth);
+          getLeaderboard(auth)
+          .then(data => {
+            setLeaderboardPlayers(data)
+          })
         })
         .catch((e) => console.log(e));
     }
   };
-
+  console.log(leaderboardPlayers)
   return (
     <div>
-      {leaderboardLoading ? (
+      {auth.state.loading ? (
         <div>loading....</div>
       ) : (
         <div>
+          {
+            scroll()
+          }
           <LeaderboardHeader />
           <div style={{ display: "flex", flexDirection: "column" }}>
             {leaderboardPlayers?.map((player) => {
@@ -106,7 +109,7 @@ const LeaderboardPage = () => {
                     player._id === auth.state.id ? "yellow" : "pink",
                 }}
               >
-                <div style={{ width: "300px" }}>{player.username}</div>
+                <div style={{ width: "300px" }} id={player._id} >{player.username}</div>
                 <div style={{ width: "300px" }}>{player.score}</div>
                 <div style={{ width: "300px" }}>{player.attackers.length}</div>
 

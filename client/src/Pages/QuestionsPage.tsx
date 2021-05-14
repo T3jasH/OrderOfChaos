@@ -1,8 +1,8 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { QuestionContext } from "../context/QuestionContext";
 import { AuthContext } from "../context/AuthContext";
 import { Redirect, useHistory } from "react-router";
-import { getContestDetails } from "../utils";
+import { getContestDetails, getLeaderboard } from "../utils";
 import "../styles/QuestionsPage.css";
 import { AuthActionTypes } from "../context/AuthReducer";
 import QuestionListItem from "../components/QuestionListItem";
@@ -13,6 +13,7 @@ const QuestionPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const player = useContext(PlayerContext);
   const history = useHistory();
+  const [rank, setRank] = useState<number | null>(null)
 
   useEffect(() => {
     if (auth.state.token === null) {
@@ -25,11 +26,23 @@ const QuestionPage: React.FC = () => {
       getContestDetails(auth, questions, player);
   }, [auth.state.token]);
 
+  useEffect( () => {
+    if(auth.state.id.length ){
+      getLeaderboard(auth)
+      .then(data => {
+        setRank(
+          data.findIndex((user:any) => user._id === auth.state.id) + 1
+        )
+      })
+    }
+  }, [auth.state.id])
+
   useEffect(() => {
-    if (questions.state[0]) {
+    if (questions.state[0] && rank) {
       auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
     }
-  }, [questions.state]);
+  }, [questions.state, rank]);
+
 
   if (auth.state.token === "x") {
     return <Redirect to="/login" />;
@@ -54,6 +67,14 @@ const QuestionPage: React.FC = () => {
           style={{ cursor: "default" }}
         >
           Score : {player.state.score}
+        </button>
+        <button
+          style={{ cursor: "pointer" }}
+          onClick={e => {
+            history.push(`/leaderboard#${auth.state.id}`)
+          }}
+        >
+        Rank : {rank}
         </button>
         <button>
           Attacks Left : {player.state.attacksLeft}

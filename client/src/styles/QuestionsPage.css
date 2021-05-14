@@ -4,6 +4,11 @@
     overflow-x: none;
     z-index: -1;
 }
+
+html{
+  scroll-behavior: smooth;
+}
+
 .header{
     width: 100vw;
     height: 3rem;
@@ -41,8 +46,10 @@ button {
   }
 
 .header button{
-    margin-left: 12vw;
+    margin-left: 8vw;
 }
+
+
 
 .questions-container{
   position: absolute;
