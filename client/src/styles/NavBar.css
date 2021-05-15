@@ -1,0 +1,45 @@
+.navbar{
+    width: 100vw;
+    position:fixed;
+    display: flex;
+    flex-direction: row-reverse;
+    top: 1.5rem;
+    z-index: 3;
+}
+
+.btn-nav {
+    font-family: 'Montserrat';
+    font-size: 20px;
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-weight: 400;
+    margin-right: 5vw;
+  }
+  
+  .btn-nav:hover {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+  }
+  
+  .btn-nav:active {
+    outline: none;
+    border: none;
+  }
+  
+  .btn-nav:focus {
+    outline: 0;
+  }
+  #logout-btn{
+    border: 1px solid #FFFFFF;
+    padding: 0.5rem 0.8rem;
+    box-sizing: border-box;
+    border-radius: 10px 0px
+  }

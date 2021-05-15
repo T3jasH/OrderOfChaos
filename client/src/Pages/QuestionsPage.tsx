@@ -8,6 +8,7 @@ import { AuthActionTypes } from "../context/AuthReducer";
 import QuestionListItem from "../components/QuestionListItem";
 import { PlayerContext } from "../context/PlayerContext";
 import AttackLog from "../components/AttackLog";
+import Navbar from "../components/Navbar";
 const QuestionPage: React.FC = () => {
   const questions = useContext(QuestionContext);
   const auth = useContext(AuthContext);
@@ -53,52 +54,14 @@ const QuestionPage: React.FC = () => {
   }
   
   return (
-    <div className="questions-page">
-      <div className="header">
-        <button style={{ marginLeft: "2vw" }}>Order of Chaos</button>
-        <button
-          onClick={() => history.push("/leaderboard")}
-          style={{ cursor: "default" }}
-        >
-          Score : {player.state.score}
-        </button>
-        <button
-          style={{ cursor: "pointer" }}
-          onClick={e => {
-            history.push(`/leaderboard#${auth.state.id}`)
-          }}
-        >
-        Rank : {rank}
-        </button>
-        <button>
-          Attacks Left : {player.state.attacksLeft}
-        </button>
-        <button onClick={() => history.push("/leaderboard")}>
-          Leaderboard
-        </button>
-        <button
-          onClick={(e) => {
-            auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: [] });
-            history.push("/login");
-          }}
-        >
-          Logout
-        </button>
-        <button onClick={e => {
-          history.push("/rules")
-        }}>
-          Rules
-        </button>
-
-        {console.log(auth.state, questions.state)}
-      </div>
+    <div className="questions-page"  >
+      <Navbar/>
       <div className="questions-container">
-        {questions.state.map((item, index) => (
-          <QuestionListItem question={item} />
-        ))}
-      </div>
-
-      <AttackLog />
+        <h3>QUESTIONS</h3>
+  {questions.state.map((item, index) => (
+    <QuestionListItem question={item} />
+  ))}
+</div>
     </div>
   );
 };

@@ -27,6 +27,11 @@ const AdminPage : React.FC = () => {
 
     useEffect(()=>{
         getUser(auth)     
+        .then(data => {
+            if(data.success){
+                auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+            }
+        })
     }, [auth.state.token])
 
     const handleSubmit = async () => {

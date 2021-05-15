@@ -56,33 +56,33 @@ export const getContestDetails = async (
 
 
 export const getUser = async (auth : any) => {
-  if(auth.state.token)
-  fetch("/api/auth", {
+  let resp=null;
+  if(auth.state.token){
+  resp = await fetch("/api/auth", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "x-auth-token": auth.state.token,
     },
   })
-  .then(resp => {
-    if(resp.status === 401){
-      auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
-    }
-    return resp.json()
-  })
-  .catch(err => console.log(err))
-  .then(data => {
-    if(data.success){
-      auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
-        id : data.data.user._id,
-        isAdmin : data.data.user.isAdmin,
-        isStarted : data.data.user.isStarted
-      }})
-    }
-    else{
-      console.log(data)
-    }
-  })
+  if(resp.status === 401){
+    auth.dispatch({type : AuthActionTypes.LOGOUT, payload : []})
+    return;
+  }
+  const data = await resp.json()
+  if(data.success){
+    auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
+      id : data.data.user._id,
+      isAdmin : data.data.user.isAdmin,
+      isStarted : data.data.user.isStarted
+    }})
+  }
+  else{
+    console.log(data)
+  }
+  return data;
+}
+  return {success : false}
 }
 
 export const getLeaderboard = async (auth: any) => {

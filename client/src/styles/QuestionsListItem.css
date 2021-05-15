@@ -1,10 +1,10 @@
 .question {
-    height: 6.5rem;
+    height: 10rem;
     width : 70vw;
+    left: 2rem;
     padding: 0px;
     margin-bottom: 15px;
     position: relative;
-    overflow: hidden;
 }
 
 
@@ -16,7 +16,7 @@
 
 p{
     margin: 0;
-}
+}    
 
 .question-name{
     position: absolute;
