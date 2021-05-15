@@ -38,6 +38,7 @@ export const getContestDetails = async (
           isStarted: true,
           isAdmin: data.data.user.isAdmin,
           id: data.data.user._id.toString(),
+          username: data.data.user.username
         },
       });
       player.dispatch({

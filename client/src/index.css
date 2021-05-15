@@ -1,10 +1,11 @@
 *{
   margin: 0;
   font-family: 'Montserrat';
-  font-size: 20px;
   color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --rootFontSize: 20px;
+  font-size: var(--rootFontSize);
 }
 
 
@@ -14,3 +15,67 @@
   }
 }
 
+button {
+  font-family: 'Montserrat';
+  font-size: var(--rootFontSize);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+button {
+  background: transparent;
+  box-shadow: 0px 0px 0px transparent;
+  border: 0px solid transparent;
+  text-shadow: 0px 0px 0px transparent;
+}
+
+button {
+  outline: none;
+  border: none;
+}
+
+button {
+  outline: 0;
+}
+
+input {
+  outline: none;
+  border: none;
+  background: inherit;
+  margin-top: 1.5rem;
+  display: block;
+  border-bottom: 1px solid #fff;
+
+}
+
+input::placeholder{
+  text-align: center;
+  letter-spacing: 0.2em;
+}
+
+input[type="submit"]{
+  border: 1px solid #fff;
+  border-radius: 1rem 0;
+  
+}
+
+@media screen and (max-width : 1200px) {
+  *{
+    --rootFontSize: 18px; 
+  }
+}
+
+@media screen and (max-width : 950px) {
+  *{
+    --rootFontSize: 15px;
+  }
+}
+
+@media screen and (max-width : 450px) {
+  *{
+    --rootFontSize: 12.5px;
+  }
+}

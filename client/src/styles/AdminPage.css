@@ -9,12 +9,12 @@ textarea{
     resize: none;
     margin-left: 3vw;
     border: 2px solid black;
-    box-shadow: none;
+    box-shadow: none; 
     outline: none;
     font-size: 20px;
 }
 
-h3{
+.admin > h3{
     margin-left: 3vw;
 }
 .short{

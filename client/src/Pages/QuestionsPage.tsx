@@ -7,8 +7,8 @@ import "../styles/QuestionsPage.css";
 import { AuthActionTypes } from "../context/AuthReducer";
 import QuestionListItem from "../components/QuestionListItem";
 import { PlayerContext } from "../context/PlayerContext";
-import AttackLog from "../components/AttackLog";
 import Navbar from "../components/Navbar";
+import PlayerInfoFooter from "../components/PlayerInfoFooter";
 const QuestionPage: React.FC = () => {
   const questions = useContext(QuestionContext);
   const auth = useContext(AuthContext);
@@ -58,10 +58,13 @@ const QuestionPage: React.FC = () => {
       <Navbar/>
       <div className="questions-container">
         <h3>QUESTIONS</h3>
-  {questions.state.map((item, index) => (
-    <QuestionListItem question={item} />
-  ))}
-</div>
+      {questions.state.map((item, index) => (
+        <QuestionListItem question={item} index={index} key={item.name}/>
+        ))}
+      </div>
+      <PlayerInfoFooter
+      rank={rank}
+      />
     </div>
   );
 };

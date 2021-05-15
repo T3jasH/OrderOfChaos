@@ -6,7 +6,8 @@ const authDefaultState: Auth = {
   isAdmin: false,
   isStarted: true,
   id: "",
-  loading: true
+  loading: true,
+  username: ""
 };
 
 export interface AuthContextModel {

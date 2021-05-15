@@ -13,7 +13,7 @@ const getContest = async (req, res) => {
         let userid = req.user.id;
         let user = await User.findOne({ _id: userid }).select('-password');
         let ques = await Question.find({})
-            .select('quesId name points tags unlockCost penalty solved')
+            .select('quesId name points tags unlockCost penalty solved difficulty')
             .sort({ quesId: 1 });
 
         // console.log(ques);
@@ -39,7 +39,8 @@ const getContest = async (req, res) => {
                         .unlockCost,
                     penalty: quesIdToQues.get(user.noOfAttempts[i].quesId)
                         .penalty,
-                    solved: quesIdToQues.get(user.noOfAttempts[i].quesId).solved
+                    solved: quesIdToQues.get(user.noOfAttempts[i].quesId).solved,
+                    difficulty: quesIdToQues.get(user.noOfAttempts[i].quesId).difficulty
                 });
             }
         }

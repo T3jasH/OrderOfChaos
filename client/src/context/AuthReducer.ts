@@ -4,6 +4,7 @@ export interface Auth {
   isStarted: boolean;
   id: string;
   loading: boolean
+  username: string
 }
 
 export enum AuthActionTypes {
@@ -52,6 +53,7 @@ export const authReducer = (state: Auth, action: AuthAction) => {
         isAdmin: action.payload.isAdmin,
         isStarted: action.payload.isStarted,
         id: action.payload.id,
+        username: action.payload.username
       };
     case "SET_LOADING":
       return {

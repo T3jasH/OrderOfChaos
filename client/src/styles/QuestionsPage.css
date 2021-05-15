@@ -14,16 +14,22 @@ html{
 
 .questions-container{
   position: absolute;
-  left : 20vw;
+  left : 15vw;
   top : 5rem;
-  width: 80vw;
-  height: calc(100vh - 5rem);
+  width: 85vw;
+  height: calc(100vh - 10rem);
   overflow: auto;
   scrollbar-color: #6D30ED #090321;
-
 }
 .questions-container > h3{
   font-size: 1.5rem;
-  font-weight: 1000;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
+@media screen and (max-width : 950px) {
+  .questions-container{
+    left: 10vw;
+    width: 90vw;
+  }
+}

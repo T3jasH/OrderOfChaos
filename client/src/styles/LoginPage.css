@@ -1,0 +1,71 @@
+.login-page{
+    height: 100vh;
+    width: 100vw;
+    background: url("../Backgrounds/SecondaryBackground.png") no-repeat;
+    background-size: cover;
+    background-position: left top;
+}
+
+.login-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-container > h2 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 0.35em;
+    line-height: 73px;
+    margin-top: 4rem;
+}
+
+.login-container > h3 {
+    margin-top: 2rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form > input[type="submit"]{
+    padding: 0.3rem 0.3rem;
+    width: 8rem;
+    letter-spacing: 0.2em;
+}
+
+.btn-login{
+    letter-spacing: 0.2em;
+}
+
+.btn-login:hover{
+    letter-spacing: 0.3em;
+}
+
+@media screen and (max-width: 950px){
+    .login-page{
+        background-position: left;
+    }
+}
+
+@media screen  and (max-width: 750px) {
+    .login-page{
+        background-image: none;
+        background-color: #3F1A81;
+    }
+    .login-container{
+        width: 100vw;
+    }
+}
+

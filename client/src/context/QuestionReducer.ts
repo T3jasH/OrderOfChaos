@@ -9,6 +9,7 @@ export interface Question {
     penalty : number
     attempts : number    
     solved : number
+    difficulty: Number
 }
 
 export enum  QuestionActionTypes {

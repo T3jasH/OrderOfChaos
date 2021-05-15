@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import "../styles/RegisterPage.css";
+import "../styles/LoginPage.css";
 import {AuthContext} from "../context/AuthContext"
 import {AuthActionTypes} from "../context/AuthReducer"
 import { Link, Redirect, useHistory } from "react-router-dom";
 
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC = () => {   
   const [email, handleEmail] = useState<string>("");
   const [password, handlePassword] = useState<string>("");
   const [status, handleStatus] = useState<string | null>(null);
@@ -49,26 +49,40 @@ const LoginPage: React.FC = () => {
 
 
   return (
-    <div className="register-page">
-      <div className="container">
-        <h3>Login</h3>
-        <form onSubmit={(e) => handleSubmit(e)}>
+    <div className="login-page">
+      <div className="login-container">
+        <h2>ORDER OF CHAOS</h2>
+         <h3>LOGIN</h3>
+        <form onSubmit={(e) => handleSubmit(e)} className="login-form">
           <input
+            style={{marginTop : "4rem"}}
             type="text"
-            placeholder="Email"
+            placeholder="EMAIL"
             name="email"
             onChange={(e) => handleEmail(e.target.value)}
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="PASSWORD"
             onChange={(e) => handlePassword(e.target.value)}
           />
-          <input type="submit" value="submit" />
+          <input type="submit" value="LOGIN" />
         </form>
-
-        <Link to="/forgot-password">Forgot password?</Link>
-        <Link to="/register">Don't have an account?</Link>
+        
+        <button className="btn-login" style={{marginTop : "4rem"}}>
+          FORGOT PASSWORD?
+        </button>
+        <button className="btn-login" 
+        style={{
+          marginTop: "1.5rem",
+          fontWeight: "bold" 
+          }}
+        onClick={
+          e => history.push("/register")
+        }
+          >
+          SIGN UP
+        </button>
         {status ? <b>{status}</b> : null}
       </div>
     </div>
