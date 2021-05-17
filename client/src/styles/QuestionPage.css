@@ -1,4 +1,4 @@
-.questions-page {
+.question-page {
     height: 100vh;
     max-height: 100vh;
     max-width: 100vw;
@@ -12,7 +12,7 @@ html {
     scroll-behavior: smooth;
 }
 
-.questions-container {
+.question-container {
     position: absolute;
     left: 15vw;
     top: 5rem;
@@ -21,15 +21,15 @@ html {
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
 }
-.questions-container > h3 {
+
+.question-container > h3 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
-@media screen and (max-width: 950px) {
-    .questions-container {
-        left: 10vw;
-        width: 90vw;
-    }
+.answer-textarea {
+    background: rgba(196, 196, 196, 0.1);
+    backdrop-filter: blur(140.2px);
+    border-radius: 30px;
 }
