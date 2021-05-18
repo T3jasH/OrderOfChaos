@@ -192,9 +192,7 @@ router.post('/forgotpassword', async (req, res, next) => {
         await user.save({ validateBeforeSave: false });
 
         //Create reset url
-        const resetUrl = `${req.protocol}://${req.get(
-            'host'
-        )}/api/users/resetpassword/${resetToken}`;
+        const resetUrl = `${req.protocol}://localhost:3000/resetpassword/${resetToken}`;
 
         const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetUrl}`;
         const resp = 'https://mail.iecsemanipal.com/codeevent/resetpassword';
@@ -253,13 +251,13 @@ router.get('/resetpassword/:resettoken', async (req, res) => {
 // @access    Public
 router.post(
     '/resetpassword/:resettoken',
-    [check('password', 'Please enter a new password.').not().isEmpty()],
+    [check('password', 'Please enter a password of at least 8 characters.').isLength({min: 8})],
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res
                 .status(400)
-                .json({ success: false, errors: errors.array() });
+                .json({ success: false, msg : errors.array()[0].msg });
         }
         try {
             const resetPasswordToken = req.params.resettoken;

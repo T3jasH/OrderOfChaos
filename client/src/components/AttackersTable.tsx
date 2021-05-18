@@ -8,6 +8,8 @@ interface props {
     handleAttack: any
 }
 
+
+
 const AttackersTable = ({
     leaderboardPlayers,
     auth,
@@ -17,6 +19,16 @@ const AttackersTable = ({
     const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
         attackersP
     )
+
+    const minsAgo = (date:any) => {
+        var diff =  parseInt( (Date.now() - new Date(date).getMilliseconds()) / (1000 * 60) as unknown as string );
+        var text = " mins ago"
+        if(diff >= 120){
+            diff = 120
+            text = "+ mins ago"
+        }
+        return `${diff}${text}`
+    }
 
     useEffect(() => {
         setAttackers((prev) =>
@@ -77,7 +89,7 @@ const AttackersTable = ({
                                     )?.attackers.length
                                 }
                             </td>
-                            <td>{attacker.date}</td>
+                            <td>{minsAgo(attacker.date)}</td>
                             <td>
                                 <button
                                     onClick={() => handleAttack(attacker._id)}

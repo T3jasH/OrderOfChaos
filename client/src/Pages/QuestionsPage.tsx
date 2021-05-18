@@ -13,7 +13,6 @@ const QuestionPage: React.FC = () => {
     const questions = useContext(QuestionContext)
     const auth = useContext(AuthContext)
     const player = useContext(PlayerContext)
-    const history = useHistory()
     const [rank, setRank] = useState<number | null>(null)
 
     useEffect(() => {
@@ -27,22 +26,22 @@ const QuestionPage: React.FC = () => {
             getContestDetails(auth, questions, player)
     }, [auth.state.token])
 
-    useEffect(() => {
-        if (auth.state.id.length) {
-            getLeaderboard(auth).then((data) => {
-                setRank(
-                    data.findIndex((user: any) => user._id === auth.state.id) +
-                        1
-                )
-            })
-        }
-    }, [auth.state.id])
+  useEffect( () => {
+    if(auth?.state?.id?.length ){
+      getLeaderboard(auth)
+      .then(data => {
+        setRank(
+          data.findIndex((user:any) => user._id === auth.state.id) + 1
+        )
+      })
+    }
+  }, [auth.state.id])
 
-    useEffect(() => {
-        if (questions.state[0] && !rank) {
-            auth.dispatch({ type: AuthActionTypes.SET_LOADING, payload: [] })
-        }
-    }, [questions.state, rank])
+  useEffect(() => {
+    if (questions?.state?.length && rank !== null) {
+      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+    }
+  }, [questions.state, rank]);
 
     if (auth.state.token === "x") {
         return <Redirect to="/login" />
@@ -52,22 +51,29 @@ const QuestionPage: React.FC = () => {
         return <div>insert loading animation here</div>
     }
 
-    return (
-        <div className="questions-page">
-            <Navbar />
-            <div className="questions-container">
-                <h3>QUESTIONS</h3>
-                {questions.state.map((item, index) => (
-                    <QuestionListItem
-                        question={item}
-                        index={index}
-                        key={item.name}
-                    />
-                ))}
-            </div>
-            <PlayerInfoFooter rank={rank} active={false} />
-        </div>
-    )
-}
+  if (auth.state.loading) {
+    return <div>insert loading animation here</div>;
+  }
+
+  if(!auth.state.isStarted){
+    return <Redirect to="/rules" />
+  }
+  
+  return (
+    <div className="questions-page"  >
+      <Navbar/>
+      <div className="questions-container">
+        <h3>QUESTIONS</h3>
+      {questions.state.map((item, index) => (
+        <QuestionListItem question={item} index={index} key={item.name}/>
+        ))}
+      </div>
+      <PlayerInfoFooter
+      active={false}
+      rank={rank}
+      />
+    </div>
+  );
+};
 
 export default QuestionPage

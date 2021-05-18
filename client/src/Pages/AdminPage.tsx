@@ -9,11 +9,8 @@ const AdminPage : React.FC = () => {
 
     const [statement, handleStatement] = useState<string>("")
     const [name, handleName] = useState<string>("")
-    const [sampleInput, handleSampleInput] = useState<string>("")
-    const [sampleOutput, handleSampleOutput] = useState<string>("")
     const [tcInput, handleTcInput] = useState<string>("")
     const [tcOutput, handleTcOuput] = useState<string>("")
-    const [constraints, handleConstraints] = useState<string>("")
     const [difficulty, handleDifficulty] = useState<number | null>(null)
     const [quesId, handleQuesId] = useState<number | null>(null)
     const [errorMsg, setErrorMsg] = useState<null | string>(null)
@@ -50,11 +47,11 @@ const AdminPage : React.FC = () => {
                         name: name,
                         tags: "",
                         statement: statement,
-                        constraints: constraints,
+                        constraints: " ",
                         inpFormat: "  ",
                         outFormat: "  ",
-                        samInput: sampleInput,
-                        samOutput: sampleOutput,
+                        samInput: " ",
+                        samOutput: " ",
                         testcase: tcInput,
                         answer: tcOutput,
                         difficulty: difficulty
@@ -77,7 +74,7 @@ const AdminPage : React.FC = () => {
                 setErrorMsg(data.errors[0])
             }
             else{
-                setErrorMsg("DB error")
+                setErrorMsg("Upload failed")
             }
         })
     }    
@@ -90,6 +87,10 @@ const AdminPage : React.FC = () => {
         return <Redirect to="/login" />
     }
 
+    if(!auth.state.isStarted){
+        return <Redirect to="/rules" />
+    }
+
     //CHECK ADMIN OR NOT
     if(auth.state.token !== null && auth.state.token !== "x" && !auth.state.isAdmin){
         return <Redirect to="/" />
@@ -97,29 +98,25 @@ const AdminPage : React.FC = () => {
 
     return <div className="admin">
         <h3>Name</h3>
-        <textarea className="short" name="name" onChange={e => handleName(e.target.value)} />
+        <textarea className="short" name="name" id="name" onChange={e => handleName(e.target.value)} />
         <h3>Question Id</h3>
-        <textarea className="short" name="quesId" onChange={e => handleQuesId(e.target.value as unknown as number)} />
+        <textarea className="short" name="quesId" id="quesId" onChange={e => handleQuesId(e.target.value as unknown as number)} />
         <h3>Difficulty</h3>
-        <textarea className="short" name="penalty" onChange={e => handleDifficulty(e.target.value as unknown as number)} />
+        <textarea className="short" name="penalty" id="penalty" onChange={e => handleDifficulty(e.target.value as unknown as number)} />
         <h3>Statement</h3>
-        <textarea className="long" name="statement" onChange={e => handleStatement(e.target.value)} />
-        <h3>Constraints</h3>
-        <textarea className="long" name="constraints" onChange={e => handleConstraints(e.target.value)} />
-        <h3>Sample Input</h3>
-        <textarea className="long" name="sample-input" onChange={e => handleSampleInput(e.target.value)} />
-        <h3>Sample Output</h3>
-        <textarea className="long" name="sample-output" onChange={e => handleSampleOutput(e.target.value)} />
+        <textarea className="long" name="statement" id="statement" onChange={e => handleStatement(e.target.value)} />
         <h3>Testcase Input</h3>
-        <textarea className="long" name="tc-input" onChange={e => handleTcInput(e.target.value)} />
+        <textarea className="long" name="tc-input" id="tc-input" onChange={e => handleTcInput(e.target.value)} />
         <h3>Testcase Output</h3>
-        <textarea className="long" name="tc-output" onChange={e => handleTcOuput(e.target.value)} />
+        <textarea className="long" name="tc-output" id="tc-output" onChange={e => handleTcOuput(e.target.value)} />
         <br/>
-        <button onClick={handleSubmit}>
+        <button onClick={handleSubmit} 
+        className="admin-submit"
+        > 
             <h3>Submit</h3>
         </button>
         {   errorMsg?
-            <b> {errorMsg} </b>
+            <b className="admin-error"> {errorMsg} </b>
             :
             null
         }

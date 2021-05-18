@@ -53,6 +53,13 @@
     letter-spacing: 0.3em;
 }
 
+.login-status{
+    position: absolute;
+    top: 24rem;
+    font-weight: bold;
+    color: #FF4A4A;
+}
+
 @media screen and (max-width: 950px){
     .login-page{
         background-position: left;

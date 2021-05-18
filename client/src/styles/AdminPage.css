@@ -3,6 +3,10 @@
     width: 100vw;
     overflow-x: hidden;
     overflow-y: auto;
+    background-image: url(../Backgrounds/MainBackground.png);
+    background-size: cover;
+    background-position: right bottom;
+    scrollbar-color: #6D30ED #090321;
 }
 
 textarea{
@@ -22,7 +26,8 @@ textarea{
     height: 1.5rem;
     border-radius: 25px;
     margin-top: 1rem;
-    padding-left: 1rem;
+    padding-left: 0.6rem;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .long{
@@ -30,5 +35,18 @@ textarea{
     height: 20vh;
     border-radius: 30px;
     margin-top: 1rem;
-    padding: 10px;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.admin-submit{
+    position: relative;
+    left: 5vw;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.admin-error{
+    position: relative;
+    left: 45vw;
 }

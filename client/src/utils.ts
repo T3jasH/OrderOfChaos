@@ -72,10 +72,12 @@ export const getUser = async (auth : any) => {
   }
   const data = await resp.json()
   if(data.success){
+    console.log(data)
     auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
       id : data.data.user._id,
       isAdmin : data.data.user.isAdmin,
-      isStarted : data.data.user.isStarted
+      isStarted : true,
+      username: data.data.user.username
     }})
   }
   else{

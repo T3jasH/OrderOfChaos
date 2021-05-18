@@ -1,0 +1,16 @@
+.not-found{
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100vw;
+    background: url("../Backgrounds/MainBackground.png") no-repeat;
+    background-size: cover;
+    background-position: right bottom;
+}
+
+.not-found > h3{
+    position: absolute;
+    color: #6D30ED;
+    font-size: 2.5rem;
+    top: 10rem;
+    left: 10vw;
+}

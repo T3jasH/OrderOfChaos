@@ -12,7 +12,6 @@ import markdown from "../components/sampleQuestion"
 import "../styles/QuestionPage.css"
 
 import Navbar from "../components/Navbar"
-import PlayerInfoFooter from "../components/PlayerInfoFooter"
 
 import { getLeaderboard } from "../utils"
 
@@ -155,7 +154,6 @@ const QuestionPage = () => {
                     <button className="answer-button">Submit</button>
                 </div>
             </div>
-            <PlayerInfoFooter rank={rank} active={false} />
         </div>
     )
 }

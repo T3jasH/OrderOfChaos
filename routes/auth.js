@@ -25,8 +25,8 @@ router.get("/", isLoggedIn, async (req, res) => {
 router.post(
     "/",
     [
-        check("email", "Please enter your email address.").isEmail(),
-        check("password", "Please enter your password."),
+        check("email", "Please enter a valid email address.").isEmail(),
+        check("password", "Please enter your password.").isLength({min: 8}),
     ],
     async (req, res) => {
         const errors = validationResult(req);

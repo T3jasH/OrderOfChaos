@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react"
-
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { getUser } from "../utils"
@@ -7,7 +6,6 @@ import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
 import { getLeaderboard } from "../utils"
 import { useHistory } from "react-router-dom"
-import LeaderboardHeader from "../components/LeaderboardHeader"
 import LeaderboardTable from "../components/LeaderBoardTable"
 import "../styles/LeadboardPage.css"
 
@@ -46,9 +44,6 @@ const LeaderboardPage = () => {
 
     useEffect(() => {
         if (auth.state.token !== null && auth.state.token !== "x") {
-            getLeaderboard(auth).then((data) => {
-                setLeaderboardPlayers(data)
-            })
             getUser(auth)
         }
     }, [auth.state.token])
@@ -58,6 +53,7 @@ const LeaderboardPage = () => {
     useEffect(() => {
         if (auth.state.id.length) {
             getLeaderboard(auth).then((data) => {
+                setLeaderboardPlayers(data)
                 setRank(
                     data.findIndex((user: any) => user._id === auth.state.id) +
                         1
@@ -171,7 +167,7 @@ const LeaderboardPage = () => {
                     />
                 )}
             </div>
-            <PlayerInfoFooter rank={rank} active={tabState === "attackers"} />
+            <PlayerInfoFooter rank={rank} active={tabState === "attackers"}/>
         </div>
     )
 }

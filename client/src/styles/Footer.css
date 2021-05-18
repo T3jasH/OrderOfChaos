@@ -30,6 +30,7 @@
 
 .info-container {
     margin-left: 8vw;
+    position: relative;
 }
 
 .field-value {
@@ -48,6 +49,22 @@
     padding: 0.5rem 0.8rem;
     font-size: 1.2rem;
 }
+
+.new-attacks-counter{
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    background-color: #3F1A81;
+    cursor: pointer;
+    position: absolute;
+    right: -0.2rem;
+    top: -0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .attack-active {
     background-color: #9c9d8e;
     color: black;

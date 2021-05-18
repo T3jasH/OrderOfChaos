@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import { Question, QuestionActionTypes } from "../context/QuestionReducer"
 import {AuthContext} from "../context/AuthContext"
 import "../styles/QuestionsListItem.css"
@@ -18,7 +18,13 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
     const questions = useContext(QuestionContext)
     const player = useContext(PlayerContext)
     const history = useHistory()
-    const [lockStatus, setLockStatus] = useState<string>(question.isLocked? player.state.score < question.unlockCost? `Locked` : `Unlock: ${question.unlockCost}pts` : "Unlocked"); 
+    const [lockStatus, setLockStatus] = useState<string>(""); 
+
+    useEffect(()=> {
+        if(question?.name?.length){
+            setLockStatus(question.isLocked? player.state.score < question.unlockCost? `Locked` : `Unlock: ${question.unlockCost}pts` : "Unlocked")
+        }
+    }, [question.name])
 
     const unlockQuestion = () => {
         if(token && player.state.score >= question.unlockCost && question.isLocked)
