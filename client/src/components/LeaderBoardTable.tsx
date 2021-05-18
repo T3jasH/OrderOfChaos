@@ -4,9 +4,14 @@ import { IleaderboardPlayer } from "../Pages/LeaderboardPage"
 interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined
     auth: any
+    handleAttack: any
 }
 
-const LeaderBoardTable = ({ leaderboardPlayers, auth }: props) => {
+const LeaderBoardTable = ({
+    leaderboardPlayers,
+    auth,
+    handleAttack,
+}: props) => {
     return (
         <table cellSpacing={50}>
             <thead>
@@ -40,7 +45,10 @@ const LeaderBoardTable = ({ leaderboardPlayers, auth }: props) => {
                             <td>{player.score}</td>
                             <td>{player.attackers.length}</td>
                             <td>
-                                <button className="leaderboard-button">
+                                <button
+                                    onClick={() => handleAttack(player._id)}
+                                    className="leaderboard-button"
+                                >
                                     Attack
                                 </button>
                             </td>

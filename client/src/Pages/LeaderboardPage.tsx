@@ -148,11 +148,13 @@ const LeaderboardPage = () => {
                     <LeaderboardTable
                         leaderboardPlayers={leaderboardPlayers}
                         auth={auth}
+                        handleAttack={handleAttack}
                     />
                 ) : (
                     <AttackersTable
                         leaderboardPlayers={leaderboardPlayers}
                         auth={auth}
+                        handleAttack={handleAttack}
                         //ACTUAL CODE BUT I DON'T HAVE ATTACKERS
                         // attackers={
                         //     leaderboardPlayers?.find(

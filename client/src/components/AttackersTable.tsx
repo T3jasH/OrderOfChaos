@@ -5,9 +5,15 @@ interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined
     attackersP: Iattacker[] | undefined
     auth: any
+    handleAttack: any
 }
 
-const AttackersTable = ({ leaderboardPlayers, auth, attackersP }: props) => {
+const AttackersTable = ({
+    leaderboardPlayers,
+    auth,
+    attackersP,
+    handleAttack,
+}: props) => {
     const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
         attackersP
     )
@@ -73,7 +79,10 @@ const AttackersTable = ({ leaderboardPlayers, auth, attackersP }: props) => {
                             </td>
                             <td>{attacker.date}</td>
                             <td>
-                                <button className="leaderboard-button">
+                                <button
+                                    onClick={() => handleAttack(attacker._id)}
+                                    className="leaderboard-button"
+                                >
                                     Attack
                                 </button>
                             </td>
