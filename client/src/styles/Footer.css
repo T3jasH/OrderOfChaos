@@ -1,58 +1,60 @@
-.footer{
+.footer {
     position: fixed;
     bottom: 0;
     height: 5rem;
-    width: 100%;  
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 1;
     background: inherit;
     overflow: hidden;
-    
 }
 
-.footer:before{
+.footer:before {
     content: "";
-  position: absolute;
-  background: inherit;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
-  filter: blur(2px);
-  margin: -20px;
+    position: absolute;
+    background: inherit;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, 0.5);
+    filter: blur(2px);
+    margin: -20px;
 }
-
 
 .info-container {
     margin-left: 8vw;
 }
 
-.field-value{
+.field-value {
     font-size: 1.5rem;
     font-weight: 600;
 }
-.number{
+.number {
     font-size: 1.2rem;
     margin-top: 0.3rem;
 }
 
-#btn-attackers{
+#btn-attackers {
     box-sizing: border-box;
     border: 1px solid white;
     border-radius: 10px 0px;
     padding: 0.5rem 0.8rem;
     font-size: 1.2rem;
 }
+.attack-active {
+    background-color: #9c9d8e;
+    color: black;
+}
 
-@media screen and (max-wdith : 950px) {
-    .info-container{
+@media screen and (max-wdith: 950px) {
+    .info-container {
         margin-left: 0px;
     }
 }

@@ -32,6 +32,7 @@ export interface IQuestion {
     tags: string[]
     testcase: string
     unlockCost: number
+    difficulty: number
     _id: string
 }
 
@@ -131,7 +132,7 @@ const QuestionPage = () => {
             <div className="question-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
-                <QuestionInfo />
+                <QuestionInfo questionData={questionData} />
                 {/* {questionData?.statement && (
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {questionData?.statement}
@@ -146,17 +147,15 @@ const QuestionPage = () => {
 
                 <div className="answer-container">
                     <h2>Answer</h2>
-                    <div>Attempts left to get an attack: 1</div>
+                    <div id="attempts-left">
+                        Attempts left to get an attack: 1
+                    </div>
 
-                    <textarea
-                        className="answer-textarea"
-                        cols={90}
-                        rows={15}
-                    ></textarea>
-                    <button className="leaderboard-button">Submit</button>
+                    <textarea className="answer-textarea"></textarea>
+                    <button className="answer-button">Submit</button>
                 </div>
             </div>
-            <PlayerInfoFooter rank={rank} />
+            <PlayerInfoFooter rank={rank} active={false} />
         </div>
     )
 }

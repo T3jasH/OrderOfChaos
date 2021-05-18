@@ -1,5 +1,24 @@
 .question-info {
     display: flex;
+    width: 90%;
     justify-content: space-between;
     margin-bottom: 3rem;
+    font-size: 1rem;
+    font-weight: 500;
+    /* font-size: 1.5rem; */
+}
+
+.question-info-purple {
+    color: #8060c6;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.question-info-label {
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.question-info > span {
+    font-weight: 700;
 }

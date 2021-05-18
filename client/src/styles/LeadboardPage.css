@@ -32,7 +32,7 @@ html {
 
 .leaderboard-container {
     position: absolute;
-    left: 15vw;
+    left: 7vw;
     top: 5rem;
     width: 85vw;
     height: calc(100vh - 10rem);
@@ -43,12 +43,12 @@ html {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    cursor: pointer;
 }
 
 td,
 th {
     /* border: 1px solid #999; */
-    padding: 0.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     text-align: center;
@@ -63,6 +63,10 @@ th {
 .table-space {
     width: 15rem;
 }
+
+.table-space-attack {
+    width: 5rem;
+}
 .leaderboard-table-heading {
     color: #6d30ed;
     font-weight: 400;
@@ -73,4 +77,13 @@ th {
         left: 10vw;
         width: 90vw;
     }
+}
+
+#slash {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.fade {
+    color: #9c9d8e;
 }

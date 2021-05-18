@@ -65,7 +65,7 @@ const QuestionPage: React.FC = () => {
                     />
                 ))}
             </div>
-            <PlayerInfoFooter rank={rank} />
+            <PlayerInfoFooter rank={rank} active={false} />
         </div>
     )
 }

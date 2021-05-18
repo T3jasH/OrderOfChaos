@@ -13,8 +13,9 @@ html {
 }
 
 .question-container {
+    /* border: 2px solid red; */
     position: absolute;
-    left: 15vw;
+    left: 7vw;
     top: 5rem;
     width: 85vw;
     height: calc(100vh - 10rem);
@@ -27,9 +28,43 @@ html {
     font-weight: 700;
     margin-bottom: 1rem;
 }
+.answer-container {
+    margin-top: 2rem;
+}
+.answer-container > h2 {
+    color: #8060c6;
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+#attempts-left {
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
 
 .answer-textarea {
     background: rgba(196, 196, 196, 0.1);
     backdrop-filter: blur(140.2px);
     border-radius: 30px;
+    margin-left: 0;
+    width: 95%;
+    height: 20rem;
+    border: none;
+}
+
+.answer-button {
+    position: relative;
+    margin-top: 1rem;
+    left: 40%;
+    border: 1px solid #ffffff;
+    padding: 0.5rem 0.8rem;
+    box-sizing: border-box;
+    border-radius: 10px 0px;
+}
+
+.answer-button:hover {
+    background-color: #9c9d8e;
+    color: black;
+    transition: all 0.3s ease;
 }

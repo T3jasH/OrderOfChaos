@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react"
+
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { getUser } from "../utils"
@@ -7,12 +8,14 @@ import { PlayerActionTypes } from "../context/PlayerReducer"
 import { getLeaderboard } from "../utils"
 import { useHistory } from "react-router-dom"
 import LeaderboardHeader from "../components/LeaderboardHeader"
+import LeaderboardTable from "../components/LeaderBoardTable"
 import "../styles/LeadboardPage.css"
 
 import Navbar from "../components/Navbar"
 import PlayerInfoFooter from "../components/PlayerInfoFooter"
+import AttackersTable from "../components/AttackersTable"
 
-export interface IleaderboardPlayers {
+export interface IleaderboardPlayer {
     username: string
     _id: string
     score: number
@@ -24,14 +27,16 @@ export interface Iattacker {
     username: string
     date: string
     _id: string
+    rank: number | undefined
 }
 const LeaderboardPage = () => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
+    const [tabState, setTabState] = useState<any>("leaderboard")
 
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
-        IleaderboardPlayers[]
+        IleaderboardPlayer[]
     >()
     useEffect(() => {
         if (auth.state.token === null) {
@@ -115,6 +120,7 @@ const LeaderboardPage = () => {
                 .catch((e) => console.log(e))
         }
     }
+
     console.log(leaderboardPlayers)
     if (auth.state.loading) return <div> loading..</div>
     return (
@@ -124,56 +130,46 @@ const LeaderboardPage = () => {
                 {scroll()}
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>
-                    <span>Leaderboard</span>/<span>Attackers</span>
+                    <span
+                        className={tabState !== "leaderboard" ? "fade" : ""}
+                        onClick={() => setTabState("leaderboard")}
+                    >
+                        Leaderboard
+                    </span>
+                    <span id="slash">/</span>
+                    <span
+                        className={tabState !== "attackers" ? "fade" : ""}
+                        onClick={() => setTabState("attackers")}
+                    >
+                        Attackers
+                    </span>
                 </h3>
-                <table cellSpacing={50}>
-                    <thead>
-                        <tr
-                            className="table-heading"
-                            style={{ color: "purple" }}
-                        >
-                            <td className="leaderboard-table-heading">
-                                Position
-                            </td>
-                            <td className="leaderboard-table-heading">Name</td>
-                            <td className="table-space"></td>
-                            <td className="leaderboard-table-heading">Score</td>
-                            <td className="leaderboard-table-heading">
-                                No. of times
-                                <br /> attacked
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {leaderboardPlayers?.map((player, idx) => {
-                            return (
-                                <tr>
-                                    <td>{idx + 1}</td>
-                                    <td
-                                        id={
-                                            auth.state.id === player._id
-                                                ? "current-player"
-                                                : ""
-                                        }
-                                    >
-                                        {player.username}
-                                    </td>
+                {tabState === "leaderboard" ? (
+                    <LeaderboardTable
+                        leaderboardPlayers={leaderboardPlayers}
+                        auth={auth}
+                    />
+                ) : (
+                    <AttackersTable
+                        leaderboardPlayers={leaderboardPlayers}
+                        auth={auth}
+                        //ACTUAL CODE BUT I DON'T HAVE ATTACKERS
+                        // attackers={
+                        //     leaderboardPlayers?.find(
+                        //         (d) => d._id === auth.state.id
+                        //     )?.attackers
+                        // }
 
-                                    <td className="table-space"></td>
-                                    <td>{player.score}</td>
-                                    <td>{player.attackers.length}</td>
-                                    <td>
-                                        <button className="leaderboard-button">
-                                            Attack
-                                        </button>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                        //TO TEST ATTACKERS
+                        attackersP={
+                            leaderboardPlayers?.find(
+                                (d) => d._id === "609c0d2a812f61639029a6e9"
+                            )?.attackers
+                        }
+                    />
+                )}
             </div>
-            <PlayerInfoFooter rank={rank} />
+            <PlayerInfoFooter rank={rank} active={tabState === "attackers"} />
         </div>
     )
 }
