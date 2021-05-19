@@ -22,7 +22,8 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
 
     useEffect(()=> {
         if(question?.name?.length){
-            setLockStatus(question.isLocked? player.state.score < question.unlockCost? `Locked` : `Unlock: ${question.unlockCost}pts` : "Unlocked")
+            setLockStatus(question.isLocked? player.state.score < question.unlockCost? `Locked` : `Unlock: ${question.unlockCost}pts` : 
+            question.isSolved? "Solved" : "Unlocked")
         }
     }, [question.name])
 

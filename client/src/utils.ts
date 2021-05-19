@@ -99,6 +99,7 @@ export const getLeaderboard = async (auth: any) => {
   })
   const data = await resp.json()
   leaderboard = data.data.ranks
+  console.log(data.data.ranks)
   return leaderboard
    
 };

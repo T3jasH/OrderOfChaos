@@ -47,10 +47,16 @@ input {
   background: inherit;
   margin-top: 1.5rem;
   display: block;
-  border-bottom: 1px solid #fff;
-
+  border-bottom: 2px solid #9C9D8E;
+  width: 20rem;
+  text-align: center;
+  font-size: 1rem;
+  transition: border-bottom 500ms ease-in-out;
 }
-
+input:focus,
+input:active{
+  border-bottom-color: #FFFFFF;
+}
 input::placeholder{
   text-align: center;
   letter-spacing: 0.2em;
@@ -60,12 +66,6 @@ input[type="submit"]{
   border: 1px solid #fff;
   border-radius: 1rem 0;
   cursor: pointer;
-}
-
-.btn-back{
-  border: 1px solid #fff;
-  border-radius: 10px 0px;
-  padding: 0.3rem 0.6rem;
 }
 
 @media screen and (max-width : 1200px) {
@@ -85,3 +85,4 @@ input[type="submit"]{
     --rootFontSize: 12.5px;
   }
 }
+

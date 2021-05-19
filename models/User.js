@@ -29,6 +29,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    phoneNo: {
+        type: String,
+        required: true
+    },
     score: {
         type: Number,
         default: 200,

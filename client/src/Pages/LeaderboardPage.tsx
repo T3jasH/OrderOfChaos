@@ -36,6 +36,7 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
     const [tabState, setTabState] = useState<any>(defaultTabState)
+    const [attackersP, setAttackersP] = useState<any[]>([])
 
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
         IleaderboardPlayer[]
@@ -68,6 +69,14 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
 
     useEffect(() => {
         if (leaderboardPlayers?.length) {
+            var att = leaderboardPlayers.find(player => player._id === "609c0d2a812f61639029a6e9")?.attackers
+            att = att?.map((obj:any) => {
+                obj.date = new Date(obj.date).getMilliseconds()
+                return obj
+            })
+            att?.sort((firstAttacker:any, secondAttacker:any) => 
+            firstAttacker.date < secondAttacker.date ? 1 : 0
+            )
             auth.dispatch({ type: AuthActionTypes.SET_LOADING, payload: [] })
         }
     }, [leaderboardPlayers])
@@ -153,10 +162,9 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 ) : (
                     <AttackersTable
                         leaderboardPlayers={leaderboardPlayers}
-                        auth={auth}
                         handleAttack={handleAttack}
                         //ACTUAL CODE BUT I DON'T HAVE ATTACKERS
-                        // attackers={
+                        // attackersP={
                         //     leaderboardPlayers?.find(
                         //         (d) => d._id === auth.state.id
                         //     )?.attackers

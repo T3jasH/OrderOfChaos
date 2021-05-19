@@ -37,10 +37,9 @@ const RulesPage : React.FC = ( ) => {
             </li>
             </ol>   
             <button
-            className="btn-back"
             onClick={() => history.goBack()}
             >
-            Back    
+            {`<Back`}    
             </button> 
         </div>
     </div>

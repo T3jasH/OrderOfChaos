@@ -11,6 +11,7 @@ const Navbar:React.FC = () => {
 
   return <div className="navbar">
   <button
+    style={{marginRight : "10vw"}}
     id="logout-btn"
     className="btn-nav"
     onClick={(e) => {

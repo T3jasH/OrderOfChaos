@@ -20,11 +20,11 @@ const getLeaderboard = async (req, res) => {
                 isActive: true,
             }).select('username score attackers');
             ranks.sort(mycomp);
-            // console.log(ranks);
+            console.log(ranks[0].attackers)
             res.send({
                 success: true,
                 msg: 'Latest leaderboard fetched',
-                data: { ranks },
+                data: { ranks : ranks},
             });
         } catch (err) {
             console.log(err);

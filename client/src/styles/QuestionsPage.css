@@ -24,9 +24,9 @@ html {
 
 .questions-container {
     position: absolute;
-    left: 15vw;
+    left: 10vw;  
     top: 5rem;
-    width: 85vw;
+    width: 90vw;
     height: calc(100vh - 10rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;

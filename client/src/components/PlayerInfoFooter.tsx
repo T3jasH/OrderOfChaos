@@ -14,7 +14,7 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
     const player = useContext(PlayerContext).state
     const history = useHistory()
 
-    var attacksOnPlayer = null;
+    var attacksOnPlayer : number | null = 8;
     const newAttacksCount = () => {
         var cnt=0;
         if(player.attacks)
@@ -25,7 +25,7 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
         }
         return cnt === 0 ? null : cnt
       }
-
+    attacksOnPlayer = newAttacksCount();
     return (
         <div className="footer">
             <div className="info-container" style={{ marginLeft: "0px" }}>

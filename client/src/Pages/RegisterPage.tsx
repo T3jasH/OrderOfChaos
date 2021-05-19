@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../styles/RegisterPage.css";
+import "../styles/LoginPage.css";
 
-import { Link, Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
 
@@ -10,9 +10,11 @@ const RegisterPage: React.FC = () => {
   const [username, handleUsername] = useState<string>("");
   const [regno, handleRegno] = useState<string>("");
   const [password, handlePassword] = useState<string>("");
+  const [confirmPassword, handleConfirmPassword] = useState<string>("");
   const [name, handleName] = useState<string>("");
   const [phoneNo, handlePhoneNo] = useState<string>("");
   const [status, handleStatus] = useState<string | null>(null);
+  const history = useHistory()
   const auth = useContext(AuthContext)
 
   useEffect(() => {
@@ -23,6 +25,10 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(password !== confirmPassword){
+      handleStatus("Passwords do not match")
+      return
+    }
     const body = {
       email: email,
       name: name,
@@ -65,51 +71,64 @@ const RegisterPage: React.FC = () => {
   }
 
   return (
-    <div className="register-page">
-      <div className="container">
-        <h3>Register</h3>
-        <form onSubmit={(e) => handleSubmit(e)}>
+    <div className="login-page">
+      <div className="login-container">
+        <h2>ORDER OF CHAOS</h2>
+        <h3>REGISTER</h3>
+        <form onSubmit={(e) => handleSubmit(e)} className="login-form register-form">
           <input
             type="text"
-            placeholder="Username"
+            placeholder="USERNAME"
             name="username"
             onChange={(e) => handleUsername(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Name"
+            placeholder="NAME"
             name="name"
             onChange={(e) => handleName(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Email"
+            placeholder="EMAIL"
             name="email"
             onChange={(e) => handleEmail(e.target.value)}
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="PASSWORD"
             onChange={(e) => handlePassword(e.target.value)}
           />
           <input
+            type="password"
+            placeholder="CONFIRM PASSWORD"
+            onChange={(e) => handleConfirmPassword(e.target.value)}
+          />
+          <input
             type="text"
-            placeholder="Registration No"
+            placeholder="REGISTRATION NO"
             name="regno"
             onChange={(e) => handleRegno(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Phone No"
+            placeholder="PHONE NO"
             name="phoneNo"
             onChange={(e) => handlePhoneNo(e.target.value)}
           />
-          <input type="submit" value="submit" />
+          <input type="submit" value="REGISTER" className="register-submit-btn" />
         </form>
-        {status ? <b>{status}</b> : null}
-        <Link to="/login">Already have an account?</Link>
+        <p className="register-status">
+          {status}
+        </p>
+        <button className="btn-login" 
+        style={{marginTop : "2.5vh"}}
+        onClick={() => {history.push("/login")}}
+        >
+          ALREADY HAVE AN ACCOUNT?
+        </button>
       </div>
-    </div>
+    </div> 
   );
 };
 

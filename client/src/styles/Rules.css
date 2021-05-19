@@ -23,7 +23,7 @@
 
 .rules-container > h2{
     font-size: 1.2rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.1em; 
     position: absolute;
     left: 45%;
 } 

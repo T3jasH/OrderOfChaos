@@ -1,24 +1,37 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../context/AuthContext"
 import { IleaderboardPlayer, Iattacker } from "../Pages/LeaderboardPage"
 
 interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined
     attackersP: Iattacker[] | undefined
-    auth: any
     handleAttack: any
 }
 
 const AttackersTable = ({
     leaderboardPlayers,
-    auth,
     attackersP,
     handleAttack,
 }: props) => {
     const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
         attackersP
     )
+    const auth = useContext(AuthContext)
+
     useEffect(() => {
         setAttackers(attackersP)
+    }, [attackersP])
+
+    useEffect(() => {
+        setAttackers((prev) =>
+            prev?.map((a) => ({
+                ...a,
+                rank: leaderboardPlayers?.findIndex(
+                    (player: IleaderboardPlayer) =>
+                        player.username === a.username
+                ),
+            }))
+        )
     }, [attackersP])
 
     const minsAgo = (date: any) => {
@@ -33,18 +46,6 @@ const AttackersTable = ({
         }
         return `${diff}${text}`
     }
-
-    useEffect(() => {
-        setAttackers((prev) =>
-            prev?.map((a) => ({
-                ...a,
-                rank: leaderboardPlayers?.findIndex(
-                    (player: IleaderboardPlayer) =>
-                        player.username === a.username
-                ),
-            }))
-        )
-    }, [attackersP])
 
     return (
         <table className="attackers-table">

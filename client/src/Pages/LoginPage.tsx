@@ -4,13 +4,14 @@ import {AuthContext} from "../context/AuthContext"
 import {AuthActionTypes} from "../context/AuthReducer"
 import { Redirect, useHistory } from "react-router-dom";
 
-
+   
 const LoginPage: React.FC = () => {   
   const [email, handleEmail] = useState<string>("");
   const [password, handlePassword] = useState<string>("");
   const [status, handleStatus] = useState<string | null>(null);
   const [loginText, setLoginText] = useState<string>("LOGIN")
   const [loginBtnText, setLoginBtnText] = useState<string>("LOGIN")
+  const [pageType, setPageType] = useState<string>("login")
   const auth = useContext(AuthContext)
   const history = useHistory()
 
@@ -23,12 +24,10 @@ const LoginPage: React.FC = () => {
   if(auth.state.token !== "x" && auth.state.token !== null){
     return <Redirect to = "/" />
   }
-  
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(loginText === "LOGIN"){
+    if(pageType === "login"){
     const response = await fetch("/api/auth", {
       method: "POST",
       headers: {
@@ -51,7 +50,8 @@ const LoginPage: React.FC = () => {
       handleStatus(data.msg)
     }
     }
-    else{
+
+    else if(pageType === "forgotPassword"){
       const response = await fetch("/api/users/forgotpassword", {
         method: "POST",
         body: JSON.stringify({email: email}),
@@ -62,20 +62,49 @@ const LoginPage: React.FC = () => {
       const data = await response.json()
       handleStatus(data.msg)
     }
+    else{
+      const response = await fetch("/api/users/resendEmail", {
+        method: "POST",
+        body: JSON.stringify({email: email}),
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+      const data = await response.json()
+      handleStatus(data.msg)
+    }
   };
 
   const handleForgotPassword = () => {
+    setPageType("forgotPassword")
     document.getElementById("password")?.setAttribute("style", "display : none;")
     document.getElementById("login-text")?.setAttribute("style", "letter-spacing : 0em;");
-    document.getElementById("login-status")?.setAttribute("style", "top: 21.5rem; color: #fff;")
+    var btns = document.getElementsByClassName("btn-login");
+    for(var i=0; i<btns.length; i++){
+      btns[i]?.setAttribute("style", "display: none")
+    }
     handleStatus(null)
     setLoginBtnText("SUBMIT")
     setLoginText("Enter your email ID")
   }
 
+  const handleVerification = () => {
+    document.getElementById("password")?.setAttribute("style", "display : none;")
+    document.getElementById("login-text")?.setAttribute("style", "letter-spacing : 0em;");
+    var btns = document.getElementsByClassName("btn-login");
+    for(var i=0; i<btns.length; i++){
+      btns[i]?.setAttribute("style", "display: none")
+    }
+    handleStatus(null)
+    setLoginText("SUBMIT")
+    setLoginText("Enter your email ID")
+  }
 
   return (
     <div className="login-page">
+      <p className="login-status" id="login-status" style={{display: status? "block" : "none"}}>
+         {status}
+        </p> 
       <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
          <h3 id="login-text">
@@ -83,7 +112,6 @@ const LoginPage: React.FC = () => {
          </h3>
         <form onSubmit={(e) => handleSubmit(e)} className="login-form">
           <input
-            style={{marginTop : "4rem"}}
             type="text"
             placeholder="EMAIL"
             name="email"
@@ -93,24 +121,24 @@ const LoginPage: React.FC = () => {
             id="password"
             type="password"
             placeholder="PASSWORD"
-            onChange={(e) => handlePassword(e.target.value)}
+            onChange={(e) => handlePassword(e.target.value)}  
           />
-          <input type="submit" value={loginBtnText}/>
+          <input type="submit" value={loginBtnText} className="login-submit-btn"/>
         </form>
-       <p className="login-status" id="login-status" style={{display: status? "block" : "none"}}>
-         {status}
-          </p> 
         <button 
-        className="btn-login" style={{marginTop : "4rem"}}
+        id="forgot-password"
+        className="btn-login" style={{marginTop : "7vh"}}
         onClick={handleForgotPassword}
         >
           FORGOT PASSWORD?
         </button>
+        <button 
+        id="verification"
+        className="btn-login" 
+        onClick={handleVerification}>
+          VERIFICATION  NOT SENT?
+        </button>
         <button className="btn-login" 
-        style={{
-          marginTop: "1.5rem",
-          fontWeight: "bold" 
-          }}
         onClick={
           e => history.push("/register")
         }
@@ -120,8 +148,7 @@ const LoginPage: React.FC = () => {
         <button 
         className="btn-login"
         onClick={e => {
-          history.push("/rules")} }
-        style={{marginTop: "1.5rem",}}
+          history.push("/rules")} }  
         >
           RULES
         </button>
@@ -129,5 +156,7 @@ const LoginPage: React.FC = () => {
     </div>
   );
 };
+
+
 
 export default LoginPage;

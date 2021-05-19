@@ -24,13 +24,14 @@ router.post(
             .isEmpty(),
         check('username', 'Please enter a username.').not().isEmpty(),
         check('college', 'Please enter a college name.').not().isEmpty(),
+        check('phoneNo', 'Place enter you phone number')
     ],
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res
                 .status(400)
-                .json({ success: false, errors: errors.array() });
+                .json({ success: false, msg: errors.array()[0].msg });
         }
 
         const { name, email, password, regno, username, college } = req.body;
