@@ -47,7 +47,7 @@ const AttackersTable = ({
     }, [attackersP])
 
     return (
-        <table cellSpacing={30}>
+        <table className="attackers-table">
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
                     <td className="leaderboard-table-heading">Position</td>
@@ -56,7 +56,7 @@ const AttackersTable = ({
                     <td className="leaderboard-table-heading">Score</td>
                     <td className="leaderboard-table-heading">
                         No. of times
-                        <br /> attacked
+                        <br /> attacked you
                     </td>
                     <td className="leaderboard-table-heading">
                         Time of <br /> attack
@@ -88,9 +88,16 @@ const AttackersTable = ({
                             </td>
                             <td>
                                 {
-                                    leaderboardPlayers?.find(
-                                        (d) => d.username === attacker.username
-                                    )?.attackers.length
+                                    leaderboardPlayers
+                                        ?.find(
+                                            (p) =>
+                                                p.username ===
+                                                auth.state.username
+                                        )
+                                        ?.attackers.map(
+                                            (a) =>
+                                                a.username === attacker.username
+                                        ).length
                                 }
                             </td>
                             <td>{minsAgo(attacker.date)}</td>

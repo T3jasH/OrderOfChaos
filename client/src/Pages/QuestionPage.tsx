@@ -160,22 +160,31 @@ const QuestionPage = () => {
                 </div>
 
                 <div className="test-case-container">
-                    <h2>Test Case</h2>
+                    <div className="test-case-header">
+                        <h2>Test Case</h2>
 
-                    <div>{questionData?.testcase}</div>
-                    <button
-                        onClick={() => {
-                            CopyToClipboard(questionData?.testcase)
-                        }}
-                    >
-                        Copy
-                    </button>
+                        <button
+                            onClick={() => {
+                                CopyToClipboard(questionData?.testcase)
+                            }}
+                        >
+                            Copy
+                        </button>
+                    </div>
+                    <div id="test-case">
+                        <div>{questionData?.testcase}</div>
+                    </div>
                 </div>
 
                 <div className="answer-container">
                     <h2>Answer</h2>
-                    <div id="attempts-left">
-                        Attempts left to get an attack: 1
+                    <div className="answer-info">
+                        <div id="attempts-left">
+                            Attempts left to get an attack: 1
+                        </div>
+                        <div className="submit-message">
+                            {submitMessage != "" && submitMessage}
+                        </div>
                     </div>
 
                     <textarea className="answer-textarea"></textarea>

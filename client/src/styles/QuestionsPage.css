@@ -43,3 +43,14 @@ html {
         width: 90vw;
     }
 }
+
+.answer-info {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.submit-message {
+    font-weight: 700;
+    color: #6d30ed;
+}
