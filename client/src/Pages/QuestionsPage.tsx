@@ -30,8 +30,9 @@ const QuestionPage: React.FC = () => {
     if(auth?.state?.id?.length ){
       getLeaderboard(auth)
       .then(data => {
+        console.log(data.attackers)
         setRank(
-          data.findIndex((user:any) => user._id === auth.state.id) + 1
+          data.ranks.findIndex((user:any) => user._id === auth.state.id) + 1
         )
       })
     }

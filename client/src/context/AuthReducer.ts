@@ -21,12 +21,9 @@ export interface AuthAction {
 }
 
 export const authReducer = (state: Auth, action: AuthAction) => {
-  console.log("Why is this not printing bruhhhhh");
   switch (action.type) {
     case "LOGIN":
       localStorage.setItem("iecseOrderOfChaosUser", action.payload.token);
-      console.log("LOOK HERE");
-      console.log(action.payload);
       return {
         ...state, 
         token : action.payload.token

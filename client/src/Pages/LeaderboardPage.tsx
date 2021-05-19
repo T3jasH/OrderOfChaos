@@ -36,7 +36,7 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
     const [tabState, setTabState] = useState<any>(defaultTabState)
-    const [attackersP, setAttackersP] = useState<any[]>([])
+    const [attackersP, setAttackersP] = useState<Iattacker[]>([])
 
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
         IleaderboardPlayer[]
@@ -49,7 +49,7 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
 
     useEffect(() => {
         if (auth.state.token !== null && auth.state.token !== "x") {
-            getUser(auth)
+            getUser(auth, contextPlayer)
         }
     }, [auth.state.token])
 
@@ -57,10 +57,17 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
 
     useEffect(() => {
         if (auth.state.id.length) {
-            getLeaderboard(auth).then((data) => {
-                setLeaderboardPlayers(data)
+            getLeaderboard(auth)
+            .then((data) => {
+                console.log(data)
+                setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
+                    return {
+                        ...obj, 
+                        attackers : data.attackers[idx]
+                    }
+                }))
                 setRank(
-                    data.findIndex((user: any) => user._id === auth.state.id) +
+                    data.ranks.findIndex((user: any) => user._id === auth.state.id) +
                         1
                 )
             })
@@ -68,6 +75,8 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
     }, [auth.state.id, tabState])
 
     useEffect(() => {
+
+        console.log(leaderboardPlayers)
         if (leaderboardPlayers?.length) {
             var att = leaderboardPlayers.find(player => player._id === "609c0d2a812f61639029a6e9")?.attackers
             att = att?.map((obj:any) => {
@@ -83,12 +92,6 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
 
     const scroll = () => {
         if (window.location.hash) {
-            console.log(
-                String(window.location.hash).substring(
-                    1,
-                    String(window.location.hash).length
-                )
-            )
             document
                 .getElementById(
                     String(window.location.hash).substring(
@@ -105,9 +108,8 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
             alert("You don't have any attacks!")
             return
         }
-
+        console.log(id)
         if (auth.state.token) {
-            console.log("Is this getting called")
             fetch(`/api/leaderboard/${id}`, {
                 method: "POST",
                 headers: {
@@ -116,21 +118,39 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 },
             })
                 .then((response) => response.json())
+                .catch((err) => console.log(err))
                 .then((data) => {
                     console.log(data)
+                    if(data.success){
                     contextPlayer.dispatch({
                         type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
                         payload: contextPlayer.state.attacksLeft - 1,
                     })
                     getLeaderboard(auth).then((data) => {
-                        setLeaderboardPlayers(data)
+                        
+                        setLeaderboardPlayers( 
+                            data.ranks.map((player:any, idx:any) => {
+                                console.log(data.attackers[idx])
+                                return{
+                                    ...player, 
+                                    attackers: data.attackers[idx]
+                                }
+                            })
+                         )
+                        setRank(
+                            data.ranks.findIndex((user: any) => user._id === auth.state.id) +
+                                1
+                        )
                     })
+                }
+                else{
+                    console.log("Someting's wrong")
+                }
                 })
                 .catch((e) => console.log(e))
         }
     }
 
-    console.log(leaderboardPlayers)
     if (auth.state.loading) return <div> loading..</div>
     return (
         <div className="leaderboard-page">

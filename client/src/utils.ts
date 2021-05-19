@@ -56,7 +56,7 @@ export const getContestDetails = async (
 
 
 
-export const getUser = async (auth : any) => {
+export const getUser = async (auth : any, player?: any) => {
   let resp=null;
   if(auth.state.token){
   resp = await fetch("/api/auth", {
@@ -79,6 +79,16 @@ export const getUser = async (auth : any) => {
       isStarted : true,
       username: data.data.user.username
     }})
+    if(player){
+      player.dispatch({ 
+        type: PlayerActionTypes.GET_USER, 
+        payload: {
+        score: data.data.user.score,
+        attacks: data.data.user.attackers,
+        attacksLeft: data.data.user.remAttack
+      }}
+      )
+    }
   }
   else{
     console.log(data)
@@ -89,7 +99,6 @@ export const getUser = async (auth : any) => {
 }
 
 export const getLeaderboard = async (auth: any) => {
-  let leaderboard = null
   const resp = await fetch("/api/leaderboard", {
     method: "GET",
     headers: {
@@ -98,8 +107,7 @@ export const getLeaderboard = async (auth: any) => {
     },
   })
   const data = await resp.json()
-  leaderboard = data.data.ranks
-  console.log(data.data.ranks)
-  return leaderboard
+  console.log(data.data.attackers)
+  return data.data
    
 };
