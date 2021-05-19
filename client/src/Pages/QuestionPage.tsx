@@ -4,6 +4,7 @@ import { AuthActionTypes } from "../context/AuthReducer"
 import { PlayerContext } from "../context/PlayerContext"
 import { useHistory, useParams } from "react-router-dom"
 import { getUser } from "../utils"
+
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
 
@@ -32,6 +33,7 @@ export interface IQuestion {
     testcase: string
     unlockCost: number
     difficulty: number
+    solved: number
     _id: string
 }
 
@@ -124,6 +126,16 @@ const QuestionPage = () => {
         }
     }
 
+    const CopyToClipboard = (text: string | undefined) => {
+        const ta = document.createElement("textarea")
+        if (text) ta.innerText = text
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand("copy")
+
+        ta.remove()
+    }
+
     if (auth.state.loading) return <div>loading...</div>
     return (
         <div className="question-page">
@@ -131,7 +143,10 @@ const QuestionPage = () => {
             <div className="question-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
-                <QuestionInfo questionData={questionData} />
+                <QuestionInfo
+                    questionData={questionData}
+                    attacksAvailable={player.state.attacksLeft}
+                />
                 {/* {questionData?.statement && (
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {questionData?.statement}
@@ -144,6 +159,19 @@ const QuestionPage = () => {
                     </ReactMarkdown>
                 </div>
 
+                <div className="test-case-container">
+                    <h2>Test Case</h2>
+
+                    <div>{questionData?.testcase}</div>
+                    <button
+                        onClick={() => {
+                            CopyToClipboard(questionData?.testcase)
+                        }}
+                    >
+                        Copy
+                    </button>
+                </div>
+
                 <div className="answer-container">
                     <h2>Answer</h2>
                     <div id="attempts-left">
@@ -151,7 +179,14 @@ const QuestionPage = () => {
                     </div>
 
                     <textarea className="answer-textarea"></textarea>
-                    <button className="answer-button">Submit</button>
+                    <button
+                        onClick={() => {
+                            handleAnswerSubmit()
+                        }}
+                        className="answer-button"
+                    >
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>

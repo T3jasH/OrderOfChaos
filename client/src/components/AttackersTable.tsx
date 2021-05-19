@@ -8,8 +8,6 @@ interface props {
     handleAttack: any
 }
 
-
-
 const AttackersTable = ({
     leaderboardPlayers,
     auth,
@@ -19,11 +17,17 @@ const AttackersTable = ({
     const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
         attackersP
     )
+    useEffect(() => {
+        setAttackers(attackersP)
+    }, [attackersP])
 
-    const minsAgo = (date:any) => {
-        var diff =  parseInt( (Date.now() - new Date(date).getMilliseconds()) / (1000 * 60) as unknown as string );
+    const minsAgo = (date: any) => {
+        var diff = parseInt(
+            (((Date.now() - new Date(date).getMilliseconds()) /
+                (1000 * 60)) as unknown) as string
+        )
         var text = " mins ago"
-        if(diff >= 120){
+        if (diff >= 120) {
             diff = 120
             text = "+ mins ago"
         }
@@ -40,10 +44,10 @@ const AttackersTable = ({
                 ),
             }))
         )
-    }, [])
+    }, [attackersP])
 
     return (
-        <table cellSpacing={50}>
+        <table cellSpacing={30}>
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
                     <td className="leaderboard-table-heading">Position</td>

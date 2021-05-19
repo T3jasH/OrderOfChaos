@@ -28,10 +28,12 @@ html {
     font-weight: 700;
     margin-bottom: 1rem;
 }
-.answer-container {
+.answer-container,
+.test-case-container {
     margin-top: 2rem;
 }
-.answer-container > h2 {
+.answer-container > h2,
+.test-case-container > h2 {
     color: #8060c6;
     font-size: 1.3rem;
     margin-bottom: 0.4rem;
@@ -67,4 +69,7 @@ html {
     background-color: #9c9d8e;
     color: black;
     transition: all 0.3s ease;
+}
+
+.test-case-container {
 }

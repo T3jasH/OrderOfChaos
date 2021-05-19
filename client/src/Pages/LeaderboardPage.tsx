@@ -27,11 +27,15 @@ export interface Iattacker {
     _id: string
     rank: number | undefined
 }
-const LeaderboardPage = () => {
+
+interface props {
+    defaultTabState: string
+}
+const LeaderboardPage = ({ defaultTabState }: props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
-    const [tabState, setTabState] = useState<any>("leaderboard")
+    const [tabState, setTabState] = useState<any>(defaultTabState)
 
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
         IleaderboardPlayer[]
@@ -60,7 +64,7 @@ const LeaderboardPage = () => {
                 )
             })
         }
-    }, [auth.state.id])
+    }, [auth.state.id, tabState])
 
     useEffect(() => {
         if (leaderboardPlayers?.length) {
@@ -128,14 +132,14 @@ const LeaderboardPage = () => {
                 <h3>
                     <span
                         className={tabState !== "leaderboard" ? "fade" : ""}
-                        onClick={() => setTabState("leaderboard")}
+                        onClick={() => history.push("/leaderboard")}
                     >
                         Leaderboard
                     </span>
                     <span id="slash">/</span>
                     <span
                         className={tabState !== "attackers" ? "fade" : ""}
-                        onClick={() => setTabState("attackers")}
+                        onClick={() => history.push("/attackers")}
                     >
                         Attackers
                     </span>
@@ -167,7 +171,7 @@ const LeaderboardPage = () => {
                     />
                 )}
             </div>
-            <PlayerInfoFooter rank={rank} active={tabState === "attackers"}/>
+            <PlayerInfoFooter rank={rank} active={tabState === "attackers"} />
         </div>
     )
 }

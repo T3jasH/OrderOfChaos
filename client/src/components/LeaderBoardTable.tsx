@@ -13,7 +13,7 @@ const LeaderBoardTable = ({
     handleAttack,
 }: props) => {
     return (
-        <table cellSpacing={50}>
+        <table cellSpacing={20}>
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
                     <td className="leaderboard-table-heading">Position</td>

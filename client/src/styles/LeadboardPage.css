@@ -49,11 +49,10 @@ html {
 td,
 th {
     /* border: 1px solid #999; */
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
     text-align: center;
     font-weight: 500;
     font-size: 1.2rem;
+    width: 20rem;
 }
 
 .table-heading {

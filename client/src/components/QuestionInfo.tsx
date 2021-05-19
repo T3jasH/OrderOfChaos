@@ -4,8 +4,9 @@ import { IQuestion } from "../Pages/QuestionPage"
 
 interface props {
     questionData: IQuestion | null
+    attacksAvailable: Number | null
 }
-const QuestionInfo = ({ questionData }: props) => {
+const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
     const getDifficulty = (diff: any) => {
         if (diff === 1) return "Easy"
         if (diff === 2) return "Medium"
@@ -44,11 +45,13 @@ const QuestionInfo = ({ questionData }: props) => {
             </div>
             <div>
                 <span className="question-info-label">Submissions: </span>
-                <span className="question-info-purple">bruh</span>
+                <span className="question-info-purple">
+                    {questionData?.solved}
+                </span>
             </div>
             <div>
                 <span className="question-info-label">Attacks Available: </span>
-                <span className="question-info-purple">{1}</span>
+                <span className="question-info-purple">{attacksAvailable}</span>
             </div>
         </div>
     )
