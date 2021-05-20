@@ -15,7 +15,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
         let userid = req.user.id;
         let user = await User.findOne({
             _id: userid,
-        });
+        }).select("noOfAttempts");
         if (!user.noOfAttempts[req.params.id - 1].isLocked) {
             let selQues = await Question.findOne({
                 quesId: req.params.id,
@@ -23,7 +23,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
             res.send({
                 sucess: true,
                 msg: "Question found and sent successfully.",
-                data: { question: selQues },
+                data: { question: selQues, attempts: user.noOfAttempts.find((q) => q.quesId == req.params.id).attempts },
             });
         } else {
             res.send({ success: false, msg: "Question is locked" });
@@ -64,6 +64,7 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
                 success: false,
                 msg: 'Unlock the question first',
             });
+        
         if (!user.noOfAttempts[pos].isSolved) {
             if (selQues.answer.replace(/\r\n/gm, '\n').trim() === sol.trim()) {
                 //first attempt correct answer give power only if less than 4 stored attacks

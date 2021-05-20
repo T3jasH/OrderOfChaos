@@ -59,14 +59,12 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 <p>Attacks:</p>
                 <p className="field-value number">{player.attacks.length}</p>
             </div>
-            <div className="info-container">
+            <div className="info-container"
+            >
                 <button
                     id="btn-attackers"
-                    className={active ? "attack-active" : ""}
+                    style={{display : active? "none" : "block"}}
                     onClick={(e) => {
-                        if(active){
-                            return
-                        }
                         history.push("/attackers")
                     }}
                 >

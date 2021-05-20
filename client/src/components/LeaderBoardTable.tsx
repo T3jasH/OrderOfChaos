@@ -1,17 +1,21 @@
-import React from "react"
+import React, { useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
+import { PlayerContext } from "../context/PlayerContext"
 import { IleaderboardPlayer } from "../Pages/LeaderboardPage"
+import { getAttackersCount } from "../utils"
 
 interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined
-    auth: any
     handleAttack: any
 }
 
 const LeaderBoardTable = ({
     leaderboardPlayers,
-    auth,
     handleAttack,
 }: props) => {
+
+    const auth = useContext(AuthContext)
+    const contextPlayer = useContext(PlayerContext).state
     return (
         <table className="leaderboard-table">
             <thead>
@@ -21,13 +25,13 @@ const LeaderBoardTable = ({
                     <td className="table-space"></td>
                     <td className="leaderboard-table-heading">Score</td>
                     <td className="leaderboard-table-heading">
-                        No. of times
-                        <br /> attacked
+                        Attacks on you
                     </td>
                 </tr>
             </thead>
             <tbody>
                 {leaderboardPlayers?.map((player, idx) => {
+                    
                     return (
                         <tr>
                             <td>{idx + 1}</td>
@@ -43,14 +47,20 @@ const LeaderBoardTable = ({
 
                             <td className="table-space"></td>
                             <td>{player.score}</td>
-                            <td>{player.attackers.length}</td>
-                            <td>
+                            <td>{getAttackersCount(contextPlayer.attacks, player)}</td>
+                            <td
+                            style={{padding: "1rem"}}
+                            >
+                               {
                                 <button
                                     onClick={() => handleAttack(player._id)}
-                                    className="leaderboard-button"
-                                >
+                                    className={`leaderboard-button ${player.attackers.length === 15 ? "disable-button" : ""}`}
+            
+                                    style={{
+                                        display : auth.state.id !== player._id ? "block" : "none"}}>
                                     Attack
                                 </button>
+                                }
                             </td>
                         </tr>
                     )

@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
-import { getUser } from "../utils"
+import { getUser, getLeaderboard, sortAttackers } from "../utils"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
-import { getLeaderboard } from "../utils"
 import { useHistory } from "react-router-dom"
 import LeaderboardTable from "../components/LeaderBoardTable"
 import "../styles/LeadboardPage.css"
-
 import Navbar from "../components/Navbar"
 import PlayerInfoFooter from "../components/PlayerInfoFooter"
 import AttackersTable from "../components/AttackersTable"
@@ -26,21 +24,24 @@ export interface Iattacker {
     date: string
     _id: string
     rank: number | undefined
+    score: number
+    numberOfAttacks: number
 }
 
-interface props {
-    defaultTabState: string
+interface props{
+    currentPage: string
 }
-const LeaderboardPage = ({ defaultTabState }: props) => {
+
+const LeaderboardPage = ({currentPage} : props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
-    const [tabState, setTabState] = useState<any>(defaultTabState)
-    const [attackersP, setAttackersP] = useState<Iattacker[]>([])
+    const [tabState, setTabState] = useState<string>(currentPage)
+    const [attackersP, setAttackersP] = useState<Iattacker[] | undefined>([])
+    const [leaderboardPlayers, setLeaderboardPlayers] = useState<IleaderboardPlayer[]>()
+    const [rank, setRank] = useState<number | null>(null)
+    const [attackStatus, setAttackStatus] = useState<string | null>(null)
 
-    const [leaderboardPlayers, setLeaderboardPlayers] = useState<
-        IleaderboardPlayer[]
-    >()
     useEffect(() => {
         if (auth.state.token === null) {
             auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
@@ -53,17 +54,15 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
         }
     }, [auth.state.token])
 
-    const [rank, setRank] = useState<number | null>(null)
 
     useEffect(() => {
         if (auth.state.id.length) {
             getLeaderboard(auth)
             .then((data) => {
-                console.log(data)
                 setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
                     return {
                         ...obj, 
-                        attackers : data.attackers[idx]
+                        attackers : data.attackers[idx],
                     }
                 }))
                 setRank(
@@ -72,23 +71,19 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 )
             })
         }
-    }, [auth.state.id, tabState])
+    }, [auth.state.id])
 
     useEffect(() => {
-
-        console.log(leaderboardPlayers)
         if (leaderboardPlayers?.length) {
-            var att = leaderboardPlayers.find(player => player._id === "609c0d2a812f61639029a6e9")?.attackers
-            att = att?.map((obj:any) => {
-                obj.date = new Date(obj.date).getMilliseconds()
-                return obj
-            })
-            att?.sort((firstAttacker:any, secondAttacker:any) => 
-            firstAttacker.date < secondAttacker.date ? 1 : 0
+            setAttackersP(
+                sortAttackers(leaderboardPlayers, auth)
             )
             auth.dispatch({ type: AuthActionTypes.SET_LOADING, payload: [] })
         }
+        console.log(leaderboardPlayers)
     }, [leaderboardPlayers])
+
+    
 
     const scroll = () => {
         if (window.location.hash) {
@@ -105,10 +100,10 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
 
     const handleAttack = (id: string) => {
         if (contextPlayer.state.attacksLeft <= 0) {
-            alert("You don't have any attacks!")
+            setAttackStatus("You don't have attacks")
+            setTimeout(() => setAttackStatus(null), 5000)
             return
         }
-        console.log(id)
         if (auth.state.token) {
             fetch(`/api/leaderboard/${id}`, {
                 method: "POST",
@@ -120,23 +115,19 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 .then((response) => response.json())
                 .catch((err) => console.log(err))
                 .then((data) => {
-                    console.log(data)
+                    console.log(data, "ATTACK DATA")
                     if(data.success){
                     contextPlayer.dispatch({
                         type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
-                        payload: contextPlayer.state.attacksLeft - 1,
+                        payload: {attacksLeft: contextPlayer.state.attacksLeft - 1},
                     })
                     getLeaderboard(auth).then((data) => {
-                        
-                        setLeaderboardPlayers( 
-                            data.ranks.map((player:any, idx:any) => {
-                                console.log(data.attackers[idx])
-                                return{
-                                    ...player, 
-                                    attackers: data.attackers[idx]
-                                }
-                            })
-                         )
+                        setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
+                            return {
+                                ...obj, 
+                                attackers : data.attackers[idx],
+                            }
+                        }))
                         setRank(
                             data.ranks.findIndex((user: any) => user._id === auth.state.id) +
                                 1
@@ -144,16 +135,20 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                     })
                 }
                 else{
-                    console.log("Someting's wrong")
+                    setAttackStatus(data.msg)
+                    setTimeout(() => setAttackStatus(null), 5000)
                 }
                 })
-                .catch((e) => console.log(e))
+                .catch((e) => console.log(e))   
         }
     }
 
     if (auth.state.loading) return <div> loading..</div>
     return (
         <div className="leaderboard-page">
+            <p className="attack-status" style={{display : attackStatus? "block" : "none"}}>
+                {attackStatus}
+            </p>
             <Navbar />
             <div className="leaderboard-container">
                 {scroll()}
@@ -161,14 +156,14 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 <h3>
                     <span
                         className={tabState !== "leaderboard" ? "fade" : ""}
-                        onClick={() => history.push("/leaderboard")}
+                        onClick={() => {setTabState("leaderboard")}}
                     >
                         Leaderboard
                     </span>
                     <span id="slash">/</span>
                     <span
                         className={tabState !== "attackers" ? "fade" : ""}
-                        onClick={() => history.push("/attackers")}
+                        onClick={() => {setTabState("attackers")}}
                     >
                         Attackers
                     </span>
@@ -176,30 +171,20 @@ const LeaderboardPage = ({ defaultTabState }: props) => {
                 {tabState === "leaderboard" ? (
                     <LeaderboardTable
                         leaderboardPlayers={leaderboardPlayers}
-                        auth={auth}
                         handleAttack={handleAttack}
                     />
                 ) : (
                     <AttackersTable
                         leaderboardPlayers={leaderboardPlayers}
                         handleAttack={handleAttack}
-                        //ACTUAL CODE BUT I DON'T HAVE ATTACKERS
-                        // attackersP={
-                        //     leaderboardPlayers?.find(
-                        //         (d) => d._id === auth.state.id
-                        //     )?.attackers
-                        // }
-
-                        //TO TEST ATTACKERS
                         attackersP={
-                            leaderboardPlayers?.find(
-                                (d) => d._id === "609c0d2a812f61639029a6e9"
-                            )?.attackers
+                            attackersP
                         }
                     />
                 )}
+                {console.log(attackersP)}
             </div>
-            <PlayerInfoFooter rank={rank} active={tabState === "attackers"} />
+            <PlayerInfoFooter rank={rank} active={true} />
         </div>
     )
 }

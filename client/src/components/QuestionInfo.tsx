@@ -44,7 +44,7 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Submissions: </span>
+                <span className="question-info-label">Solved: </span>
                 <span className="question-info-purple">
                     {questionData?.solved}
                 </span>

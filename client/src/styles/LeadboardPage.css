@@ -8,11 +8,23 @@
     background-position: right bottom;
 }
 
+.attack-status{
+    position: absolute; 
+    top: 5vh;
+    padding: 0.4rem;
+    background-color: #1A0554;
+    left: 40vw;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #FF4A4A;
+}
+
 .leaderboard-container {
-    position: absolute;
-    left: 10vw;
+    position: relative;
+    left: 5vw;
     top: 5rem;
-    width: 90vw;
+    width: 95vw;
     height: calc(100vh - 10rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
@@ -29,16 +41,10 @@ html {
 
 .leaderboard-button {
     border: 1px solid #ffffff;
-    padding: 0.6rem 2.4rem;
+    padding: 0.6rem 2.8rem;
     box-sizing: border-box;
     border-radius: 10px 0px;
     display: block;
-}
-
-.leaderboard-button:hover {
-    background-color: #9c9d8e;
-    color: black;
-    transition: all 0.3s ease;
 }
 
 .leaderboard-container > h3 > span {
@@ -54,18 +60,25 @@ th {
     text-align: center;
     font-weight: 500;
     font-size: 1.2rem;
-    padding: 1rem;
-    width: 20rem;
+    padding: 1rem 0rem;
+    width: 25vw;
 }
 .leaderboard-table {
     /* border: 1px solid salmon; */
     position: relative;
-    left: -5rem;
+    top: 2rem;
+    padding: 0px;
 }
-
+.leaderboard-table{
+    padding: 0;
+    margin: 0;
+}
 .attackers-table {
     position: relative;
-    left: -4rem;
+    top: 2rem;
+    padding: 0;
+    margin: 0;
+    left: 0;
 }
 
 .table-heading {
@@ -89,6 +102,9 @@ th {
         left: 10vw;
         width: 90vw;
     }
+    .leaderboard-button{
+        padding: 0.6rem 1.5rem;
+    }
 }
 
 #slash {
@@ -97,5 +113,12 @@ th {
 }
 
 .fade {
-    color: #9c9d8e;
+    color: #9C9D8E;
 }
+
+.disable-button{
+    background-color: #9C9D8E;
+    cursor: default;
+}
+
+

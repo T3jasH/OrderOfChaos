@@ -27,6 +27,7 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     if(password !== confirmPassword){
       handleStatus("Passwords do not match")
+      setTimeout(() => handleStatus(null), 5000)
       return
     }
     const body = {
@@ -61,6 +62,7 @@ const RegisterPage: React.FC = () => {
         else{
           handleStatus(data.msg)
         }
+        setTimeout(() => handleStatus(null), 5000)
       });
   };
 
@@ -72,6 +74,11 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-page">
+      <p className="login-status"
+      style={{display: status? "block" : "none"}}
+      >
+          {status}
+      </p> 
       <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
         <h3>REGISTER</h3>
@@ -118,9 +125,7 @@ const RegisterPage: React.FC = () => {
           />
           <input type="submit" value="REGISTER" className="register-submit-btn" />
         </form>
-        <p className="register-status">
-          {status}
-        </p>
+        
         <button className="btn-login" 
         style={{marginTop : "2.5vh"}}
         onClick={() => {history.push("/login")}}

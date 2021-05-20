@@ -1,6 +1,7 @@
-import { AuthActionTypes } from "./context/AuthReducer";
-import { PlayerActionTypes } from "./context/PlayerReducer";
+import {AuthActionTypes } from "./context/AuthReducer";
+import { attack, PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
+import { Iattacker, IleaderboardPlayer } from "./Pages/LeaderboardPage";
 
 export const getContestDetails = async (
   auth: any,
@@ -107,7 +108,54 @@ export const getLeaderboard = async (auth: any) => {
     },
   })
   const data = await resp.json()
-  console.log(data.data.attackers)
+  //console.log(data.data.attackers)
   return data.data
    
 };
+
+
+export  const getAttackersCount = (attackers : attack[], leaderboardPlayer: any) => {
+  let cnt = 0
+  if(attackers.length){
+    attackers.map( (attacker: attack) => {
+      if(attacker.username === leaderboardPlayer.username){
+        cnt += 1;
+      }
+      return null
+    } )
+  }
+  return cnt;
+}
+
+export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : any) => {
+  var att = null
+  att = leaderboardPlayers?.find(player => player._id === auth.state.id)?.attackers
+  att = att?.map((obj:any) => {
+        let newObj = obj;
+        newObj.date = Date.parse(obj.date);
+        if(leaderboardPlayers?.length){
+        var idx =  leaderboardPlayers?.findIndex(player => player.username === obj.username)
+        newObj.rank = idx+1
+        newObj.score = leaderboardPlayers[idx].score
+        newObj._id = leaderboardPlayers[idx]
+        newObj.numberOfAttacks = leaderboardPlayers[idx].attackers.length
+       }
+       console.log(newObj)
+          return newObj
+      })
+      att?.sort((firstAttacker:any, secondAttacker:any) => 
+      firstAttacker.date < secondAttacker.date ? 1 : 0
+      )
+      if(att){
+      var toDelete = []
+      for(var i=0; i<att?.length-1; i++){
+          if(att[i].username === att[i+1].username){
+              toDelete.push(i+1)
+          }
+      }
+      for(i=0; i<toDelete.length; i++){
+          att.splice(toDelete[i]-i, 1)
+      }
+    }
+    return att? att : undefined
+}

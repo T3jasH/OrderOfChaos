@@ -35,7 +35,9 @@ export interface IQuestion {
     difficulty: number
     solved: number
     _id: string
+    attempts: number
 }
+
 
 const QuestionPage = () => {
     const auth = useContext(AuthContext)
@@ -54,7 +56,7 @@ const QuestionPage = () => {
         if (auth.state.id.length) {
             getLeaderboard(auth).then((data) => {
                 setRank(
-                    data.findIndex((user: any) => user._id === auth.state.id) +
+                    data.ranks.findIndex((user: any) => user._id === auth.state.id) +
                         1
                 )
             })
@@ -64,7 +66,6 @@ const QuestionPage = () => {
         console.log("LOGGING AUTH")
         console.log(auth)
         console.log(auth.state.token)
-        console.log("IS THIS GETTING CALLED")
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
                 method: "GET",
@@ -76,8 +77,9 @@ const QuestionPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log("printing data:")
-                    setQuestionData(data.data.question)
+                    setQuestionData({ ...data.data.question, attempts: data.data.attempts})
                     console.log(typeof questionData?.statement)
+                    console.log(data.data.question, data.data.attempts)
                     auth.dispatch({
                         type: AuthActionTypes.SET_LOADING,
                         payload: [],
@@ -113,8 +115,8 @@ const QuestionPage = () => {
                 body: JSON.stringify({ answer: userAnswer }),
             })
                 .then((response) => response.json())
+                .catch(err => console.log(err))
                 .then((data) => {
-                    console.log("printing data:")
                     console.log(data)
                     setSubmitMessage(data.msg)
                 })
@@ -132,7 +134,6 @@ const QuestionPage = () => {
         document.body.appendChild(ta)
         ta.select()
         document.execCommand("copy")
-
         ta.remove()
     }
 
@@ -155,7 +156,7 @@ const QuestionPage = () => {
             )} */}
                 <div className="question-markdown">
                     <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                        {markdown}
+                        {String(questionData?.statement)}
                     </ReactMarkdown>
                 </div>
 
@@ -180,14 +181,19 @@ const QuestionPage = () => {
                     <h2>Answer</h2>
                     <div className="answer-info">
                         <div id="attempts-left">
-                            Attempts left to get an attack: 1
+                            Attempts left to get an attack:{" "} 
+                {questionData?.difficulty && questionData.attempts !== undefined? 
+                                questionData.difficulty - questionData.attempts > 0 ? 
+                                    questionData.difficulty - questionData.attempts : 0 : null}
                         </div>
                         <div className="submit-message">
-                            {submitMessage != "" && submitMessage}
+                            {submitMessage !== "" && submitMessage}
                         </div>
                     </div>
 
-                    <textarea className="answer-textarea"></textarea>
+                    <textarea className="answer-textarea"
+                    onChange={e => {setUserAnswer(e.target.value)}}
+                    ></textarea>
                     <button
                         onClick={() => {
                             handleAnswerSubmit()

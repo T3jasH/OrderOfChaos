@@ -17,13 +17,17 @@ const App: React.FC = () => {
                 <Route
                     path="/leaderboard"
                     component={() => (
-                        <LeaderboardPage defaultTabState="leaderboard" />
+                        <LeaderboardPage
+                        currentPage="leaderboard"
+                        />
                     )}
                 />
                 <Route
                     path="/attackers"
                     component={() => (
-                        <LeaderboardPage defaultTabState="attackers" />
+                        <LeaderboardPage
+                        currentPage="attackers"
+                        />
                     )}
                 />
                 <Route path="/register" component={() => <RegisterPage />} />

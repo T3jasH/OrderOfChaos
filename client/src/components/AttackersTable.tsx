@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
+import { PlayerContext } from "../context/PlayerContext"
 import { IleaderboardPlayer, Iattacker } from "../Pages/LeaderboardPage"
+import { getAttackersCount } from "../utils"
 
 interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined
@@ -9,7 +11,6 @@ interface props {
 }
 
 const AttackersTable = ({
-    leaderboardPlayers,
     attackersP,
     handleAttack,
 }: props) => {
@@ -17,36 +18,26 @@ const AttackersTable = ({
         attackersP
     )
     const auth = useContext(AuthContext)
+    const playerContext = useContext(PlayerContext).state
+
 
     useEffect(() => {
         setAttackers(attackersP)
     }, [attackersP])
 
-    useEffect(() => {
-        setAttackers((prev) =>
-            prev?.map((a) => ({
-                ...a,
-                rank: leaderboardPlayers?.findIndex(
-                    (player: IleaderboardPlayer) =>
-                        player.username === a.username
-                ),
-            }))
-        )
-    }, [attackersP])
-
     const minsAgo = (date: any) => {
         var diff = parseInt(
-            (((Date.now() - new Date(date).getMilliseconds()) /
+            (((Date.now() - date) /
                 (1000 * 60)) as unknown) as string
         )
-        var text = " mins ago"
+        var text = " m ago"
         if (diff >= 120) {
             diff = 120
-            text = "+ mins ago"
+            text = "+ m ago"
         }
         return `${diff}${text}`
     }
-
+    
     return (
         <table className="attackers-table">
             <thead>
@@ -56,11 +47,10 @@ const AttackersTable = ({
                     <td className="table-space-attack"></td>
                     <td className="leaderboard-table-heading">Score</td>
                     <td className="leaderboard-table-heading">
-                        No. of times
-                        <br /> attacked you
+                        Attacks on you
                     </td>
                     <td className="leaderboard-table-heading">
-                        Time of <br /> attack
+                        Last attack
                     </td>
                 </tr>
             </thead>
@@ -82,33 +72,29 @@ const AttackersTable = ({
                             <td className="table-space-attack"></td>
                             <td>
                                 {
-                                    leaderboardPlayers?.find(
-                                        (d) => d.username === attacker.username
-                                    )?.score
+                                    attacker.score
                                 }
                             </td>
                             <td>
                                 {
-                                    leaderboardPlayers
-                                        ?.find(
-                                            (p) =>
-                                                p.username ===
-                                                auth.state.username
-                                        )
-                                        ?.attackers.map(
-                                            (a) =>
-                                                a.username === attacker.username
-                                        ).length
+                                    getAttackersCount(playerContext.attacks, attacker)
                                 }
                             </td>
                             <td>{minsAgo(attacker.date)}</td>
-                            <td>
+                            <td
+                            style={{padding: "1rem"}}
+                            >
+                                {
                                 <button
                                     onClick={() => handleAttack(attacker._id)}
-                                    className="leaderboard-button"
-                                >
+                                    className={`leaderboard-button ${attacker.numberOfAttacks === 15 ? "disable-button" : ""}`}
+            
+                                    style={{
+                                        display : auth.state.id !== attacker._id ? "block" : "none"}}>
                                     Attack
                                 </button>
+                                }
+                                
                             </td>
                         </tr>
                     )

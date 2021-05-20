@@ -24,7 +24,7 @@ router.post(
             .isEmpty(),
         check('username', 'Please enter a username.').not().isEmpty(),
         check('college', 'Please enter a college name.').not().isEmpty(),
-        check('phoneNo', 'Place enter you phone number')
+        check('phoneNo', 'Place enter you phone number').not().isEmpty()
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -34,7 +34,7 @@ router.post(
                 .json({ success: false, msg: errors.array()[0].msg });
         }
 
-        const { name, email, password, regno, username, college } = req.body;
+        const { name, email, password, regno, username, college, phoneNo } = req.body;
 
         try {
             let user = await User.findOne({ email });
@@ -61,6 +61,7 @@ router.post(
                 regno,
                 username,
                 college,
+                phoneNo
             });
             //Initializing noOfAttempts
             // let totalQues = process.env.NO_OF_QUESTIONS;
@@ -78,9 +79,7 @@ router.post(
             const verifyToken = user.getVerifiedToken();
             await user.save({ validateBeforeSave: false });
             const resp = 'https://mail.iecsemanipal.com/codeevent/verifyaccount';
-            const resetUrl = `${req.protocol}://${req.get(
-              "host"
-            )}/api/users/confirmation/${user.verifyToken}`;
+            const resetUrl = `${req.protocol}://localhost:3000/confirmation/${user.verifyToken}`;
             try {
                 await sendEmail(resp, user.email,user.name,resetUrl);
                 res.status(200).json({ success: true, msg: 'Email Sent.' });

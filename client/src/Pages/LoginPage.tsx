@@ -39,15 +39,16 @@ const LoginPage: React.FC = () => {
     const data = await response.json();
     console.log(data)
     if(data.success){
-      handleStatus(null)
       auth.dispatch({type : AuthActionTypes.LOGIN, payload : { token : data.data.token} })
       history.push("/")
     }
     else if(data.errors){
       handleStatus(data.errors[0].msg)
+      setTimeout(() => handleStatus(null), 5000)
     }
     else {
       handleStatus(data.msg)
+      setTimeout(() => handleStatus(null), 5000)
     }
     }
 
@@ -72,6 +73,7 @@ const LoginPage: React.FC = () => {
       })
       const data = await response.json()
       handleStatus(data.msg)
+      setTimeout(() => handleStatus(null), 5000)
     }
   };
 
@@ -83,7 +85,6 @@ const LoginPage: React.FC = () => {
     for(var i=0; i<btns.length; i++){
       btns[i]?.setAttribute("style", "display: none")
     }
-    handleStatus(null)
     setLoginBtnText("SUBMIT")
     setLoginText("Enter your email ID")
   }
@@ -95,7 +96,6 @@ const LoginPage: React.FC = () => {
     for(var i=0; i<btns.length; i++){
       btns[i]?.setAttribute("style", "display: none")
     }
-    handleStatus(null)
     setLoginText("SUBMIT")
     setLoginText("Enter your email ID")
   }

@@ -16,7 +16,7 @@ export enum PlayerActionTypes{
     UPDATE_ATTACKS_LEFT = "UPDATE_ATTACKS_LEFT",
     UPDATE_ATTACKS = "UPDATE_ATTACKS",
     GET_USER = "GET_USER",
-    SET_SEEN = "SET_SEEN"
+    SET_SEEN = "SET_SEEN",
 }
 
 export interface PlayerAction {
@@ -28,11 +28,13 @@ export const playerReducer = (state : Player, action : PlayerAction) => {
     switch (action.type) {
         case "GET_USER":
             return {
+                ...state,
                 score : action.payload.score,
                 attacksLeft : action.payload.attacksLeft,
                 attacks : action.payload.attacks
             }
         case "UPDATE_ATTACKS_LEFT":
+            
             return {
                 ...state,
                 attacksLeft: action.payload.attacksLeft

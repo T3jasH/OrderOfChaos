@@ -20,8 +20,6 @@ const getLeaderboard = async (req, res) => {
                 isActive: true,
             }).select('username score attackers');
             ranks.sort(mycomp);
-            console.log("CALLED")
-            console.log(ranks[0].attackers)
             var  attackers = ranks.map((obj) => obj.attackers)
             res.send({
                 success: true,
@@ -58,7 +56,6 @@ const attackUser = async (req, res) => {
         // console.log(id);
         if (attacker.remAttack > 0) {
             let user = await User.findOne({ _id: id }).select('-password');
-            console.log(user)
             if (user) {
                 // console.log(
                 //     'Attack left on player under attack ' +
@@ -87,7 +84,7 @@ const attackUser = async (req, res) => {
                     return res.send({
                         success: false,
                         msg:
-                            'Cannot attack the player as player has already reached max attacks,try attacking other player',
+                            'Player has been attacked 15 times',
                     });
                 }
             } else {

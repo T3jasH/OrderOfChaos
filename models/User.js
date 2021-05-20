@@ -31,7 +31,7 @@ const UserSchema = mongoose.Schema({
     },
     phoneNo: {
         type: String,
-        required: true
+        //required: true
     },
     score: {
         type: Number,

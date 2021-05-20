@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import "../styles/LoginPage.css"
 
 const MailVerificationPage: React.FC = () => {
   const [message, setMessage] = useState<string>("");
@@ -10,7 +11,7 @@ const MailVerificationPage: React.FC = () => {
 
   useEffect(() => {
     if (token)
-      fetch(`confirmation/${token}`, {
+      fetch(`/api/users/confirmation/${token}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +31,15 @@ const MailVerificationPage: React.FC = () => {
         });
   }, [token]);
 
-  return <div>{message}</div>;
+  return <div className="login-page">
+    {message? 
+    <p className="login-status">
+      {message}
+    </p>
+    :
+    null
+    }
+    </div>;
 };
 
 export default MailVerificationPage;
