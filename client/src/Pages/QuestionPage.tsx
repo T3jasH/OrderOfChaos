@@ -45,10 +45,9 @@ const QuestionPage = () => {
 
     const [userAnswer, setUserAnswer] = useState<string>("")
     const [questionData, setQuestionData] = useState<IQuestion | null>(null)
-
     const [submitMessage, setSubmitMessage] = useState<string>("")
-
     const [rank, setRank] = useState<number | null>(null)
+    const [attemptsState, setAttemptState] = useState<number | undefined>(0)
 
     const history = useHistory()
 
@@ -78,6 +77,7 @@ const QuestionPage = () => {
                 .then((data) => {
                     console.log("printing data:")
                     setQuestionData({ ...data.data.question, attempts: data.data.attempts})
+                    setAttemptState(data.data.attempts)
                     console.log(typeof questionData?.statement)
                     console.log(data.data.question, data.data.attempts)
                     auth.dispatch({
@@ -118,7 +118,11 @@ const QuestionPage = () => {
                 .catch(err => console.log(err))
                 .then((data) => {
                     console.log(data)
+                    if(!data.success){
+                        setAttemptState(attemptsState!==undefined? attemptsState + 1 : undefined)
+                    }
                     setSubmitMessage(data.msg)
+                    setTimeout(() => setSubmitMessage(""), 3000)
                 })
                 .catch((e) => {
                     console.log(e)
@@ -182,9 +186,9 @@ const QuestionPage = () => {
                     <div className="answer-info">
                         <div id="attempts-left">
                             Attempts left to get an attack:{" "} 
-                {questionData?.difficulty && questionData.attempts !== undefined? 
-                                questionData.difficulty - questionData.attempts > 0 ? 
-                                    questionData.difficulty - questionData.attempts : 0 : null}
+                {questionData?.difficulty && attemptsState !== undefined? 
+                                questionData.difficulty - attemptsState > 0 ? 
+                                    questionData.difficulty - attemptsState: 0 : null}
                         </div>
                         <div className="submit-message">
                             {submitMessage !== "" && submitMessage}

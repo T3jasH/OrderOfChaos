@@ -133,14 +133,14 @@ export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : a
   att = att?.map((obj:any) => {
         let newObj = obj;
         newObj.date = Date.parse(obj.date);
+        
         if(leaderboardPlayers?.length){
         var idx =  leaderboardPlayers?.findIndex(player => player.username === obj.username)
         newObj.rank = idx+1
         newObj.score = leaderboardPlayers[idx].score
-        newObj._id = leaderboardPlayers[idx]
+        newObj._id = leaderboardPlayers[idx]._id
         newObj.numberOfAttacks = leaderboardPlayers[idx].attackers.length
        }
-       console.log(newObj)
           return newObj
       })
       att?.sort((firstAttacker:any, secondAttacker:any) => 

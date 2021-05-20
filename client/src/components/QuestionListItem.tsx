@@ -25,7 +25,8 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
             setLockStatus(question.isLocked? player.state.score < question.unlockCost? `Locked` : `Unlock: ${question.unlockCost}pts` : 
             question.isSolved? "Solved" : "Unlocked")
         }
-    }, [question.name])
+        console.log(question.isSolved, question.isLocked)
+    }, [question.name, question.isSolved, question.isLocked])
 
     const unlockQuestion = () => {
         if(token && player.state.score >= question.unlockCost && question.isLocked)

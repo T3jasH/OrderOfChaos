@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { PlayerContext } from "../context/PlayerContext"
+import { PlayerActionTypes } from "../context/PlayerReducer"
 import { IleaderboardPlayer, Iattacker } from "../Pages/LeaderboardPage"
 import { getAttackersCount } from "../utils"
 
@@ -18,12 +19,36 @@ const AttackersTable = ({
         attackersP
     )
     const auth = useContext(AuthContext)
-    const playerContext = useContext(PlayerContext).state
+    const playerContext = useContext(PlayerContext)
 
 
     useEffect(() => {
         setAttackers(attackersP)
     }, [attackersP])
+
+    //Set all attacks as seen
+
+    useEffect(() => {
+        if(auth.state.token)
+        fetch("/api/attacklogs", {
+            method: "POST",
+            body: JSON.stringify({}),
+            headers: {
+                "Content-type": "application/json",
+                "x-auth-token": auth.state.token
+            }
+        })
+        .then(response => response.json())
+        .catch(err => console.log(err))
+        .then(data => {
+            if(data.success){
+                playerContext.dispatch({type: PlayerActionTypes.SET_SEEN, payload: []})
+            }
+            else{
+                console.log(data.msg)
+            }
+        })
+    }, [])
 
     const minsAgo = (date: any) => {
         var diff = parseInt(
@@ -77,7 +102,7 @@ const AttackersTable = ({
                             </td>
                             <td>
                                 {
-                                    getAttackersCount(playerContext.attacks, attacker)
+                                    getAttackersCount(playerContext.state.attacks, attacker)
                                 }
                             </td>
                             <td>{minsAgo(attacker.date)}</td>

@@ -60,6 +60,7 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 <p className="field-value number">{player.attacks.length}</p>
             </div>
             <div className="info-container"
+            style = {{display : active? "none" : "block"}}
             >
                 <button
                     id="btn-attackers"
@@ -70,7 +71,9 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 >
                     Attackers
                 </button>
-                <div className="new-attacks-counter"
+                <div 
+                    
+                    className="new-attacks-counter"
                      onClick={(e) => {
                         if(active){
                             return
