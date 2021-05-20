@@ -97,16 +97,6 @@ th {
     font-weight: 400;
 }
 
-@media screen and (max-width: 950px) {
-    .questions-container {
-        left: 10vw;
-        width: 90vw;
-    }
-    .leaderboard-button{
-        padding: 0.6rem 1.5rem;
-    }
-}
-
 #slash {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -121,4 +111,26 @@ th {
     cursor: default;
 }
 
+#no-attacks{
+    position: absolute;
+    top: 25vh;
+    left: 10vw;
+    font-size: 1.5rem;
+    color: #6d30ed;
+}
 
+@media screen and (max-width: 950px) {
+    .questions-container {
+        left: 10vw;
+        width: 90vw;
+    }
+    .leaderboard-button{
+        padding: 0.6rem 1.5rem;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .leaderboard-container{
+        display: none;
+    }
+}

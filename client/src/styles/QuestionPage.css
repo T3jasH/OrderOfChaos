@@ -99,3 +99,9 @@ html {
 
 .test-case-container {
 }
+
+@media screen and (max-width: 720px) {
+    .question-container{
+        display: none;
+    }
+}

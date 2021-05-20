@@ -68,6 +68,18 @@ input[type="submit"]{
   cursor: pointer;
 }
 
+.mobile-message{
+  position: absolute;
+  top: 15vh;
+  left: 20vw;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #6D30ED;
+  display: none;
+}
+
+
+
 @media screen and (max-width : 1200px) {
   *{
     --rootFontSize: 18px; 
@@ -77,6 +89,15 @@ input[type="submit"]{
 @media screen and (max-width : 950px) {
   *{
     --rootFontSize: 15px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .mobile-message{
+    display: block;
+  }
+  .footer{
+    display: none;
   }
 }
 

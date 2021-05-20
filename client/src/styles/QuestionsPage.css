@@ -54,3 +54,11 @@ html {
     font-weight: 700;
     color: #6d30ed;
 }
+
+
+
+@media screen and (max-width: 720px) {
+    .questions-container{
+        display: none;
+    }    
+}

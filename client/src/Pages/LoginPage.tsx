@@ -96,7 +96,8 @@ const LoginPage: React.FC = () => {
     for(var i=0; i<btns.length; i++){
       btns[i]?.setAttribute("style", "display: none")
     }
-    setLoginText("SUBMIT")
+    setPageType("verification")
+    setLoginBtnText("SUBMIT")
     setLoginText("Enter your email ID")
   }
 

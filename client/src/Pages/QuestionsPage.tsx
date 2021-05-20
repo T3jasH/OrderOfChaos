@@ -63,6 +63,7 @@ const QuestionPage: React.FC = () => {
   return (
     <div className="questions-page"  >
       <Navbar/>
+      <h2 className="mobile-message" >Switch to PC for a better experience</h2>
       <div className="questions-container">
         <h3>QUESTIONS</h3>
       {questions.state.map((item, index) => (

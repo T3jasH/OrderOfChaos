@@ -64,6 +64,7 @@ const AttackersTable = ({
     }
     
     return (
+        attackers?.length?
         <table className="attackers-table">
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
@@ -126,6 +127,10 @@ const AttackersTable = ({
                 })}
             </tbody>
         </table>
+        :
+        <div>
+            <h2 id="no-attacks" >There have been no attacks on you</h2>
+        </div>
     )
 }
 

@@ -144,6 +144,7 @@ const QuestionPage = () => {
     if (auth.state.loading) return <div>loading...</div>
     return (
         <div className="question-page">
+            <h2 className="mobile-message" >Switch to PC for a better experience</h2>
             <Navbar />
             <div className="question-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>

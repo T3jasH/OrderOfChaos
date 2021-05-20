@@ -146,6 +146,7 @@ const LeaderboardPage = ({currentPage} : props) => {
     if (auth.state.loading) return <div> loading..</div>
     return (
         <div className="leaderboard-page">
+        <h2 className="mobile-message" >Switch to PC for a better experience</h2>    
             <p className="attack-status" style={{display : attackStatus? "block" : "none"}}>
                 {attackStatus}
             </p>
