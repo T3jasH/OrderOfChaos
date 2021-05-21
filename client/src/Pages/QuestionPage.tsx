@@ -52,19 +52,13 @@ const QuestionPage = () => {
     const history = useHistory()
 
     useEffect(() => {
-        if (auth.state.id.length) {
-            getLeaderboard(auth).then((data) => {
-                setRank(
-                    data.ranks.findIndex((user: any) => user._id === auth.state.id) +
-                        1
-                )
-            })
+        if (auth.state.token === null) {
+            auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
+            getUser(auth)
         }
-    }, [auth.state.id])
+    })
+
     useEffect(() => {
-        console.log("LOGGING AUTH")
-        console.log(auth)
-        console.log(auth.state.token)
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
                 method: "GET",
@@ -80,10 +74,6 @@ const QuestionPage = () => {
                     setAttemptState(data.data.attempts)
                     console.log(typeof questionData?.statement)
                     console.log(data.data.question, data.data.attempts)
-                    auth.dispatch({
-                        type: AuthActionTypes.SET_LOADING,
-                        payload: [],
-                    })
                     console.log(data)
                 })
                 .catch((e) => {
@@ -95,12 +85,16 @@ const QuestionPage = () => {
     }, [auth.state.token])
 
     useEffect(() => {
-        if (auth.state.token === null) {
-            auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
-            getUser(auth)
+        if(questionData !== null){
+            auth.dispatch({
+                type: AuthActionTypes.SET_LOADING,
+                payload: [],
+            })
         }
-    })
+    }, [questionData])
 
+
+    
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
@@ -139,12 +133,21 @@ const QuestionPage = () => {
         ta.select()
         document.execCommand("copy")
         ta.remove()
+        setSubmitMessage("Copied to clipboard")
+        setTimeout(() => setSubmitMessage(""), 1500)
     }
 
     if (auth.state.loading) return <div>loading...</div>
     return (
         <div className="question-page">
-            <h2 className="mobile-message" >Switch to PC for a better experience</h2>
+            <div className="status-container">
+            <p 
+            className="submit-status"
+            style={{display : submitMessage === "" ? "none" : "flex"}}>
+                {submitMessage}
+            </p>
+            </div>
+            <h3 className="mobile-message" >Switch to PC for a better experience</h3>
             <Navbar />
             <div className="question-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
@@ -164,24 +167,43 @@ const QuestionPage = () => {
                         {String(questionData?.statement)}
                     </ReactMarkdown>
                 </div>
-
-                <div className="test-case-container">
-                    <div className="test-case-header">
-                        <h2>Test Case</h2>
-
-                        <button
-                            onClick={() => {
-                                CopyToClipboard(questionData?.testcase)
-                            }}
-                        >
-                            Copy
-                        </button>
-                    </div>
-                    <div id="test-case">
-                        <div>{questionData?.testcase}</div>
-                    </div>
+                <br/>
+                <h2>
+                    Constraints
+                </h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.constraints)}
+                </ReactMarkdown>
+                <br/>
+                <h2>Input Format</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.inpFormat)}
+                </ReactMarkdown>
+                <br/>
+                <h2>Output Format</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.outFormat)}
+                </ReactMarkdown>
+                <br/>
+                <h2>Sample Input</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.samInput)}
+                </ReactMarkdown>
+                <br/>
+                <h2>Sample Output</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.samOutput)}
+                </ReactMarkdown>
+                <br/>
+                <h2>Testcase</h2>
+                <div className="testcase-container">
+                    {questionData?.testcase}
                 </div>
-
+                <button 
+                className="copy-btn"
+                onClick={() => CopyToClipboard(questionData?.testcase)}>
+                    Copy Testcase
+                </button>
                 <div className="answer-container">
                     <h2>Answer</h2>
                     <div className="answer-info">
@@ -191,9 +213,7 @@ const QuestionPage = () => {
                                 questionData.difficulty - attemptsState > 0 ? 
                                     questionData.difficulty - attemptsState: 0 : null}
                         </div>
-                        <div className="submit-message">
-                            {submitMessage !== "" && submitMessage}
-                        </div>
+
                     </div>
 
                     <textarea className="answer-textarea"

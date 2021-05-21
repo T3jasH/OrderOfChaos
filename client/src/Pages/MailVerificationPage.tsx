@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useParams, useHistory } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import { AuthActionTypes } from "../context/AuthReducer";
 import "../styles/LoginPage.css"
 
 const MailVerificationPage: React.FC = () => {
-  const [message, setMessage] = useState<string>("");
-
   const { token }: any = useParams();
-
+  const auth = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
@@ -20,25 +20,12 @@ const MailVerificationPage: React.FC = () => {
         .then((res) => res.json())
         .catch((err) => console.log(err))
         .then((data) => {
-          if (data.success) {
-            setMessage(data.msg);
-            setTimeout(() => {
-              history.push("/login");
-            }, 3000);
-          } else {
-            setMessage(data.msg);
-          }
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg: data.msg}})
+          history.push("/login")
         });
   }, [token]);
 
   return <div className="login-page">
-    {message? 
-    <p className="login-status">
-      {message}
-    </p>
-    :
-    null
-    }
     </div>;
 };
 

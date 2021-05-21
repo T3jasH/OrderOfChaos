@@ -29,7 +29,8 @@ const AttackersTable = ({
     //Set all attacks as seen
 
     useEffect(() => {
-        if(auth.state.token)
+        if(auth.state.token && playerContext.state.attacks?.length){
+        if(playerContext.state.attacks.find(att => att.seen === false) !== undefined)
         fetch("/api/attacklogs", {
             method: "POST",
             body: JSON.stringify({}),
@@ -48,7 +49,8 @@ const AttackersTable = ({
                 console.log(data.msg)
             }
         })
-    }, [])
+    }
+    }, [playerContext.state.attacks])
 
     const minsAgo = (date: any) => {
         var diff = parseInt(
@@ -62,9 +64,9 @@ const AttackersTable = ({
         }
         return `${diff}${text}`
     }
-    
+       
     return (
-        attackers?.length?
+        attackers !== undefined && attackers?.length !== 0 ?
         <table className="attackers-table">
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>

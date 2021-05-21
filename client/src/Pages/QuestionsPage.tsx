@@ -27,7 +27,7 @@ const QuestionPage: React.FC = () => {
     }, [auth.state.token])
 
   useEffect( () => {
-    if(auth?.state?.id?.length ){
+    if(auth?.state?.id?.length && auth.state.token !== "x"){
       getLeaderboard(auth)
       .then(data => {
         console.log(data.attackers)

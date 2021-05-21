@@ -12,13 +12,14 @@
     flex-direction: row;
     align-items: center;
     --lockRight : 4vw;
-    --lockWidth : 180px;
+    --lockWidth : 10rem;
     --pointsRight: 2vw;
-    --solvedRight: 8vw; 
+    --solvedRight: 10vw; 
 }
 
 .question > * {
     position: absolute;
+    font-size: 1.35rem;
 }
 
 .question > .index{
@@ -28,16 +29,19 @@
 
 .question > .question-name{
     left: 5vw;
+    font-weight: 500;
 }
 
 .question > .question-lock{
     right: var(--lockRight);
     width: var(--lockWidth);
+    font-size: 1.2rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     border-radius: 10px 0px;
-    padding: 0.4rem;
+    font-weight: 400;
+    padding: 0.6rem 0.2rem;
 }
 
 .question > .question-points{
@@ -48,6 +52,16 @@
 .question > .question-solved{
     right: calc(var(--lockRight) + var(--lockWidth) + var(--pointsRight) + var(--solvedRight));
     color: #9C9D8E;
+    font-weight: 500;
+}
+
+@media screen  and (max-width: 1000px) {
+    .question > *{
+        font-size: 1.2rem;;
+    }
+    .question > .question-lock {
+        font-size: 1rem;
+    }
 }
 
 @media screen and (max-width : 950px) {

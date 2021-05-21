@@ -56,7 +56,7 @@ const LeaderboardPage = ({currentPage} : props) => {
 
 
     useEffect(() => {
-        if (auth.state.id.length) {
+        if (auth.state.id.length && auth.state.token !== "x") {
             getLeaderboard(auth)
             .then((data) => {
                 setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
@@ -134,22 +134,25 @@ const LeaderboardPage = ({currentPage} : props) => {
                         )
                     })
                 }
-                else{
-                    setAttackStatus(data.msg)
-                    setTimeout(() => setAttackStatus(null), 5000)
-                }
+                setAttackStatus(data.msg)
+                setTimeout(() => setAttackStatus(null), 5000)
                 })
                 .catch((e) => console.log(e))   
         }
-    }
+    }    
 
     if (auth.state.loading) return <div> loading..</div>
     return (
         <div className="leaderboard-page">
         <h2 className="mobile-message" >Switch to PC for a better experience</h2>    
-            <p className="attack-status" style={{display : attackStatus? "block" : "none"}}>
+        <div 
+        className="status-container"
+        style={{display : attackStatus === null ? "none" : "flex"}}
+        >
+            <p className="attack-status">
                 {attackStatus}
             </p>
+        </div>
             <Navbar />
             <div className="leaderboard-container">
                 {scroll()}

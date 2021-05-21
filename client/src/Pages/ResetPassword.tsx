@@ -1,5 +1,7 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { useHistory, useParams } from "react-router"
+import { AuthContext } from "../context/AuthContext"
+import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/LoginPage.css"
 
 const ResetPassword : React.FC = () => {
@@ -8,6 +10,7 @@ const ResetPassword : React.FC = () => {
     const [status, handleStatus] = useState<string | null>(null)
     const [confirmPassword, handleConfirmPassword] = useState<string>("");
     const [password, handlePassword] = useState<string>("");
+    const auth = useContext(AuthContext)
     const history = useHistory()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,6 +19,7 @@ const ResetPassword : React.FC = () => {
 
         if(confirmPassword !== password){
             handleStatus("Passwords do not match")
+            setTimeout(() => handleStatus(null), 5000)
             return;
         }
         fetch(`/api/users/resetpassword/${token}`, {
@@ -29,19 +33,24 @@ const ResetPassword : React.FC = () => {
         .catch(err => console.log(err))
         .then(data => {
             if(data.success){
-                document.getElementById("login-status")?.setAttribute("style", "color: #fff");
-                handleStatus("Password reset successful")
-                setTimeout(() => {
-                    history.push("/login")
-                }, 2500)
+                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg}})
+                history.push("/login")
             }
             else{
                 handleStatus(data.msg)
+                setTimeout(() => handleStatus(null), 5000)
             }
         })
     }
 
     return <div className="login-page">
+        <div className="status-container">
+            <p 
+            className="login-status"
+            style={{display : status === null ? "none" : "flex"}}>
+                {status}
+            </p>
+      </div>
         <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
          <h3>
@@ -60,11 +69,8 @@ const ResetPassword : React.FC = () => {
             placeholder="CONFIRM PASSWORD"
             onChange={(e) => handleConfirmPassword(e.target.value)}
           />
-          <input type="submit" value="SUBMIT"/>
+          <input type="submit" className="login-submit-btn" value="SUBMIT"/>
         </form>
-       <p className="login-status" id="login-status" style={{display: status? "block" : "none"}}>
-         {status}
-          </p> 
         </div>
     </div>
 }

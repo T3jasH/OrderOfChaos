@@ -74,11 +74,13 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-page">
-      <p className="login-status"
-      style={{display: status? "block" : "none"}}
-      >
-          {status}
-      </p> 
+      <div className="status-container">
+            <p 
+            className="login-status"
+            style={{display : status === null ? "none" : "flex"}}>
+                {status}
+            </p>
+      </div>
       <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
         <h3>REGISTER</h3>

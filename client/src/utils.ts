@@ -1,7 +1,7 @@
 import {AuthActionTypes } from "./context/AuthReducer";
 import { attack, PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
-import { Iattacker, IleaderboardPlayer } from "./Pages/LeaderboardPage";
+import {IleaderboardPlayer } from "./Pages/LeaderboardPage";
 
 export const getContestDetails = async (
   auth: any,
@@ -100,6 +100,7 @@ export const getUser = async (auth : any, player?: any) => {
 }
 
 export const getLeaderboard = async (auth: any) => {
+  
   const resp = await fetch("/api/leaderboard", {
     method: "GET",
     headers: {
@@ -107,13 +108,16 @@ export const getLeaderboard = async (auth: any) => {
       "Content-type": "application/json",
     },
   })
+  if(resp.status === 401){
+    auth.dispatch({type : AuthActionTypes.LOGOUT, payload: []})
+    return ;
+  }
   const data = await resp.json()
-  //console.log(data.data.attackers)
   return data.data
    
 };
 
-
+// To get count of attacks, from another player on current player 
 export  const getAttackersCount = (attackers : attack[], leaderboardPlayer: any) => {
   let cnt = 0
   if(attackers.length){
@@ -128,12 +132,11 @@ export  const getAttackersCount = (attackers : attack[], leaderboardPlayer: any)
 }
 
 export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : any) => {
-  var att = null
-  att = leaderboardPlayers?.find(player => player._id === auth.state.id)?.attackers
+  var att:any = null
+  att = leaderboardPlayers?.find(player => player._id === auth.state.id )?.attackers
   att = att?.map((obj:any) => {
         let newObj = obj;
         newObj.date = Date.parse(obj.date);
-        
         if(leaderboardPlayers?.length){
         var idx =  leaderboardPlayers?.findIndex(player => player.username === obj.username)
         newObj.rank = idx+1
@@ -144,18 +147,19 @@ export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : a
           return newObj
       })
       att?.sort((firstAttacker:any, secondAttacker:any) => 
-      firstAttacker.date < secondAttacker.date ? 1 : 0
+      firstAttacker.date < secondAttacker.date ? 1 : -1
       )
       if(att){
-      var toDelete = []
-      for(var i=0; i<att?.length-1; i++){
-          if(att[i].username === att[i+1].username){
-              toDelete.push(i+1)
-          }
+      var newAtt:any = []
+      var m = new Map()
+      att.map((obj:any) => {
+        if(!m.has(obj._id)){
+          m.set(obj._id, obj.date)
+          newAtt.push( att.find( (attacker:any) => attacker._id === obj._id && attacker.date === obj.date) )
+        }
+        return null
+      })
+      att = newAtt
       }
-      for(i=0; i<toDelete.length; i++){
-          att.splice(toDelete[i]-i, 1)
-      }
-    }
     return att? att : undefined
 }

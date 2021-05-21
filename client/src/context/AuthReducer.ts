@@ -5,6 +5,7 @@ export interface Auth {
   id: string;
   loading: boolean
   username: string
+  authAlertMessage? :string
 }
 
 export enum AuthActionTypes {
@@ -12,7 +13,8 @@ export enum AuthActionTypes {
   LOGOUT = "LOGOUT",
   GET_TOKEN = "GET_TOKEN",
   GET_AUTH = "GET_AUTH",
-  SET_LOADING = "SET_LOADING"
+  SET_LOADING = "SET_LOADING",
+  SET_MESSAGE = "SET_MESSAGE"
 }
 
 export interface AuthAction {
@@ -56,6 +58,11 @@ export const authReducer = (state: Auth, action: AuthAction) => {
       return {
         ...state, 
         loading : false
+      }
+    case "SET_MESSAGE":
+      return{
+        ...state,
+        authAlertMessage: action.payload.msg
       }
     default:
       return state;

@@ -8,15 +8,6 @@
     background-position: right bottom;
 }
 
-.questions-container::-webkit-scrollbar {
-    background-color: #090321 #6d30ed;
-}
-
-body::-webkit-scrollbar {
-    width: 1em;
-    color: #6d30ed;
-    background-color: #6d30ed;
-}
 
 html {
     scroll-behavior: smooth;
@@ -29,10 +20,10 @@ html {
     width: 90vw;
     height: calc(100vh - 10rem);
     overflow: auto;
-    scrollbar-color: #6d30ed #090321;
+    scrollbar-color:#6D30ED #090321;
 }
 .questions-container > h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
