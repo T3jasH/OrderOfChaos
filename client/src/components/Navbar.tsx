@@ -4,7 +4,11 @@ import {AuthContext} from "../context/AuthContext";
 import { AuthActionTypes } from "../context/AuthReducer";
 import "../styles/NavBar.css"
 
-const Navbar:React.FC = () => {
+interface props {
+  removeButton: boolean
+}
+
+const Navbar:React.FC<props> = ({removeButton}) => {
   const auth = useContext(AuthContext)
   const history = useHistory()
 
@@ -21,14 +25,18 @@ const Navbar:React.FC = () => {
   >
     Logout
   </button>
-  <button onClick={() => history.push("/leaderboard")} className="btn-nav" >
+  <button 
+  onClick={() => history.push("/leaderboard")} 
+  className="btn-nav"
+  style={{display : removeButton ? "none" : "block"}} >
     Leaderboard
   </button>
   <button 
   className="btn-nav"
   onClick={e => {
     history.push("/rules")
-  }}>
+  }}
+  style={{display : removeButton ? "none" : "block"}} >
     Rules
   </button>
  

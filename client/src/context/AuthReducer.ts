@@ -4,7 +4,7 @@ export interface Auth {
   isStarted: boolean;
   id: string;
   username: string
-  authAlertMessage? :string
+  authAlertMessage? :string | null
 }
 
 export enum AuthActionTypes {

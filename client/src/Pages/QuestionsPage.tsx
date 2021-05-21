@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { QuestionContext } from "../context/QuestionContext"
 import { AuthContext } from "../context/AuthContext"
 import { Redirect, useHistory } from "react-router"
-import { getContestDetails, getLeaderboard } from "../utils"
+import { getContestDetails, getLeaderboard, Loading } from "../utils"
 import "../styles/QuestionsPage.css"
 import { AuthActionTypes } from "../context/AuthReducer"
 import QuestionListItem from "../components/QuestionListItem"
@@ -50,7 +50,7 @@ const QuestionPage: React.FC = () => {
     }
 
     if (loading) {
-        return <div>insert loading animation here</div>
+        return <Loading/>
     }
 
     if(!auth.state.isStarted){
@@ -59,7 +59,7 @@ const QuestionPage: React.FC = () => {
   
   return (
     <div className="questions-page"  >
-      <Navbar/>
+      <Navbar removeButton={false} />
       <h2 className="mobile-message" >Switch to PC for a better experience</h2>
       <div className="questions-container">
         <h3>QUESTIONS</h3>

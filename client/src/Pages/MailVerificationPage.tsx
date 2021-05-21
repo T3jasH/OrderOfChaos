@@ -20,7 +20,10 @@ const MailVerificationPage: React.FC = () => {
         .then((res) => res.json())
         .catch((err) => console.log(err))
         .then((data) => {
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg: data.msg}})
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+          setTimeout(() => {
+              auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+              }, 3500)
           history.push("/login")
         });
   }, [token]);

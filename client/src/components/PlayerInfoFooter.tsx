@@ -14,15 +14,6 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
     const player = useContext(PlayerContext).state
     const history = useHistory()
 
-    const scrollToName = () => {
-        if(window.location.hash){
-            window.location.reload()
-        }
-        else{
-            history.push(`/leaderboard#${auth.id}`)
-        }
-    }
-
     var attacksOnPlayer : number | null = 8;
     const newAttacksCount = () => {
         var cnt=0;
@@ -39,12 +30,10 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
         <div className="footer">
             <div className="info-container" style={{ marginLeft: "0px" }}>
                 <p>Username:</p>
-                <button
-                    className="field-value"
-                    onClick={scrollToName}
-                >
-                    {auth.username}
-                </button>
+                <p className="field-value">
+                {auth.username}
+                </p>
+    
             </div>
             <div className="info-container">
                 <p>Score:</p>
@@ -52,12 +41,11 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
             </div>
             <div className="info-container">
                 <p>Rank:</p>
-                <button
+                <p
                     className="field-value"
-                    onClick={scrollToName}
                 >
                     {rank ? rank : "-"}
-                </button>
+                </p>
             </div>
 
             <div className="info-container">
@@ -65,7 +53,7 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 <p className="field-value">{player.attacksLeft}</p>
             </div>
             <div className="info-container">
-                <p>Attacks:</p>
+                <p>Attacks faced:</p>
                 <p className="field-value">{player.attacks.length}</p>
             </div>
             <div className="info-container"

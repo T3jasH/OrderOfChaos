@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
-import { getUser, getLeaderboard, sortAttackers } from "../utils"
+import { getUser, getLeaderboard, sortAttackers, Loading } from "../utils"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
 import { useHistory } from "react-router-dom"
@@ -40,8 +40,6 @@ const LeaderboardPage = ({currentPage} : props) => {
     const [attackersP, setAttackersP] = useState<Iattacker[] | undefined | null>(undefined)
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<IleaderboardPlayer[]>()
     const [rank, setRank] = useState<number | null>(null)
-    const [attackStatus, setAttackStatus] = useState<string | null>(null)
-    const [scrollTo, setScrollTo] = useState<string | null>(window.location.hash? window.location.hash : null)
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
@@ -89,25 +87,13 @@ const LeaderboardPage = ({currentPage} : props) => {
         }
     }, [attackersP])
 
-    const scroll = () => {
-        var ele = document
-        .getElementById(
-            String(window.location.hash).substring(
-                1,
-                String(window.location.hash).length
-            )
-        )
-        if (scrollTo && attackersP!== undefined && ele) {
-            console.log("SCROLL", ele)
-                ele.scrollIntoView({ behavior: "smooth" })
-            setScrollTo(null)
-        }
-    }
 
     const handleAttack = (id: string) => {
         if (contextPlayer.state.attacksLeft <= 0) {
-            setAttackStatus("You don't have attacks")
-            setTimeout(() => setAttackStatus(null), 5000)
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "You don't have attacks"}})
+            setTimeout(() => {
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                }, 3500)
             return
         }
         if (auth.state.token) {
@@ -140,26 +126,20 @@ const LeaderboardPage = ({currentPage} : props) => {
                         )
                     })
                 }
-                setAttackStatus(data.msg)
-                setTimeout(() => setAttackStatus(null), 5000)
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg}})
+                setTimeout(() => {
+                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                    }, 3500)
                 })
                 .catch((e) => console.log(e))   
         }
     }    
 
-    if (loading) return <div> loading..</div>
+    if (loading) return <Loading/>
     return (
         <div className="leaderboard-page">
         <h2 className="mobile-message" >Switch to PC for a better experience</h2>    
-        <div 
-        className="status-container"
-        style={{display : attackStatus === null ? "none" : "flex"}}
-        >
-            <p className="attack-status">
-                {attackStatus}
-            </p>
-        </div>
-            <Navbar />
+            <Navbar  removeButton={true}/>
             <div className="leaderboard-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>
@@ -193,7 +173,6 @@ const LeaderboardPage = ({currentPage} : props) => {
                 {console.log(attackersP)}
             </div>
             <PlayerInfoFooter rank={rank} active={true} />
-            {scroll()}
         </div>
     )
 }

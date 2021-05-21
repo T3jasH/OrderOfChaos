@@ -7,7 +7,6 @@ import "../styles/LoginPage.css"
 const ResetPassword : React.FC = () => {
 
     const {token} : any = useParams()
-    const [status, handleStatus] = useState<string | null>(null)
     const [confirmPassword, handleConfirmPassword] = useState<string>("");
     const [password, handlePassword] = useState<string>("");
     const auth = useContext(AuthContext)
@@ -18,8 +17,10 @@ const ResetPassword : React.FC = () => {
         e.preventDefault()
 
         if(confirmPassword !== password){
-            handleStatus("Passwords do not match")
-            setTimeout(() => handleStatus(null), 5000)
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match"}})
+            setTimeout(() => {
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                }, 3500)
             return;
         }
         fetch(`/api/users/resetpassword/${token}`, {
@@ -37,20 +38,15 @@ const ResetPassword : React.FC = () => {
                 history.push("/login")
             }
             else{
-                handleStatus(data.msg)
-                setTimeout(() => handleStatus(null), 5000)
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+                setTimeout(() => {
+                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                    }, 3500)
             }
         })
     }
 
     return <div className="login-page">
-        <div className="status-container">
-            <p 
-            className="login-status"
-            style={{display : status === null ? "none" : "flex"}}>
-                {status}
-            </p>
-      </div>
         <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
          <h3>

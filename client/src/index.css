@@ -72,7 +72,50 @@ input[type="submit"]{
   cursor: pointer;
 }
 
+.loading{
+    min-height: 100vh;
+    min-width: 100vw;
+    background: url(./Backgrounds/PlainBackground.png);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loading .loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.status-container{
+  position: absolute;
+  top: 2.5vh;
+  background-color: none;
+  width: 100%;
+  height: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+}
+
+.status-message{
+  background-color: #8060c6;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 0rem 0.5rem;
+  width: fit-content;
+  height: fit-content;
+}
 
 .mobile-message{
   position: absolute;
@@ -98,7 +141,7 @@ input[type="submit"]{
   }
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 1050px) {
   .mobile-message{
     display: block;
   }

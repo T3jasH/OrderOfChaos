@@ -13,7 +13,6 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, handleConfirmPassword] = useState<string>("");
   const [name, handleName] = useState<string>("");
   const [phoneNo, handlePhoneNo] = useState<string>("");
-  const [status, handleStatus] = useState<string | null>(null);
   const history = useHistory()
   const auth = useContext(AuthContext)
 
@@ -26,8 +25,10 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(password !== confirmPassword){
-      handleStatus("Passwords do not match")
-      setTimeout(() => handleStatus(null), 5000)
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match"}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
       return
     }
     const body = {
@@ -54,15 +55,20 @@ const RegisterPage: React.FC = () => {
       .then((data) => {
         console.log(data)
         if(data.success){
-          handleStatus(data.msg)
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+        
         }
         else if(data.errors){
-          handleStatus(data.errors[0])
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.error[0].msg}})
+
         }
         else{
-          handleStatus(data.msg)
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+
         }
-        setTimeout(() => handleStatus(null), 5000)
+        setTimeout(() => {
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+          }, 3500)
       });
   };
 
@@ -74,13 +80,6 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-page">
-      <div className="status-container">
-            <p 
-            className="login-status"
-            style={{display : status === null ? "none" : "flex"}}>
-                {status}
-            </p>
-      </div>
       <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
         <h3>REGISTER</h3>

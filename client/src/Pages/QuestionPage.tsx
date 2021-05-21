@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { PlayerContext } from "../context/PlayerContext"
 import { useHistory, useParams } from "react-router-dom"
-import { getUser } from "../utils"
+import { getUser, Loading } from "../utils"
 
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
@@ -45,8 +45,6 @@ const QuestionPage = () => {
 
     const [userAnswer, setUserAnswer] = useState<string>("")
     const [questionData, setQuestionData] = useState<IQuestion | null>(null)
-    const [submitMessage, setSubmitMessage] = useState<string>("")
-    const [rank, setRank] = useState<number | null>(null)
     const [attemptsState, setAttemptState] = useState<number | undefined>(0)
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -113,8 +111,10 @@ const QuestionPage = () => {
                     if(!data.success){
                         setAttemptState(attemptsState!==undefined? attemptsState + 1 : undefined)
                     }
-                    setSubmitMessage(data.msg)
-                    setTimeout(() => setSubmitMessage(""), 3000)
+                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
                 })
                 .catch((e) => {
                     console.log(e)
@@ -131,22 +131,17 @@ const QuestionPage = () => {
         ta.select()
         document.execCommand("copy")
         ta.remove()
-        setSubmitMessage("Copied to clipboard")
-        setTimeout(() => setSubmitMessage(""), 1500)
+        auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Copied to clipboard"}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
     }
 
-    if (loading) return <div>loading...</div>
+    if (loading) return <Loading/>
     return (
         <div className="question-page">
-            <div className="status-container">
-            <p 
-            className="submit-status"
-            style={{display : submitMessage === "" ? "none" : "flex"}}>
-                {submitMessage}
-            </p>
-            </div>
             <h3 className="mobile-message" >Switch to PC for a better experience</h3>
-            <Navbar />
+            <Navbar removeButton={false} />
             <div className="question-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
@@ -161,9 +156,7 @@ const QuestionPage = () => {
                 // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
             )} */}
                 <div className="question-markdown">
-                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                        {String(questionData?.statement)}
-                    </ReactMarkdown>
+                    <ReactMarkdown rehypePlugins={[rehypeRaw]} children={String(questionData?.statement)} />
                 </div>
                 <br/>
                 <h2>
@@ -195,9 +188,7 @@ const QuestionPage = () => {
                 <br/>
                 <h2>Testcase</h2>
                 <div className="testcase-container">
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                    {String(questionData?.testcase)}
-                </ReactMarkdown>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} children={String(questionData?.testcase)}/>
                 </div>
                 <button 
                 className="copy-btn"

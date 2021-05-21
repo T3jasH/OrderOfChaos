@@ -14,7 +14,7 @@
 .rules-container{
     position: relative;
     height: 75vh;
-    width: 40vw;
+    width: 45vw;
     border: 2px solid #6D30ED;
     border-radius: 1.5rem;
     padding: 1rem;
@@ -22,7 +22,7 @@
 }
 
 .rules-container > h2{
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     letter-spacing: 0.1em; 
     position: absolute;
     left: 45%;

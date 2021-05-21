@@ -10,9 +10,11 @@ import QuestionPage from "./Pages/QuestionPage"
 import RulesPage from "./Pages/RulesPage"
 import NotFoundPage from "./Pages/NotFoundPage"
 import ResetPassword from "./Pages/ResetPassword"
+import { SendAlert } from "./utils"
 const App: React.FC = () => {
     return (
         <div className="code-event">
+            <SendAlert/>
             <Switch>
                 <Route
                     path="/leaderboard"

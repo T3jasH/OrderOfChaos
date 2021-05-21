@@ -21,6 +21,7 @@ html {
     height: calc(100vh - 10rem);
     overflow: auto;
     scrollbar-color:#6D30ED #090321;
+    line-height: 4vh;
 }
 .questions-container > h3 {
     font-size: 1.6rem;
@@ -28,12 +29,6 @@ html {
     margin-bottom: 1rem;
 }
 
-@media screen and (max-width: 950px) {
-    .questions-container {
-        left: 10vw;
-        width: 90vw;
-    }
-}
 
 .answer-info {
     display: flex;
@@ -48,7 +43,7 @@ html {
 
 
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 1050px) {
     .questions-container{
         display: none;
     }    

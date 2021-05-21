@@ -2,6 +2,8 @@ import {AuthActionTypes } from "./context/AuthReducer";
 import { attack, PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
 import {IleaderboardPlayer } from "./Pages/LeaderboardPage";
+import React, { useContext, useEffect } from "react"
+import { AuthContext } from "./context/AuthContext";
 
 export const getContestDetails = async (
   auth: any,
@@ -162,4 +164,27 @@ export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : a
       att = newAtt
       }
     return att? att : null
+}
+
+export const SendAlert:React.FC = () => {
+
+    const auth  = useContext(AuthContext)
+    if(auth.state.authAlertMessage === null){
+      return <div></div>
+    }
+    
+    
+    return <div className="status-container">
+      <p className="status-message">
+        {auth.state.authAlertMessage}
+      </p>
+    </div>
+}
+
+export const Loading:React.FC = () => {
+  return <div 
+  className="loading"
+  >
+    <div className="loader" />
+    </div>
 }

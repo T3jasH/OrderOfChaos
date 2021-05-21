@@ -8,7 +8,6 @@ import { Redirect, useHistory } from "react-router-dom";
 const LoginPage: React.FC = () => {   
   const [email, handleEmail] = useState<string>("");
   const [password, handlePassword] = useState<string>("");
-  const [status, handleStatus] = useState<string | null>(null);
   const [loginText, setLoginText] = useState<string>("LOGIN")
   const [loginBtnText, setLoginBtnText] = useState<string>("LOGIN")
   const [pageType, setPageType] = useState<string>("login")
@@ -18,10 +17,6 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     if(auth.state.token === null){
       auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
-    }
-    if(auth.state.authAlertMessage){
-      handleStatus(auth.state.authAlertMessage)
-      setTimeout(() => handleStatus(null), 3000)
     }
   },  [])
 
@@ -47,12 +42,16 @@ const LoginPage: React.FC = () => {
       history.push("/")
     }
     else if(data.errors){
-      handleStatus(data.errors[0].msg)
-      setTimeout(() => handleStatus(null), 5000)
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.errors[0].msg}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
     }
     else {
-      handleStatus(data.msg)
-      setTimeout(() => handleStatus(null), 5000)
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
     }
     }
 
@@ -65,8 +64,10 @@ const LoginPage: React.FC = () => {
         }
       })
       const data = await response.json()
-      handleStatus(data.msg)
-      setTimeout(() => handleStatus(null), 5000)
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
     }
     else{
       const response = await fetch("/api/users/resendEmail", {
@@ -77,8 +78,10 @@ const LoginPage: React.FC = () => {
         }
       })
       const data = await response.json()
-      handleStatus(data.msg)
-      setTimeout(() => handleStatus(null), 5000)
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+        setTimeout(() => {
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+            }, 3500)
     }
   };
 
@@ -108,13 +111,6 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
-      <div className="status-container">
-            <p 
-            className="login-status"
-            style={{display : status === null ? "none" : "flex"}}>
-                {status}
-            </p>
-      </div>
       <div className="login-container">
         <h2>ORDER OF CHAOS</h2>
          <h3 id="login-text">

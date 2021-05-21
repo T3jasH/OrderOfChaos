@@ -21,6 +21,8 @@ html {
     height: calc(100vh - 10rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
+    line-height: 4vh;
+
 }
 
 .question-markdown {
@@ -54,6 +56,7 @@ html {
     backdrop-filter: blur(140.2px);
     border-radius: 1.2rem;
     padding: 0.8rem;
+    word-wrap: break-word;
 }
 
 .test-case-header {
