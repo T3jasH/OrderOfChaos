@@ -14,6 +14,8 @@ const AdminPage : React.FC = () => {
     const [difficulty, handleDifficulty] = useState<number | null>(null)
     const [quesId, handleQuesId] = useState<number | null>(null)
     const [errorMsg, setErrorMsg] = useState<null | string>(null)
+    const [loading, setLoading] = useState<boolean>(true)
+
 
     const auth = useContext(AuthContext)
     useEffect(() => {
@@ -26,7 +28,7 @@ const AdminPage : React.FC = () => {
         getUser(auth)     
         .then(data => {
             if(data.success){
-                auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+                setLoading(false)
             }
         })
     }, [auth.state.token])
@@ -79,7 +81,7 @@ const AdminPage : React.FC = () => {
         })
     }    
 
-    if(auth.state.loading){
+    if(loading){
         return <div>insert loading animation here</div>
     }
 

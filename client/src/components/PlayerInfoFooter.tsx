@@ -14,6 +14,15 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
     const player = useContext(PlayerContext).state
     const history = useHistory()
 
+    const scrollToName = () => {
+        if(window.location.hash){
+            window.location.reload()
+        }
+        else{
+            history.push(`/leaderboard#${auth.id}`)
+        }
+    }
+
     var attacksOnPlayer : number | null = 8;
     const newAttacksCount = () => {
         var cnt=0;
@@ -32,20 +41,20 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 <p>Username:</p>
                 <button
                     className="field-value"
-                    onClick={(e) => history.push(`/leaderboard#${auth.id}`)}
+                    onClick={scrollToName}
                 >
                     {auth.username}
                 </button>
             </div>
             <div className="info-container">
                 <p>Score:</p>
-                <p className="field-value number">{player.score}</p>
+                <p className="field-value">{player.score}</p>
             </div>
             <div className="info-container">
                 <p>Rank:</p>
                 <button
-                    className="field-value number"
-                    onClick={(e) => history.push(`/leaderboard#${auth.id}`)}
+                    className="field-value"
+                    onClick={scrollToName}
                 >
                     {rank ? rank : "-"}
                 </button>
@@ -53,11 +62,11 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
 
             <div className="info-container">
                 <p>Attacks Left:</p>
-                <p className="field-value number">{player.attacksLeft}</p>
+                <p className="field-value">{player.attacksLeft}</p>
             </div>
             <div className="info-container">
                 <p>Attacks:</p>
-                <p className="field-value number">{player.attacks.length}</p>
+                <p className="field-value">{player.attacks.length}</p>
             </div>
             <div className="info-container"
             style = {{display : active? "none" : "block"}}

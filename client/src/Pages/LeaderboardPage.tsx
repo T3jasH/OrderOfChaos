@@ -37,10 +37,12 @@ const LeaderboardPage = ({currentPage} : props) => {
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
     const [tabState, setTabState] = useState<string>(currentPage)
-    const [attackersP, setAttackersP] = useState<Iattacker[] | undefined>([])
+    const [attackersP, setAttackersP] = useState<Iattacker[] | undefined | null>(undefined)
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<IleaderboardPlayer[]>()
     const [rank, setRank] = useState<number | null>(null)
     const [attackStatus, setAttackStatus] = useState<string | null>(null)
+    const [scrollTo, setScrollTo] = useState<string | null>(window.location.hash? window.location.hash : null)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -78,23 +80,27 @@ const LeaderboardPage = ({currentPage} : props) => {
             setAttackersP(
                 sortAttackers(leaderboardPlayers, auth)
             )
-            auth.dispatch({ type: AuthActionTypes.SET_LOADING, payload: [] })
         }
-        console.log(leaderboardPlayers)
     }, [leaderboardPlayers])
 
-    
+    useEffect(() => {
+        if(attackersP !== undefined){
+            setLoading(false)
+        }
+    }, [attackersP])
 
     const scroll = () => {
-        if (window.location.hash) {
-            document
-                .getElementById(
-                    String(window.location.hash).substring(
-                        1,
-                        String(window.location.hash).length
-                    )
-                )
-                ?.scrollIntoView({ behavior: "smooth" })
+        var ele = document
+        .getElementById(
+            String(window.location.hash).substring(
+                1,
+                String(window.location.hash).length
+            )
+        )
+        if (scrollTo && attackersP!== undefined && ele) {
+            console.log("SCROLL", ele)
+                ele.scrollIntoView({ behavior: "smooth" })
+            setScrollTo(null)
         }
     }
 
@@ -141,7 +147,7 @@ const LeaderboardPage = ({currentPage} : props) => {
         }
     }    
 
-    if (auth.state.loading) return <div> loading..</div>
+    if (loading) return <div> loading..</div>
     return (
         <div className="leaderboard-page">
         <h2 className="mobile-message" >Switch to PC for a better experience</h2>    
@@ -155,7 +161,6 @@ const LeaderboardPage = ({currentPage} : props) => {
         </div>
             <Navbar />
             <div className="leaderboard-container">
-                {scroll()}
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>
                     <span
@@ -179,7 +184,6 @@ const LeaderboardPage = ({currentPage} : props) => {
                     />
                 ) : (
                     <AttackersTable
-                        leaderboardPlayers={leaderboardPlayers}
                         handleAttack={handleAttack}
                         attackersP={
                             attackersP
@@ -189,6 +193,7 @@ const LeaderboardPage = ({currentPage} : props) => {
                 {console.log(attackersP)}
             </div>
             <PlayerInfoFooter rank={rank} active={true} />
+            {scroll()}
         </div>
     )
 }

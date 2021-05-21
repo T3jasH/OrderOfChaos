@@ -44,7 +44,7 @@ html {
     scroll-behavior: smooth;
 }
 
-#current-player {
+.current-player {
     color: #6d30ed;  
 }
 

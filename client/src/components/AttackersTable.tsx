@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
-import { IleaderboardPlayer, Iattacker } from "../Pages/LeaderboardPage"
+import { Iattacker } from "../Pages/LeaderboardPage"
 import { getAttackersCount } from "../utils"
 
 interface props {
-    leaderboardPlayers: IleaderboardPlayer[] | undefined
-    attackersP: Iattacker[] | undefined
+    attackersP: Iattacker[] | null | undefined
     handleAttack: any
 }
 
@@ -16,13 +15,14 @@ const AttackersTable = ({
     handleAttack,
 }: props) => {
     const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
-        attackersP
+        undefined
     )
     const auth = useContext(AuthContext)
     const playerContext = useContext(PlayerContext)
 
 
     useEffect(() => {
+        if(attackersP)
         setAttackers(attackersP)
     }, [attackersP])
 
@@ -63,6 +63,13 @@ const AttackersTable = ({
             text = "+ m ago"
         }
         return `${diff}${text}`
+    }
+
+    // LOADING ANIMATION NEEDED
+    if(attackers === null){
+        return <div>
+                <h2 id="no-attacks" >There have been no attacks on you</h2>
+                </div>
     }
        
     return (
@@ -130,9 +137,9 @@ const AttackersTable = ({
             </tbody>
         </table>
         :
-        <div>
-            <h2 id="no-attacks" >There have been no attacks on you</h2>
-        </div>
+        <h2>
+            Loading
+        </h2>
     )
 }
 

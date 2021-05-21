@@ -48,6 +48,7 @@ const QuestionPage = () => {
     const [submitMessage, setSubmitMessage] = useState<string>("")
     const [rank, setRank] = useState<number | null>(null)
     const [attemptsState, setAttemptState] = useState<number | undefined>(0)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const history = useHistory()
 
@@ -85,11 +86,8 @@ const QuestionPage = () => {
     }, [auth.state.token])
 
     useEffect(() => {
-        if(questionData !== null){
-            auth.dispatch({
-                type: AuthActionTypes.SET_LOADING,
-                payload: [],
-            })
+        if(questionData){
+            setLoading(false)
         }
     }, [questionData])
 
@@ -137,7 +135,7 @@ const QuestionPage = () => {
         setTimeout(() => setSubmitMessage(""), 1500)
     }
 
-    if (auth.state.loading) return <div>loading...</div>
+    if (loading) return <div>loading...</div>
     return (
         <div className="question-page">
             <div className="status-container">
@@ -197,7 +195,9 @@ const QuestionPage = () => {
                 <br/>
                 <h2>Testcase</h2>
                 <div className="testcase-container">
-                    {questionData?.testcase}
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {String(questionData?.testcase)}
+                </ReactMarkdown>
                 </div>
                 <button 
                 className="copy-btn"

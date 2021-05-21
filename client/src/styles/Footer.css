@@ -13,7 +13,7 @@
     background: inherit;
     overflow: hidden;
 }
-
+   
 .footer:before {
     content: "";
     position: absolute;

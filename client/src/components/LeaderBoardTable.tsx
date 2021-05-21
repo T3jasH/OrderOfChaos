@@ -36,11 +36,12 @@ const LeaderBoardTable = ({
                         <tr>
                             <td>{idx + 1}</td>
                             <td
-                                id={
+                                className={
                                     auth.state.id === player._id
-                                        ? "current-player"
+                                        ? `current-player` 
                                         : ""
                                 }
+                                id={player._id}
                             >
                                 {player.username}
                             </td>

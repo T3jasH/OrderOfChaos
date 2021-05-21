@@ -161,5 +161,5 @@ export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : a
       })
       att = newAtt
       }
-    return att? att : undefined
+    return att? att : null
 }

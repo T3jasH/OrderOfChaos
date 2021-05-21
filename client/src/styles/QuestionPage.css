@@ -49,6 +49,7 @@ html {
     width: 45vw;
     height: 12rem;
     overflow-y: auto;
+    overflow-x: hidden;
     background: rgba(196, 196, 196, 0.1);
     backdrop-filter: blur(140.2px);
     border-radius: 1.2rem;

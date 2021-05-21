@@ -14,6 +14,7 @@ const QuestionPage: React.FC = () => {
     const auth = useContext(AuthContext)
     const player = useContext(PlayerContext)
     const [rank, setRank] = useState<number | null>(null)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -40,7 +41,7 @@ const QuestionPage: React.FC = () => {
 
   useEffect(() => {
     if (questions?.state?.length && rank !== null) {
-      auth.dispatch({type : AuthActionTypes.SET_LOADING, payload : []})
+      setLoading(false)
     }
   }, [questions.state, rank]);
 
@@ -48,17 +49,13 @@ const QuestionPage: React.FC = () => {
         return <Redirect to="/login" />
     }
 
-    if (auth.state.loading) {
+    if (loading) {
         return <div>insert loading animation here</div>
     }
 
-  if (auth.state.loading) {
-    return <div>insert loading animation here</div>;
-  }
-
-  if(!auth.state.isStarted){
-    return <Redirect to="/rules" />
-  }
+    if(!auth.state.isStarted){
+      return <Redirect to="/rules" />
+    }
   
   return (
     <div className="questions-page"  >
