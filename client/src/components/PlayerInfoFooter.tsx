@@ -29,18 +29,18 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
     return (
         <div className="footer">
             <div className="info-container" style={{ marginLeft: "0px" }}>
-                <p>Username:</p>
+                <p>Username</p>
                 <p className="field-value">
                 {auth.username}
                 </p>
     
             </div>
             <div className="info-container">
-                <p>Score:</p>
+                <p>Score</p>
                 <p className="field-value">{player.score}</p>
             </div>
             <div className="info-container">
-                <p>Rank:</p>
+                <p>Rank</p>
                 <p
                     className="field-value"
                 >
@@ -49,11 +49,11 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
             </div>
 
             <div className="info-container">
-                <p>Attacks Left:</p>
+                <p>Attacks Left</p>
                 <p className="field-value">{player.attacksLeft}</p>
             </div>
             <div className="info-container">
-                <p>Attacks faced:</p>
+                <p>Attacks Faced</p>
                 <p className="field-value">{player.attacks.length}</p>
             </div>
             <div className="info-container"

@@ -18,11 +18,10 @@ html {
     top: 5rem;
     width: 90vw;
     left: 10vw;
-    height: calc(100vh - 10rem);
+    height: calc(100vh - 5rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
     line-height: 4vh;
-
 }
 
 .question-markdown {
@@ -30,10 +29,15 @@ html {
 }
 
 .question-container > h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
+
+.question-container button{
+    font-size: 1.3rem;
+}
+
 .answer-container,
 .test-case-container {
     margin-top: 2rem;
@@ -47,6 +51,14 @@ html {
     font-weight: 700;
 }
 
+pre{
+    white-space: pre-wrap;     
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;    
+    white-space: -o-pre-wrap;  
+    word-wrap: break-word; 
+}
+
 .testcase-container {
     width: 45vw;
     height: 12rem;
@@ -55,7 +67,7 @@ html {
     background: rgba(196, 196, 196, 0.1);
     backdrop-filter: blur(140.2px);
     border-radius: 1.2rem;
-    padding: 0.8rem;
+    padding: 1rem;
     word-wrap: break-word;
 }
 
@@ -86,7 +98,7 @@ html {
     backdrop-filter: blur(140.2px);
     border-radius: 30px;
     margin-left: 0; 
-    padding: 1rem;
+    padding: 2rem;
     width: 92%;
     height: 20rem;
     border: none;
@@ -97,9 +109,10 @@ html {
     margin-top: 1rem;
     left: 40%;
     border: 1px solid #ffffff;
-    padding: 0.5rem 0.8rem;
+    padding: 0.5rem 3.5rem;
     box-sizing: border-box;
     border-radius: 10px 0px;
+    margin-bottom: 40px;
 }
 
 .copy-btn{
@@ -140,4 +153,17 @@ html {
     .question-container{
         display: none;
     }
+}
+
+.question-container h2 button i{
+    color: #6d30ed !important;
+    font-size: inherit;
+    font-weight: bold;    
+}
+
+.question-container h2 button{
+    margin-left: 20px;
+    padding: .1rem .3rem;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .15);
 }

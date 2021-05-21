@@ -9,11 +9,7 @@ interface props {
     handleAttack: any
 }
 
-const LeaderBoardTable = ({
-    leaderboardPlayers,
-    handleAttack,
-}: props) => {
-
+const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext).state
     return (
@@ -31,14 +27,21 @@ const LeaderBoardTable = ({
             </thead>
             <tbody>
                 {leaderboardPlayers?.map((player, idx) => {
-                    
                     return (
                         <tr>
-                            <td>{idx + 1}</td>
                             <td
                                 className={
                                     auth.state.id === player._id
-                                        ? `current-player` 
+                                        ? `current-player`
+                                        : ""
+                                }
+                            >
+                                {idx + 1}
+                            </td>
+                            <td
+                                className={
+                                    auth.state.id === player._id
+                                        ? `current-player`
                                         : ""
                                 }
                                 id={player._id}
@@ -47,20 +50,40 @@ const LeaderBoardTable = ({
                             </td>
 
                             <td className="table-space"></td>
-                            <td>{player.score}</td>
-                            <td>{getAttackersCount(contextPlayer.attacks, player)}</td>
                             <td
-                            style={{padding: "1rem"}}
+                                className={
+                                    auth.state.id === player._id
+                                        ? `current-player`
+                                        : ""
+                                }
                             >
-                               {
-                                <button
-                                    onClick={() => handleAttack(player._id)}
-                                    className={`leaderboard-button ${player.attackers.length === 15 ? "disable-button" : ""}`}
-            
-                                    style={{
-                                        display : auth.state.id !== player._id ? "block" : "none"}}>
-                                    Attack
-                                </button>
+                                {player.score}
+                            </td>
+                            <td
+                                className={
+                                    auth.state.id === player._id
+                                        ? `current-player`
+                                        : ""
+                                }
+                            >
+                                {getAttackersCount(
+                                    contextPlayer.attacks,
+                                    player
+                                )}
+                            </td>
+                            <td style={{ padding: "1rem" }}>
+                                {
+                                    <button
+                                        onClick={() => handleAttack(player._id)}
+                                        className={`leaderboard-button ${
+                                            player.attackers.length === 15 ||
+                                            auth.state.id === player._id
+                                                ? "disable-button"
+                                                : ""
+                                        }`}
+                                    >
+                                        Attack
+                                    </button>
                                 }
                             </td>
                         </tr>

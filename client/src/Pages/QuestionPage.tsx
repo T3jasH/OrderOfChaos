@@ -38,7 +38,6 @@ export interface IQuestion {
     attempts: number
 }
 
-
 const QuestionPage = () => {
     const auth = useContext(AuthContext)
     const player = useContext(PlayerContext)
@@ -69,7 +68,10 @@ const QuestionPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log("printing data:")
-                    setQuestionData({ ...data.data.question, attempts: data.data.attempts})
+                    setQuestionData({
+                        ...data.data.question,
+                        attempts: data.data.attempts,
+                    })
                     setAttemptState(data.data.attempts)
                     console.log(typeof questionData?.statement)
                     console.log(data.data.question, data.data.attempts)
@@ -84,13 +86,11 @@ const QuestionPage = () => {
     }, [auth.state.token])
 
     useEffect(() => {
-        if(questionData){
+        if (questionData) {
             setLoading(false)
         }
     }, [questionData])
 
-
-    
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
@@ -105,16 +105,26 @@ const QuestionPage = () => {
                 body: JSON.stringify({ answer: userAnswer }),
             })
                 .then((response) => response.json())
-                .catch(err => console.log(err))
+                .catch((err) => console.log(err))
                 .then((data) => {
                     console.log(data)
-                    if(!data.success){
-                        setAttemptState(attemptsState!==undefined? attemptsState + 1 : undefined)
+                    if (!data.success) {
+                        setAttemptState(
+                            attemptsState !== undefined
+                                ? attemptsState + 1
+                                : undefined
+                        )
                     }
-                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
-        setTimeout(() => {
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-            }, 3500)
+                    auth.dispatch({
+                        type: AuthActionTypes.SET_MESSAGE,
+                        payload: { msg: data.msg },
+                    })
+                    setTimeout(() => {
+                        auth.dispatch({
+                            type: AuthActionTypes.SET_MESSAGE,
+                            payload: { msg: null },
+                        })
+                    }, 3500)
                 })
                 .catch((e) => {
                     console.log(e)
@@ -131,19 +141,27 @@ const QuestionPage = () => {
         ta.select()
         document.execCommand("copy")
         ta.remove()
-        auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Copied to clipboard"}})
+        auth.dispatch({
+            type: AuthActionTypes.SET_MESSAGE,
+            payload: { msg: "Copied to clipboard" },
+        })
         setTimeout(() => {
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-            }, 3500)
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: null },
+            })
+        }, 3500)
     }
 
-    if (loading) return <Loading/>
+    if (loading) return <Loading />
     return (
         <div className="question-page">
-            <h3 className="mobile-message" >Switch to PC for a better experience</h3>
-            <Navbar removeButton={false} />
+            <h3 className="mobile-message">
+                Switch to PC for a better experience
+            </h3>
+            <Navbar removeButton={true} />
             <div className="question-container">
-                <button onClick={() => history.goBack()}>{"<Back"}</button>
+                <button onClick={() => history.push("/")}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
                     questionData={questionData}
@@ -156,59 +174,80 @@ const QuestionPage = () => {
                 // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
             )} */}
                 <div className="question-markdown">
-                    <ReactMarkdown rehypePlugins={[rehypeRaw]} children={String(questionData?.statement)} />
+                    <ReactMarkdown
+                        rehypePlugins={[rehypeRaw]}
+                        children={String(questionData?.statement)}
+                    />
                 </div>
-                <br/>
-                <h2>
-                    Constraints
-                </h2>
+                <br />
+                <h2>Constraints</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.constraints)}
                 </ReactMarkdown>
-                <br/>
+                <br />
                 <h2>Input Format</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.inpFormat)}
                 </ReactMarkdown>
-                <br/>
+                <br />
                 <h2>Output Format</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.outFormat)}
                 </ReactMarkdown>
-                <br/>
-                <h2>Sample Input</h2>
+                <br />
+                <h2>
+                    Sample Input
+                    <button
+                        className="copy-btn"
+                        onClick={() => CopyToClipboard(questionData?.testcase)}
+                    >
+                        <i className="far fa-copy"></i>
+                    </button>
+                </h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.samInput)}
                 </ReactMarkdown>
-                <br/>
+                <br />
                 <h2>Sample Output</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.samOutput)}
                 </ReactMarkdown>
-                <br/>
-                <h2>Testcase</h2>
+                <br />
+                <h2>
+                    Testcase
+                    <button
+                        className="copy-btn"
+                        onClick={() => CopyToClipboard(questionData?.testcase)}
+                    >
+                        <i className="far fa-copy"></i>
+                    </button>
+                </h2>
                 <div className="testcase-container">
-                <ReactMarkdown rehypePlugins={[rehypeRaw]} children={String(questionData?.testcase)}/>
+                    <ReactMarkdown
+                        rehypePlugins={[rehypeRaw]}
+                        children={String(questionData?.testcase)}
+                    />
                 </div>
-                <button 
-                className="copy-btn"
-                onClick={() => CopyToClipboard(questionData?.testcase)}>
-                    Copy Testcase
-                </button>
+
                 <div className="answer-container">
                     <h2>Answer</h2>
                     <div className="answer-info">
                         <div id="attempts-left">
-                            Attempts left to get an attack:{" "} 
-                {questionData?.difficulty && attemptsState !== undefined? 
-                                questionData.difficulty - attemptsState > 0 ? 
-                                    questionData.difficulty - attemptsState: 0 : null}
+                            Attempts left to get an attack:{" "}
+                            {questionData?.difficulty &&
+                            attemptsState !== undefined
+                                ? questionData.difficulty - attemptsState > 0
+                                    ? questionData.difficulty - attemptsState
+                                    : 0
+                                : null}
                         </div>
-
                     </div>
 
-                    <textarea className="answer-textarea"
-                    onChange={e => {setUserAnswer(e.target.value)}}
+                    <textarea
+                        className="answer-textarea"
+                        onChange={(e) => {
+                            setUserAnswer(e.target.value)
+                        }}
                     ></textarea>
                     <button
                         onClick={() => {

@@ -8,27 +8,25 @@
     background-position: right bottom;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
 
 .questions-container {
     position: absolute;
-    left: 10vw;  
+    left: 10vw;
     top: 5rem;
     width: 90vw;
     height: calc(100vh - 10rem);
     overflow: auto;
-    scrollbar-color:#6D30ED #090321;
+    scrollbar-color: #6d30ed #090321;
     line-height: 4vh;
 }
 .questions-container > h3 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
-
 
 .answer-info {
     display: flex;
@@ -41,10 +39,8 @@ html {
     color: #6d30ed;
 }
 
-
-
 @media screen and (max-width: 1050px) {
-    .questions-container{
+    .questions-container {
         display: none;
-    }    
+    }
 }

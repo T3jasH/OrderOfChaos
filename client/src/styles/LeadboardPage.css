@@ -8,7 +8,6 @@
     background-position: right bottom;
 }
 
-
 .leaderboard-container {
     position: relative;
     left: 5vw;
@@ -25,22 +24,29 @@ html {
 }
 
 .current-player {
-    color: #6d30ed;  
+    color: #6d30ed;
+    font-weight: 600;
+    text-shadow: 0 0 4px #6d30ed;
 }
 
 .leaderboard-button {
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
     padding: 0.6rem 2.8rem;
     box-sizing: border-box;
     border-radius: 10px 0px;
     display: block;
+    font-weight: 500;
 }
 
 .leaderboard-container > h3 > span {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
     cursor: pointer;
+}
+
+.leaderboard-container button {
+    font-size: 1.3rem;
 }
 
 td,
@@ -48,8 +54,7 @@ th {
     /* border: 1px solid #999; */
     text-align: center;
     font-weight: 500;
-    font-size: 1.2rem;
-    padding: 1rem 0rem;
+    font-size: 1.35rem;
     width: 25vw;
 }
 .leaderboard-table {
@@ -58,7 +63,7 @@ th {
     top: 2rem;
     padding: 0px;
 }
-.leaderboard-table{
+.leaderboard-table {
     padding: 0;
     margin: 0;
 }
@@ -92,16 +97,19 @@ th {
 }
 
 .fade {
-    color: #9C9D8E;
+    color: #9c9d8e;
 }
 
-.disable-button{
-    color: #9C9D8E;
-    cursor: default;
-    border-color: #9C9D8E;
+.disable-button {
+    color: #9c9d8e;
+    cursor: not-allowed;
+    border-color: #9c9d8e;
+}
+.disable-button:hover {
+    transform: scale(1) !important;
 }
 
-#no-attacks{
+#no-attacks {
     position: absolute;
     top: 25vh;
     left: 10vw;
@@ -109,21 +117,22 @@ th {
     color: #6d30ed;
 }
 
+.leaderboard-button:hover {
+    transform: scale(1.05);
+}
+
 @media screen and (max-width: 950px) {
     .questions-container {
         left: 10vw;
         width: 90vw;
     }
-    .leaderboard-button{
+    .leaderboard-button {
         padding: 0.6rem 1.5rem;
     }
 }
 
-
-
-
 @media screen and (max-width: 1050px) {
-    .leaderboard-container{
+    .leaderboard-container {
         display: none;
     }
 }

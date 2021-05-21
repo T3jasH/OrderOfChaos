@@ -27,52 +27,56 @@ const QuestionPage: React.FC = () => {
             getContestDetails(auth, questions, player)
     }, [auth.state.token])
 
-  useEffect( () => {
-    if(auth?.state?.id?.length && auth.state.token !== "x"){
-      getLeaderboard(auth)
-      .then(data => {
-        console.log(data.attackers)
-        setRank(
-          data.ranks.findIndex((user:any) => user._id === auth.state.id) + 1
-        )
-      })
-    }
-  }, [auth.state.id])
+    useEffect(() => {
+        if (auth?.state?.id?.length && auth.state.token !== "x") {
+            getLeaderboard(auth).then((data) => {
+                console.log(data.attackers)
+                setRank(
+                    data.ranks.findIndex(
+                        (user: any) => user._id === auth.state.id
+                    ) + 1
+                )
+            })
+        }
+    }, [auth.state.id])
 
-  useEffect(() => {
-    if (questions?.state?.length && rank !== null) {
-      setLoading(false)
-    }
-  }, [questions.state, rank]);
+    useEffect(() => {
+        if (questions?.state?.length && rank !== null) {
+            setLoading(false)
+        }
+    }, [questions.state, rank])
 
     if (auth.state.token === "x") {
         return <Redirect to="/login" />
     }
 
     if (loading) {
-        return <Loading/>
+        return <Loading />
     }
 
-    if(!auth.state.isStarted){
-      return <Redirect to="/rules" />
+    if (!auth.state.isStarted) {
+        return <Redirect to="/rules" />
     }
-  
-  return (
-    <div className="questions-page"  >
-      <Navbar removeButton={false} />
-      <h2 className="mobile-message" >Switch to PC for a better experience</h2>
-      <div className="questions-container">
-        <h3>QUESTIONS</h3>
-      {questions.state.map((item, index) => (
-        <QuestionListItem question={item} index={index} key={item.name}/>
-        ))}
-      </div>
-      <PlayerInfoFooter
-      active={false}
-      rank={rank}
-      />
-    </div>
-  );
-};
+
+    return (
+        <div className="questions-page">
+            <Navbar removeButton={false} />
+            <h2 className="mobile-message">
+                Switch to PC for a better experience
+            </h2>
+            <div className="questions-container">
+                <h3>QUESTIONS</h3>
+                {questions.state.map((item, index) => (
+                    <QuestionListItem
+                        question={item}
+                        index={index}
+                        key={item.name}
+                    />
+                ))}
+            </div>
+            <PlayerInfoFooter active={false} rank={rank} />
+        </div>
+    )
+}
 
 export default QuestionPage
