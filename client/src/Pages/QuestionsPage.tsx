@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { QuestionContext } from "../context/QuestionContext"
 import { AuthContext } from "../context/AuthContext"
-import { Redirect, useHistory } from "react-router"
+import { Redirect } from "react-router"
 import { getContestDetails, getLeaderboard, Loading } from "../utils"
 import "../styles/QuestionsPage.css"
 import { AuthActionTypes } from "../context/AuthReducer"
@@ -25,6 +25,7 @@ const QuestionPage: React.FC = () => {
     useEffect(() => {
         if (auth.state.token !== null && auth.state.token !== "x")
             getContestDetails(auth, questions, player)
+            // eslint-disable-next-line
     }, [auth.state.token])
 
     useEffect(() => {
@@ -38,6 +39,7 @@ const QuestionPage: React.FC = () => {
                 )
             })
         }
+        // eslint-disable-next-line
     }, [auth.state.id])
 
     useEffect(() => {

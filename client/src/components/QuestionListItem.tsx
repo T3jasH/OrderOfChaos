@@ -26,6 +26,7 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
             question.isSolved? "Solved" : "Unlocked")
         }
         console.log(question.isSolved, question.isLocked)
+        // eslint-disable-next-line
     }, [question.name, question.isSolved, question.isLocked])
 
     const unlockQuestion = () => {

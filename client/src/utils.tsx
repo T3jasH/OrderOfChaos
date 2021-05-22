@@ -2,7 +2,7 @@ import {AuthActionTypes } from "./context/AuthReducer";
 import { attack, PlayerActionTypes } from "./context/PlayerReducer";
 import { QuestionActionTypes } from "./context/QuestionReducer";
 import {IleaderboardPlayer } from "./Pages/LeaderboardPage";
-import React, { useContext, useEffect } from "react"
+import React, { useContext } from "react"
 import { AuthContext } from "./context/AuthContext";
 
 export const getContestDetails = async (

@@ -8,13 +8,13 @@ import { getUser, Loading } from "../utils"
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
 
-import markdown from "../components/sampleQuestion"
+// import markdown from "../components/sampleQuestion"
 
 import "../styles/QuestionPage.css"
 
 import Navbar from "../components/Navbar"
 
-import { getLeaderboard } from "../utils"
+// import { getLeaderboard } from "../utils"
 
 import QuestionInfo from "../components/QuestionInfo"
 
@@ -83,6 +83,7 @@ const QuestionPage = () => {
                     console.log("Am i getting an error")
                 })
         }
+        // eslint-disable-next-line
     }, [auth.state.token])
 
     useEffect(() => {
@@ -264,6 +265,7 @@ const QuestionPage = () => {
 }
 export default QuestionPage
 
+// eslint-disable-next-line
 {
     /* <textarea
                     cols={30}

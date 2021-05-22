@@ -26,6 +26,7 @@ const MailVerificationPage: React.FC = () => {
               }, 3500)
           history.push("/login")
         });
+        // eslint-disable-next-line
   }, [token]);
 
   return <div className="login-page">

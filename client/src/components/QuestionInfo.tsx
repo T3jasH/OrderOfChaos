@@ -59,7 +59,7 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
 }
 
 export default QuestionInfo
-
+// eslint-disable-next-line
 {
     /* <p className="question-points"
 

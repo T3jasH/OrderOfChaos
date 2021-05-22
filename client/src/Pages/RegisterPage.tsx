@@ -20,6 +20,7 @@ const RegisterPage: React.FC = () => {
     if(auth.state.token === null){
       auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
     }
+    // eslint-disable-next-line
   }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
