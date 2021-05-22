@@ -71,29 +71,6 @@
     letter-spacing: 0.4em;
 }
 
-
-.status-container{
-    position: absolute;
-    top: 3.5vh;
-    background-color: none;
-    width: 100%;
-    height: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.login-status{
-    background-color:  #8060c6;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #fff;
-    padding: 0rem 0.5rem;
-    width: fit-content;
-    height: fit-content;
-}
-
-
 @media screen and (max-height : 850px) {
     .login-page{
         --h2MarginTop: 6vh;

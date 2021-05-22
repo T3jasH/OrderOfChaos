@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext} from "react"
 import { useHistory } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { PlayerContext } from "../context/PlayerContext"
@@ -26,6 +26,7 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
         return cnt === 0 ? null : cnt
       }
     attacksOnPlayer = newAttacksCount();
+
     return (
         <div className="footer">
             <div className="info-container" style={{ marginLeft: "0px" }}>
@@ -70,14 +71,17 @@ const PlayerInfoFooter: React.FC<props> = ({ rank, active}) => {
                 </button>
                 <div 
                     
-                    className="new-attacks-counter"
+                    id="new-attacks-counter"
+                    className="glow"
                      onClick={(e) => {
                         if(active){
                             return
                         }
                         history.push("/attackers")
                     }}
-                    style = {{display : attacksOnPlayer === 0 || attacksOnPlayer === null ? "none" : "block"}}
+                    style = {{
+                        display : attacksOnPlayer === 0 || attacksOnPlayer === null ? "none" : "block"
+                    }}
                 >
                     {
                         attacksOnPlayer === null || attacksOnPlayer === 0? null : attacksOnPlayer > 9 ? "9+" : attacksOnPlayer 

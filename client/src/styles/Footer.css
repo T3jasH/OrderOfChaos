@@ -50,7 +50,7 @@
     font-size: 1.2rem;
 }
 
-.new-attacks-counter{
+#new-attacks-counter{
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 0.75rem;
@@ -64,12 +64,28 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding-top: 0.1rem;
 }
 
 .attack-active {
     background-color: #9c9d8e;
     color: black;
 }
+
+.glow {
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+@keyframes glow {
+    from {
+      box-shadow: 0 0 10px #fff, 0 0 12px #fff, 0 0 15px #fff;
+    }
+    to {
+      box-shadow: 0 0 10px #fff, 0 0 5px #fff, 0 0 0px #fff;
+    }
+  }
 
 @media screen and (max-wdith: 950px) {
     .info-container {

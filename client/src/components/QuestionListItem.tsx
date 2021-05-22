@@ -100,7 +100,7 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
         <p className="question-solved"
         style={{color : question.isSolved ? "#FFF" : "#9C9D8E"}}
         >
-            {`solved: ${question.solved}`}
+        {`solved :${question.solved}`}
         </p>
     </div>
 }

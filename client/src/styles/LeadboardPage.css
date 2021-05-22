@@ -96,9 +96,9 @@ th {
 }
 
 .disable-button{
-    color: #9C9D8E;
-    cursor: default;
-    border-color: #9C9D8E;
+   background-color: #807d7d;
+   border-color: #807d7d;
+   cursor: default;
 }
 
 #no-attacks{

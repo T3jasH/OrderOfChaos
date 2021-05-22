@@ -55,6 +55,7 @@
     font-weight: 500;
 }
 
+
 @media screen  and (max-width: 1000px) {
     .question > *{
         font-size: 1.2rem;;
