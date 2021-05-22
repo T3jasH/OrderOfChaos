@@ -22,6 +22,7 @@ const AdminPage : React.FC = () => {
         if(auth.state.token === null){
             auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
         }
+        // eslint-disable-next-line
     }, [])
 
     useEffect(()=>{
@@ -31,6 +32,7 @@ const AdminPage : React.FC = () => {
                 setLoading(false)
             }
         })
+        // eslint-disable-next-line
     }, [auth.state.token])
 
     const handleSubmit = async () => {

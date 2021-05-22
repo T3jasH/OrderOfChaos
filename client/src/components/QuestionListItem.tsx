@@ -26,6 +26,7 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
             question.isSolved? "Solved" : "Unlocked")
         }
         console.log(question.isSolved, question.isLocked)
+        // eslint-disable-next-line
     }, [question.name, question.isSolved, question.isLocked])
 
     const unlockQuestion = () => {
@@ -98,9 +99,9 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
             {`${question.points} pts`}
         </p>
         <p className="question-solved"
-        style={{color : question.isSolved ? "#FFF" : "#9C9D8E"}}
+        style={{color : question.isSolved ? "#FFF " : "#9C9D8E "}}
         >
-        {`solved :${question.solved}`}
+            <i className="fas fa-user"></i>{` x ${question.solved}`}
         </p>
     </div>
 }

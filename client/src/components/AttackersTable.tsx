@@ -50,6 +50,7 @@ const AttackersTable = ({
             }
         })
     }
+    // eslint-disable-next-line
     }, [playerContext.state.attacks])
 
     const minsAgo = (date: any) => {

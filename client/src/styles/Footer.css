@@ -17,7 +17,7 @@
 .footer:before {
     content: "";
     position: absolute;
-    background: inherit;
+    background  : inherit;
     z-index: -1;
     top: 0;
     left: 0;
@@ -33,9 +33,16 @@
     position: relative;
 }
 
-.field-value {
+.info-container p {
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 300;
+}
+
+.info-container .field-value {
     font-size: 1.5rem;
     font-weight: 600;
+    text-align: center;
 }
 .number {
     font-size: 1.2rem;
@@ -48,6 +55,7 @@
     border-radius: 10px 0px;
     padding: 0.8rem 2rem;
     font-size: 1.2rem;
+    font-weight: 500;
 }
 
 #new-attacks-counter{

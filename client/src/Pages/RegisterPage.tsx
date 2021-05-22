@@ -20,6 +20,7 @@ const RegisterPage: React.FC = () => {
     if(auth.state.token === null){
       auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : []})
     }
+    // eslint-disable-next-line
   }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,7 +82,7 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <h2>ORDER OF CHAOS</h2>
+        <h2 style={{marginTop: 25}}>ORDER OF CHAOS</h2>
         <h3>REGISTER</h3>
         <form onSubmit={(e) => handleSubmit(e)} className="login-form register-form">
           <input

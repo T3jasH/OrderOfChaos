@@ -16,7 +16,7 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
     return (
         <div className="question-info">
             <div>
-                <span className="question-info-label">Difficulty: </span>
+                <span className="question-info-label">Difficulty : </span>
                 <span
                     style={{
                         color:
@@ -25,32 +25,33 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
                                 : questionData?.difficulty === 2
                                 ? "#FBFF35"
                                 : "#FF4A4A",
-                        fontWeight: 500,
+                        fontWeight: 600,
+                        fontSize: "1.3rem"
                     }}
                 >
                     {getDifficulty(questionData?.difficulty)}
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Points: </span>
+                <span className="question-info-label">Points : </span>
                 <span className="question-info-purple">
                     {questionData?.points}
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Penalty: </span>
+                <span className="question-info-label">Penalty : </span>
                 <span className="question-info-purple">
                     {questionData?.penalty}
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Solved: </span>
+                <span className="question-info-label">Solved : </span>
                 <span className="question-info-purple">
                     {questionData?.solved}
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Attacks Available: </span>
+                <span className="question-info-label">Attacks Available : </span>
                 <span className="question-info-purple">{attacksAvailable}</span>
             </div>
         </div>
@@ -58,7 +59,7 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
 }
 
 export default QuestionInfo
-
+// eslint-disable-next-line
 {
     /* <p className="question-points"
 

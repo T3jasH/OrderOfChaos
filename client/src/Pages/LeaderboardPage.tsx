@@ -52,6 +52,7 @@ const LeaderboardPage = ({currentPage} : props) => {
         if (auth.state.token !== null && auth.state.token !== "x") {
             getUser(auth, contextPlayer)
         }
+        // eslint-disable-next-line
     }, [auth.state.token])
 
 
@@ -71,6 +72,7 @@ const LeaderboardPage = ({currentPage} : props) => {
                 )
             })
         }
+        // eslint-disable-next-line
     }, [auth.state.id])
 
     useEffect(() => {
@@ -79,6 +81,7 @@ const LeaderboardPage = ({currentPage} : props) => {
                 sortAttackers(leaderboardPlayers, auth)
             )
         }
+        // eslint-disable-next-line
     }, [leaderboardPlayers])
 
     useEffect(() => {
