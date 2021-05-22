@@ -1,6 +1,6 @@
 .question-info {
     display: flex;
-    width: 90%;
+    width: 100%;
     justify-content: space-between;
     margin-bottom: 1.8rem;
     font-size: 1.3rem;

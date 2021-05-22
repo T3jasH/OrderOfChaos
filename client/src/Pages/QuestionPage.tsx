@@ -174,12 +174,11 @@ const QuestionPage = () => {
                 </ReactMarkdown>
                 // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
             )} */}
-                <div className="question-markdown">
                     <ReactMarkdown
                         rehypePlugins={[rehypeRaw]}
                         children={String(questionData?.statement)}
                     />
-                </div>
+
                 <br />
                 <h2>Constraints</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>

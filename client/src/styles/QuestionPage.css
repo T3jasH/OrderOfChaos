@@ -18,6 +18,8 @@ html {
     top: 5rem;
     width: 90vw;
     left: 10vw;
+    padding-right: 10vw !important;
+    box-sizing: border-box;
     height: calc(100vh - 5rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
@@ -122,11 +124,6 @@ pre{
     font-weight: 600;
 }
 
-.answer-button:hover {
-    background-color: #9c9d8e;
-    color: black;
-    transition: all 0.3s ease;
-}
 
 
 
