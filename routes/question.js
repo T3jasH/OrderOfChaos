@@ -20,10 +20,11 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
             let selQues = await Question.findOne({
                 quesId: req.params.id,
             }).select("-answer");
+            let userQestionData = user.noOfAttempts.find((q) => q.quesId == req.params.id)
             res.send({
-                sucess: true,
+                success: true,
                 msg: "Question found and sent successfully.",
-                data: { question: selQues, attempts: user.noOfAttempts.find((q) => q.quesId == req.params.id).attempts },
+                data: { question: selQues, attempts: userQestionData.attempts, isSolved : userQestionData.isSolved },
             });
         } else {
             res.send({ success: false, msg: "Question is locked" });

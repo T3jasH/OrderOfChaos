@@ -2,9 +2,9 @@ import React, { useEffect, useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { PlayerContext } from "../context/PlayerContext"
-import { useHistory, useParams } from "react-router-dom"
+import { Redirect, useHistory, useParams } from "react-router-dom"
 import { getUser, Loading } from "../utils"
-
+import CopyToClipboard from "react-copy-to-clipboard"
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
 
@@ -36,6 +36,7 @@ export interface IQuestion {
     solved: number
     _id: string
     attempts: number
+    isSolved: boolean
 }
 
 const QuestionPage = () => {
@@ -45,19 +46,21 @@ const QuestionPage = () => {
     const [userAnswer, setUserAnswer] = useState<string>("")
     const [questionData, setQuestionData] = useState<IQuestion | null>(null)
     const [attemptsState, setAttemptState] = useState<number | undefined>(0)
+    const [attemptsStatus, setAttemptsStatus] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(true)
+    const [locked, setLocked] = useState<boolean>(false)
 
     const history = useHistory()
 
     useEffect(() => {
         if (auth.state.token === null) {
             auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
-            getUser(auth)
         }
     })
 
     useEffect(() => {
         if (auth.state.token) {
+            getUser(auth, player)
             fetch(`/api/question/${id}`, {
                 method: "GET",
                 headers: {
@@ -67,15 +70,18 @@ const QuestionPage = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("printing data:")
+                    console.log(data.success)
+                    if(data.success){
                     setQuestionData({
                         ...data.data.question,
                         attempts: data.data.attempts,
+                        isSolved: data.data.isSolved
                     })
                     setAttemptState(data.data.attempts)
-                    console.log(typeof questionData?.statement)
-                    console.log(data.data.question, data.data.attempts)
-                    console.log(data)
+                    }
+                    else{
+                        setLocked(true);
+                    }
                 })
                 .catch((e) => {
                     console.log(e)
@@ -92,7 +98,32 @@ const QuestionPage = () => {
         }
     }, [questionData])
 
-    const { id }: any = useParams()
+    useEffect(() => {
+        if(
+            questionData?.isSolved
+        )
+        {
+            setAttemptsStatus("")
+            return;
+        }
+        if(questionData?.difficulty && attemptsState)
+        {
+            if(questionData?.difficulty - attemptsState > 0){
+                if(player.state.attacksLeft === 3){
+                    setAttemptsStatus("You have 3 attacks already")
+                }
+                else{
+                    setAttemptsStatus(`Attempts left to get an attack: ${questionData?.difficulty - attemptsState}`)
+                }
+            }
+            else{
+                setAttemptsStatus("Attempts left to get an attack: 0")
+            }
+        }
+        
+    }, [attemptsState])
+
+    const { id }: any = useParams() 
 
     const handleAnswerSubmit = () => {
         if (auth.state.token) {
@@ -108,22 +139,28 @@ const QuestionPage = () => {
                 .then((response) => response.json())
                 .catch((err) => console.log(err))
                 .then((data) => {
-                    console.log(data)
                     if (!data.success) {
                         setAttemptState(
                             attemptsState !== undefined
                                 ? attemptsState + 1
                                 : undefined
                         )
-                    }
-                    auth.dispatch({
-                        type: AuthActionTypes.SET_MESSAGE,
-                        payload: { msg: data.msg },
-                    })
-                    setTimeout(() => {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: null },
+                            payload: { msg: data.msg, type : "fail" },
+                        })
+                    }
+                    else{
+                        auth.dispatch({
+                            type: AuthActionTypes.SET_MESSAGE,
+                            payload: { msg: data.msg, type : "fail" },
+                        })
+                    }
+                    
+                    setTimeout(() => {
+                        auth.dispatch({
+                            type: AuthActionTypes.CLEAR_MESSAGE,
+                            payload: {},
                         })
                     }, 3500)
                 })
@@ -135,23 +172,28 @@ const QuestionPage = () => {
         }
     }
 
-    const CopyToClipboard = (text: string | undefined) => {
-        const ta = document.createElement("textarea")
-        if (text) ta.innerText = text
-        document.body.appendChild(ta)
-        ta.select()
-        document.execCommand("copy")
-        ta.remove()
-        auth.dispatch({
-            type: AuthActionTypes.SET_MESSAGE,
-            payload: { msg: "Copied to clipboard" },
-        })
-        setTimeout(() => {
-            auth.dispatch({
-                type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: null },
-            })
-        }, 3500)
+    // const CopyToClipboard = (text: String | undefined) => {
+    //     const ta = document.createElement("textarea")
+       
+    //     if (text) ta.innerText = text as string
+    //     document.body.appendChild(ta)
+    //     ta.select()
+    //     document.execCommand("copy")
+    //     ta.remove()
+    //     auth.dispatch({
+    //         type: AuthActionTypes.SET_MESSAGE,
+    //         payload: { msg: "Copied to clipboard" },
+    //     })
+    //     setTimeout(() => {
+    //         auth.dispatch({
+    //             type: AuthActionTypes.SET_MESSAGE,
+    //             payload: { msg: null },
+    //         })
+    //     }, 3500)
+    // }
+
+    if(locked){
+        return <Redirect to="/" />
     }
 
     if (loading) return <Loading />
@@ -160,8 +202,8 @@ const QuestionPage = () => {
             <h3 className="mobile-message">
                 Switch to PC for a better experience
             </h3>
-            <Navbar removeButton={true} />
-            <div className="question-container">
+            <Navbar removeButton={false} />
+            <div className="question-container" style={{userSelect : "none"}}>
                 <button onClick={() => history.push("/")}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
@@ -177,6 +219,7 @@ const QuestionPage = () => {
                     <ReactMarkdown
                         rehypePlugins={[rehypeRaw]}
                         children={String(questionData?.statement)}
+                        
                     />
 
                 <br />
@@ -197,12 +240,19 @@ const QuestionPage = () => {
                 <br />
                 <h2>
                     Sample Input
+                    <CopyToClipboard text={questionData?.samInput.slice(-4, 4)? questionData?.samInput.slice(-4, 4) : ""} >
                     <button
                         className="copy-btn"
-                        onClick={() => CopyToClipboard(questionData?.testcase)}
+                        onClick={() => {
+                            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Copied to clipboard", type : "default"}})
+                            setTimeout(() => {
+                                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                            }, 3000)
+                        }}
                     >
                         <i className="far fa-copy"></i>
                     </button>
+                    </CopyToClipboard>
                 </h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                     {String(questionData?.samInput)}
@@ -215,12 +265,21 @@ const QuestionPage = () => {
                 <br />
                 <h2>
                     Testcase
+                <CopyToClipboard 
+                text={questionData?.testcase.slice(4, -4)? questionData?.testcase.slice(4, -4) : ""}
+                >
                     <button
                         className="copy-btn"
-                        onClick={() => CopyToClipboard(questionData?.testcase)}
+                        onClick={() => {
+                            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Copied to clipboard"}})
+                            setTimeout(() => {
+                                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                            }, 3000)
+                        }}
                     >
                         <i className="far fa-copy"></i>
                     </button>
+                </CopyToClipboard>
                 </h2>
                 <div className="testcase-container">
                     <ReactMarkdown
@@ -230,19 +289,12 @@ const QuestionPage = () => {
                 </div>
 
                 <div className="answer-container">
-                    <h2>Answer</h2>
+                    <h2 style={{marginBottom : "0.5rem"}} >Answer</h2>
                     <div className="answer-info">
-                        <div id="attempts-left">
-                            Attempts left to get an attack:{" "}
-                            {questionData?.difficulty &&
-                            attemptsState !== undefined
-                                ? questionData.difficulty - attemptsState > 0
-                                    ? questionData.difficulty - attemptsState
-                                    : 0
-                                : null}
+                        <div id="attempts-left" style={{display : questionData?.isSolved? "none" : "block"}}>
+                            {attemptsStatus}
                         </div>
                     </div>
-
                     <textarea
                         className="answer-textarea"
                         onChange={(e) => {

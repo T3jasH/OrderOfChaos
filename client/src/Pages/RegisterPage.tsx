@@ -26,10 +26,10 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(password !== confirmPassword){
-      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match"}})
+      auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match", type : "fail"}})
         setTimeout(() => {
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-            }, 3500)
+            auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+            }, 3000)
       return
     }
     const body = {
@@ -56,20 +56,20 @@ const RegisterPage: React.FC = () => {
       .then((data) => {
         console.log(data)
         if(data.success){
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg, type : "success"}})
         
         }
         else if(data.errors){
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.error[0].msg}})
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.error[0].msg, type : "fail"}})
 
         }
         else{
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg, type : "fail"}})
 
         }
         setTimeout(() => {
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-          }, 3500)
+          auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+          }, 3000)
       });
   };
 

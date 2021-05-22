@@ -95,6 +95,12 @@
     }
   }
 
+@media screen and (max-width: 1300px) {
+    .info-container{
+        margin-left: 6vw;
+    }
+}
+
 @media screen and (max-wdith: 950px) {
     .info-container {
         margin-left: 0px;

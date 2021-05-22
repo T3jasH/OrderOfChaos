@@ -13,7 +13,6 @@ const AdminPage : React.FC = () => {
     const [tcOutput, handleTcOuput] = useState<string>("")
     const [difficulty, handleDifficulty] = useState<number | null>(null)
     const [quesId, handleQuesId] = useState<number | null>(null)
-    const [errorMsg, setErrorMsg] = useState<null | string>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
 
@@ -72,14 +71,18 @@ const AdminPage : React.FC = () => {
         .then(data => {
             console.log(data)
             if(data.success){
-                setErrorMsg(data.msg)
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type : "success"}})
             }
             else if(data.errors){
-                setErrorMsg(data.errors[0])
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.errors[0], type : "success"}})
             }
             else{
-                setErrorMsg("Upload failed")
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Upload failed", type : "success"}})
+                
             }
+            setTimeout(() => {
+                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : []})
+            }, 3000)
         })
     }    
 
@@ -119,11 +122,6 @@ const AdminPage : React.FC = () => {
         > 
             <h3>Submit</h3>
         </button>
-        {   errorMsg?
-            <b className="admin-error"> {errorMsg} </b>
-            :
-            null
-        }
     </div>
 }
 

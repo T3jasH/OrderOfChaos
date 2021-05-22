@@ -75,7 +75,6 @@ export const getUser = async (auth : any, player?: any) => {
   }
   const data = await resp.json()
   if(data.success){
-    console.log(data)
     auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
       id : data.data.user._id,
       isAdmin : data.data.user.isAdmin,
@@ -172,7 +171,9 @@ export const SendAlert:React.FC = () => {
     
     if(auth.state.authAlertMessage)
     return <div className="status-container">
-      <p className="status-message">
+      {console.log(auth.state.alertMessageType)}
+      <p className={`status-message ${auth.state.alertMessageType}`}
+      >
         {auth.state.authAlertMessage}
       </p>
     </div>

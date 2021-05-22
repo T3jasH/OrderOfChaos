@@ -20,10 +20,15 @@ const MailVerificationPage: React.FC = () => {
         .then((res) => res.json())
         .catch((err) => console.log(err))
         .then((data) => {
-          auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
+          if(data.success){
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg, type : "success"}})
+          }
+          else{
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg, type : "fail"}})
+          }
           setTimeout(() => {
-              auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-              }, 3500)
+              auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+              }, 3000)
           history.push("/login")
         });
         // eslint-disable-next-line

@@ -26,7 +26,6 @@ html {
 .current-player {
     color: #6d30ed;
     font-weight: 600;
-    text-shadow: 0 0 4px #6d30ed;
 }
 
 .leaderboard-button {

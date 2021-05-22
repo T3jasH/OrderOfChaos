@@ -93,9 +93,9 @@ const LeaderboardPage = ({currentPage} : props) => {
 
     const handleAttack = (id: string) => {
         if (contextPlayer.state.attacksLeft <= 0) {
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "You don't have attacks"}})
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "You don't have attacks", type : "fail"}})
             setTimeout(() => {
-                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
                 }, 3500)
             return
         }
@@ -112,6 +112,7 @@ const LeaderboardPage = ({currentPage} : props) => {
                 .then((data) => {
                     console.log(data, "ATTACK DATA")
                     if(data.success){
+                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type : "success"}})
                     contextPlayer.dispatch({
                         type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
                         payload: {attacksLeft: contextPlayer.state.attacksLeft - 1},
@@ -129,9 +130,11 @@ const LeaderboardPage = ({currentPage} : props) => {
                         )
                     })
                 }
-                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg}})
+                else{
+                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type: "fail"}})
+                }
                 setTimeout(() => {
-                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
+                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
                     }, 3500)
                 })
                 .catch((e) => console.log(e))   

@@ -46,26 +46,20 @@ const LoginPage: React.FC = () => {
             } else if (data.errors) {
                 auth.dispatch({
                     type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: data.errors[0].msg },
+                    payload: { msg: data.errors[0].msg, type : "fail" },
                 })
-                setTimeout(() => {
-                    auth.dispatch({
-                        type: AuthActionTypes.SET_MESSAGE,
-                        payload: { msg: null },
-                    })
-                }, 3500)
             } else {
                 auth.dispatch({
                     type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: data.msg },
+                    payload: { msg: data.msg, type : "fail" },
                 })
-                setTimeout(() => {
-                    auth.dispatch({
-                        type: AuthActionTypes.SET_MESSAGE,
-                        payload: { msg: null },
-                    })
-                }, 3500)
             }
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
         } else if (pageType === "forgotPassword") {
             const response = await fetch("/api/users/forgotpassword", {
                 method: "POST",
@@ -84,7 +78,7 @@ const LoginPage: React.FC = () => {
                     type: AuthActionTypes.SET_MESSAGE,
                     payload: { msg: null },
                 })
-            }, 3500)
+            }, 3000)
         } else {
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
@@ -96,12 +90,12 @@ const LoginPage: React.FC = () => {
             const data = await response.json()
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: data.msg },
+                payload: { msg: data.msg, type : "default" },
             })
             setTimeout(() => {
                 auth.dispatch({
-                    type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: null },
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
                 })
             }, 3500)
         }

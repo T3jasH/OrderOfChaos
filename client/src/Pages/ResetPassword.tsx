@@ -17,10 +17,10 @@ const ResetPassword : React.FC = () => {
         e.preventDefault()
 
         if(confirmPassword !== password){
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match"}})
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Passwords do not match", type : "fail"}})
             setTimeout(() => {
-                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-                }, 3500)
+                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                }, 3000)
             return;
         }
         fetch(`/api/users/resetpassword/${token}`, {
@@ -34,15 +34,18 @@ const ResetPassword : React.FC = () => {
         .catch(err => console.log(err))
         .then(data => {
             if(data.success){
-                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg}})
+                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type : "success"}})
+                setTimeout(() => {
+                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                }, 3000)
                 history.push("/login")
             }
             else{
-                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg}})
-                setTimeout(() => {
-                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-                    }, 3500)
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : data.msg, type : "fail"}})
             }
+            setTimeout(() => {
+                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                }, 3000)
         })
     }
 

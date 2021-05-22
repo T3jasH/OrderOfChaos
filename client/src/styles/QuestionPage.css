@@ -23,7 +23,7 @@ html {
     height: calc(100vh - 5rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
-    line-height: 4vh;
+    line-height: 1.8rem;
 }
 
 .question-markdown {
@@ -36,7 +36,7 @@ html {
     margin-bottom: 1rem;
 }
 
-.question-container button{
+.question-container button {
     font-size: 1.3rem;
 }
 
@@ -44,7 +44,7 @@ html {
 .test-case-container {
     margin-top: 2rem;
 }
-.question-container> h2,
+.question-container > h2,
 .answer-container > h2,
 .test-case-container > h2 {
     color: #8060c6;
@@ -53,12 +53,12 @@ html {
     font-weight: 700;
 }
 
-pre{
-    white-space: pre-wrap;     
+pre {
+    white-space: pre-wrap;
     white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;    
-    white-space: -o-pre-wrap;  
-    word-wrap: break-word; 
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 .testcase-container {
@@ -99,7 +99,7 @@ pre{
     background: rgba(196, 196, 196, 0.1);
     backdrop-filter: blur(140.2px);
     border-radius: 30px;
-    margin-left: 0; 
+    margin-left: 0;
     padding: 2rem;
     width: 92%;
     height: 20rem;
@@ -117,31 +117,28 @@ pre{
     margin-bottom: 40px;
 }
 
-.copy-btn{
+.copy-btn {
     border: 1px #fff;
     margin-top: 1rem;
     color: #8060c6;
     font-weight: 600;
 }
 
-
-
-
-@media screen and (max-width: 720px) {
-    .question-container{
+@media screen and (max-width: 1050px) {
+    .question-container {
         display: none;
     }
 }
 
-.question-container h2 button i{
+.question-container h2 button i {
     color: #6d30ed !important;
     font-size: inherit;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
-.question-container h2 button{
+.question-container h2 button {
     margin-left: 20px;
-    padding: .1rem .3rem;
+    padding: 0.1rem 0.3rem;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, .15);
+    background-color: rgba(255, 255, 255, 0.15);
 }
