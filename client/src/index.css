@@ -75,7 +75,7 @@ input[type="submit"]{
 .loading{
     min-height: 100vh;
     min-width: 100vw;
-    background: url(./Backgrounds/PlainBackground.png);
+    background: url(./Backgrounds/MainBackground.png);
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -96,6 +96,7 @@ input[type="submit"]{
 }
 
 .status-container{
+
   position: absolute;
   top: 1.5rem;
   background-color: none;

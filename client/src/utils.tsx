@@ -169,16 +169,15 @@ export const sortAttackers = (leaderboardPlayers: IleaderboardPlayer[], auth : a
 export const SendAlert:React.FC = () => {
 
     const auth  = useContext(AuthContext)
-    if(auth.state.authAlertMessage === null){
-      return <div></div>
-    }
     
-    
+    if(auth.state.authAlertMessage)
     return <div className="status-container">
       <p className="status-message">
         {auth.state.authAlertMessage}
       </p>
     </div>
+
+    return <div/>
 }
 
 export const Loading:React.FC = () => {
