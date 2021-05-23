@@ -18,6 +18,11 @@ button:hover {
     transform: scale(1.05);
 }
 
+input[type=submit]:hover{
+    transform: scale(1.05);
+
+}
+
 button {
     font-family: "Montserrat";
     font-size: var(--rootFontSize);
@@ -138,7 +143,10 @@ input[type="submit"] {
     height: 1.2rem;
     padding: 5px 20px;
     border-radius: 5px;
-    border-left: 10px solid black;
+    min-width: 150px;
+    text-align: center;
+    z-index: 100000;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .fail {

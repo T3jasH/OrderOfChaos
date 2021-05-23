@@ -248,8 +248,8 @@ const QuestionPage = () => {
                                 auth.dispatch({
                                     type: AuthActionTypes.SET_MESSAGE,
                                     payload: {
-                                        msg: "Copied to clipboard",
-                                        type: "default",
+                                        msg: "Copied!",
+                                        type: "success",
                                     },
                                 })
                                 setTimeout(() => {
@@ -287,12 +287,15 @@ const QuestionPage = () => {
                             onClick={() => {
                                 auth.dispatch({
                                     type: AuthActionTypes.SET_MESSAGE,
-                                    payload: { msg: "Copied to clipboard" },
+                                    payload: {
+                                        msg: "Copied!",
+                                        type: "success",
+                                    },
                                 })
                                 setTimeout(() => {
                                     auth.dispatch({
-                                        type: AuthActionTypes.SET_MESSAGE,
-                                        payload: { msg: null },
+                                        type: AuthActionTypes.CLEAR_MESSAGE,
+                                        payload: {},
                                     })
                                 }, 3000)
                             }}
