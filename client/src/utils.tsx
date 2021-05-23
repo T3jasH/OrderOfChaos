@@ -175,9 +175,12 @@ export const SendAlert:React.FC = () => {
       <p className={`status-message ${auth.state.alertMessageType}`}
       >
         {auth.state.authAlertMessage}
+      <i className='fas fa-times' 
+      onClick={() => {
+        auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+      }}></i>
       </p>
     </div>
-
     return <div/>
 }
 

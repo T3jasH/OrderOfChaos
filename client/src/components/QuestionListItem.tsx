@@ -6,6 +6,7 @@ import { QuestionContext } from "../context/QuestionContext"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
 import { useHistory } from "react-router"
+import { AuthActionTypes } from "../context/AuthReducer"
 
 interface props {
     question: Question 
@@ -17,6 +18,7 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
     const token = useContext(AuthContext).state.token
     const questions = useContext(QuestionContext)
     const player = useContext(PlayerContext)
+    const auth = useContext(AuthContext)
     const history = useHistory()
     const [lockStatus, setLockStatus] = useState<string>(""); 
 
@@ -43,7 +45,6 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
         .then(data => {
             console.log(data)
             if(data.success){
-                console.log("RECEIVED")
                 questions.dispatch({type : QuestionActionTypes.SET_UNLOCKED, payload : {id : question.quesId}})
                 player.dispatch({type : PlayerActionTypes.UPDATE_SCORE, payload : {score : player.state.score - question.unlockCost}})
             }
