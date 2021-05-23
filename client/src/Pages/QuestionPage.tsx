@@ -71,16 +71,15 @@ const QuestionPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data.success)
-                    if(data.success){
-                    setQuestionData({
-                        ...data.data.question,
-                        attempts: data.data.attempts,
-                        isSolved: data.data.isSolved
-                    })
-                    setAttemptState(data.data.attempts)
-                    }
-                    else{
-                        setLocked(true);
+                    if (data.success) {
+                        setQuestionData({
+                            ...data.data.question,
+                            attempts: data.data.attempts,
+                            isSolved: data.data.isSolved,
+                        })
+                        setAttemptState(data.data.attempts)
+                    } else {
+                        setLocked(true)
                     }
                 })
                 .catch((e) => {
@@ -99,31 +98,29 @@ const QuestionPage = () => {
     }, [questionData])
 
     useEffect(() => {
-        if(
-            questionData?.isSolved
-        )
-        {
+        if (questionData?.isSolved) {
             setAttemptsStatus("")
-            return;
+            return
         }
-        if(questionData?.difficulty && attemptsState)
-        {
-            if(questionData?.difficulty - attemptsState > 0){
-                if(player.state.attacksLeft === 3){
+        if (questionData?.difficulty && attemptsState) {
+            if (questionData?.difficulty - attemptsState > 0) {
+                if (player.state.attacksLeft === 3) {
                     setAttemptsStatus("You have 3 attacks already")
+                } else {
+                    setAttemptsStatus(
+                        `Attempts left to get an attack: ${
+                            questionData?.difficulty - attemptsState
+                        }`
+                    )
                 }
-                else{
-                    setAttemptsStatus(`Attempts left to get an attack: ${questionData?.difficulty - attemptsState}`)
-                }
-            }
-            else{
+            } else {
                 setAttemptsStatus("Attempts left to get an attack: 0")
             }
         }
-        
+        // eslint-disable-next-line
     }, [attemptsState])
 
-    const { id }: any = useParams() 
+    const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
         if (auth.state.token) {
@@ -147,16 +144,15 @@ const QuestionPage = () => {
                         )
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: data.msg, type : "fail" },
+                            payload: { msg: data.msg, type: "fail" },
                         })
-                    }
-                    else{
+                    } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: data.msg, type : "fail" },
+                            payload: { msg: data.msg, type: "fail" },
                         })
                     }
-                    
+
                     setTimeout(() => {
                         auth.dispatch({
                             type: AuthActionTypes.CLEAR_MESSAGE,
@@ -174,7 +170,7 @@ const QuestionPage = () => {
 
     // const CopyToClipboard = (text: String | undefined) => {
     //     const ta = document.createElement("textarea")
-       
+
     //     if (text) ta.innerText = text as string
     //     document.body.appendChild(ta)
     //     ta.select()
@@ -192,7 +188,7 @@ const QuestionPage = () => {
     //     }, 3500)
     // }
 
-    if(locked){
+    if (locked) {
         return <Redirect to="/" />
     }
 
@@ -203,7 +199,7 @@ const QuestionPage = () => {
                 Switch to PC for a better experience
             </h3>
             <Navbar removeButton={false} />
-            <div className="question-container" style={{userSelect : "none"}}>
+            <div className="question-container" style={{ userSelect: "none" }}>
                 <button onClick={() => history.push("/")}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
@@ -216,11 +212,10 @@ const QuestionPage = () => {
                 </ReactMarkdown>
                 // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
             )} */}
-                    <ReactMarkdown
-                        rehypePlugins={[rehypeRaw]}
-                        children={String(questionData?.statement)}
-                        
-                    />
+                <ReactMarkdown
+                    rehypePlugins={[rehypeRaw]}
+                    children={String(questionData?.statement)}
+                />
 
                 <br />
                 <h2>Constraints</h2>
@@ -240,18 +235,33 @@ const QuestionPage = () => {
                 <br />
                 <h2>
                     Sample Input
-                    <CopyToClipboard text={questionData?.samInput.slice(-4, 4)? questionData?.samInput.slice(-4, 4) : ""} >
-                    <button
-                        className="copy-btn"
-                        onClick={() => {
-                            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Copied to clipboard", type : "default"}})
-                            setTimeout(() => {
-                                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
-                            }, 3000)
-                        }}
+                    <CopyToClipboard
+                        text={
+                            questionData?.samInput.slice(4, -4)
+                                ? questionData?.samInput.slice(4, -4)
+                                : ""
+                        }
                     >
-                        <i className="far fa-copy"></i>
-                    </button>
+                        <button
+                            className="copy-btn"
+                            onClick={() => {
+                                auth.dispatch({
+                                    type: AuthActionTypes.SET_MESSAGE,
+                                    payload: {
+                                        msg: "Copied to clipboard",
+                                        type: "default",
+                                    },
+                                })
+                                setTimeout(() => {
+                                    auth.dispatch({
+                                        type: AuthActionTypes.CLEAR_MESSAGE,
+                                        payload: {},
+                                    })
+                                }, 3000)
+                            }}
+                        >
+                            <i className="far fa-copy"></i>
+                        </button>
                     </CopyToClipboard>
                 </h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
@@ -265,21 +275,31 @@ const QuestionPage = () => {
                 <br />
                 <h2>
                     Testcase
-                <CopyToClipboard 
-                text={questionData?.testcase.slice(4, -4)? questionData?.testcase.slice(4, -4) : ""}
-                >
-                    <button
-                        className="copy-btn"
-                        onClick={() => {
-                            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Copied to clipboard"}})
-                            setTimeout(() => {
-                                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : null}})
-                            }, 3000)
-                        }}
+                    <CopyToClipboard
+                        text={
+                            questionData?.testcase.slice(4, -4)
+                                ? questionData?.testcase.slice(4, -4)
+                                : ""
+                        }
                     >
-                        <i className="far fa-copy"></i>
-                    </button>
-                </CopyToClipboard>
+                        <button
+                            className="copy-btn"
+                            onClick={() => {
+                                auth.dispatch({
+                                    type: AuthActionTypes.SET_MESSAGE,
+                                    payload: { msg: "Copied to clipboard" },
+                                })
+                                setTimeout(() => {
+                                    auth.dispatch({
+                                        type: AuthActionTypes.SET_MESSAGE,
+                                        payload: { msg: null },
+                                    })
+                                }, 3000)
+                            }}
+                        >
+                            <i className="far fa-copy"></i>
+                        </button>
+                    </CopyToClipboard>
                 </h2>
                 <div className="testcase-container">
                     <ReactMarkdown
@@ -289,9 +309,16 @@ const QuestionPage = () => {
                 </div>
 
                 <div className="answer-container">
-                    <h2 style={{marginBottom : "0.5rem"}} >Answer</h2>
+                    <h2 style={{ marginBottom: "0.5rem" }}>Answer</h2>
                     <div className="answer-info">
-                        <div id="attempts-left" style={{display : questionData?.isSolved? "none" : "block"}}>
+                        <div
+                            id="attempts-left"
+                            style={{
+                                display: questionData?.isSolved
+                                    ? "none"
+                                    : "block",
+                            }}
+                        >
                             {attemptsStatus}
                         </div>
                     </div>
