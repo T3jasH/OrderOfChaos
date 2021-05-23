@@ -35,6 +35,9 @@ html {
     font-weight: 700;
     margin-bottom: 1rem;
 }
+.question-container > p {
+    margin-bottom: 1rem;
+}
 
 .question-container button {
     font-size: 1.3rem;
