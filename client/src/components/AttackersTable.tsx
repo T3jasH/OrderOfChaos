@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect} from "react"
 import { AuthContext } from "../context/AuthContext"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
 import { Iattacker } from "../Pages/LeaderboardPage"
-import { getAttackersCount } from "../utils"
+import { getAttackersCount, Loading } from "../utils"
 
 interface props {
-    attackersP: Iattacker[] | null | undefined
+    attackersP: Iattacker[] | null 
     handleAttack: any
 }
 
@@ -14,17 +14,9 @@ const AttackersTable = ({
     attackersP,
     handleAttack,
 }: props) => {
-    const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
-        undefined
-    )
+ 
     const auth = useContext(AuthContext)
     const playerContext = useContext(PlayerContext)
-
-
-    useEffect(() => {
-        if(attackersP)
-        setAttackers(attackersP)
-    }, [attackersP])
 
     //Set all attacks as seen
 
@@ -67,14 +59,17 @@ const AttackersTable = ({
     }
 
     // LOADING ANIMATION NEEDED
-    if(attackers === null){
+    if(attackersP === null){
         return <div>
                 <h2 id="no-attacks" >There have been no attacks on you</h2>
                 </div>
     }
-       
+
+    if(attackersP === undefined){
+        return <div/>
+    }
+
     return (
-        attackers !== undefined && attackers?.length !== 0 ?
         <table className="attackers-table">
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
@@ -91,7 +86,7 @@ const AttackersTable = ({
                 </tr>
             </thead>
             <tbody>
-                {attackers?.map((attacker, idx) => {
+                {attackersP?.map((attacker, idx) => {
                     return (
                         <tr>
                             <td>{attacker.rank}</td>
@@ -137,10 +132,6 @@ const AttackersTable = ({
                 })}
             </tbody>
         </table>
-        :
-        <h2>
-            Loading
-        </h2>
     )
 }
 

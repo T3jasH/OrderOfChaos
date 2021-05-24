@@ -108,7 +108,7 @@ const QuestionPage = () => {
             setAttemptsStatus("Question has been solved")
             return
         }
-        if (questionData?.difficulty && attemptsState) {
+        if (questionData?.difficulty && attemptsState !== undefined) {
             if (questionData?.difficulty - attemptsState > 0) {
                 if (player.state.attacksLeft === 3) {
                     setAttemptsStatus("You have 3 attacks already")
@@ -124,7 +124,7 @@ const QuestionPage = () => {
             }
         }
         // eslint-disable-next-line
-    }, [attemptsState])
+    }, [attemptsState, questionData?.difficulty])
 
     const { id }: any = useParams()
 
