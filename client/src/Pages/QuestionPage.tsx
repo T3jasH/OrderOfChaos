@@ -112,7 +112,9 @@ const QuestionPage = () => {
                     setAttemptsStatus("You already have 3 attacks.")
                 } else {
                     setAttemptsStatus(
-                        ` ${questionData?.difficulty - attemptsState} attempts left to get an attack.`
+                        ` ${
+                            questionData?.difficulty - attemptsState
+                        } attempts left to get an attack.`
                     )
                 }
             } else {

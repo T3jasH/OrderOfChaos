@@ -1,4 +1,4 @@
-.login-page{
+.login-page {
     min-height: 100vh;
     min-width: 100vw;
     background: url("../Backgrounds/SecondaryBackground.png") no-repeat;
@@ -8,7 +8,7 @@
     --h3MarginTop: 6.5vh;
 }
 
-.login-container{
+.login-container {
     position: absolute;
     right: 0;
     top: 0;
@@ -19,7 +19,6 @@
     align-items: center;
     flex-wrap: nowrap;
 }
-
 
 .login-container > h2 {
     font-weight: bold;
@@ -41,7 +40,7 @@
     line-height: 3rem;
 }
 
-.login-form{
+.login-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -49,64 +48,61 @@
     margin-top: 4vh;
 }
 
-.register-form{
+.register-form {
     margin-top: 0.5vh;
 }
 
-.login-submit-btn{
+.login-submit-btn {
     padding: 0.5rem 0.3rem;
     width: 8rem;
     letter-spacing: 0.2em;
     font-weight: 700;
 }
 
-.register-submit-btn{
+.register-submit-btn {
     padding: 0.5rem 0.8rem;
     width: 10rem;
     letter-spacing: 0.2em;
     font-weight: 700;
 }
 
-.btn-login{
+.btn-login {
     letter-spacing: 0.2em;
     margin-top: 1.5vh;
 }
 
-.btn-login:hover{
+.btn-login:hover {
     font-weight: 700;
 }
 
-@media screen and (max-height : 850px) {
-    .login-page{
+@media screen and (max-height: 850px) {
+    .login-page {
         --h2MarginTop: 6vh;
         --h3MarginTop: 3.5vh;
     }
 }
 
-
-@media screen and (max-height : 680px) {
-    .login-page{
+@media screen and (max-height: 680px) {
+    .login-page {
         --h2MarginTop: 3vh;
         --h3MarginTop: 1.5vh;
-    }   
+    }
 }
 
-
 @media screen and (max-width: 1200px) {
-    .login-container > h2{
+    .login-container > h2 {
         font-size: 2rem;
     }
     .login-container > h3 {
         font-size: 1.6rem;
-    }   
-
+    }
 }
 
-@media screen  and (max-width: 1050px) {
-    .login-page{
+@media screen and (max-width: 1050px) {
+    .login-page {
         background-image: url(../Backgrounds/PlainBackground.png);
     }
-    .login-container{
+    .login-container {
         width: 100vw;
     }
 }
@@ -115,11 +111,7 @@
     .login-container > h2 {
         font-size: 1.5rem;
     }
-    .login-container > h3{
+    .login-container > h3 {
         font-size: 1.2rem;
     }
 }
-
-
-
-

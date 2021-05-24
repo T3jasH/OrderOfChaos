@@ -1,6 +1,6 @@
-.navbar{
+.navbar {
     width: 100vw;
-    position:fixed;
+    position: fixed;
     display: flex;
     flex-direction: row-reverse;
     top: 1.5rem;
@@ -16,11 +16,11 @@
     margin-right: 4vw;
     font-weight: 500;
     font-size: 1.2rem;
-  }
+}
 
-  #logout-btn{
-    border: 2px solid #FFFFFF;
+#logout-btn {
+    border: 2px solid #ffffff;
     padding: 0.6rem 2rem;
     box-sizing: border-box;
     border-radius: 10px 0px;
-  }
+}

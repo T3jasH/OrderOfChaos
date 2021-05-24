@@ -25,17 +25,17 @@ const QuestionPage: React.FC = () => {
     useEffect(() => {
         if (auth.state.token !== null && auth.state.token !== "x")
             getContestDetails(auth, questions, player)
-            // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [auth.state.token])
 
     useEffect(() => {
-        if(auth.state.isStarted === false){
+        if (auth.state.isStarted === false) {
             setLoading(false)
-            return;
+            return
         }
         if (auth?.state?.id?.length && auth.state.token !== "x") {
             getLeaderboard(auth).then((data) => {
-                console.log(data.attackers)
+                // console.log(data.attackers)
                 setRank(
                     data.ranks.findIndex(
                         (user: any) => user._id === auth.state.id

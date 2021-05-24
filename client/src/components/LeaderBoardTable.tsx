@@ -28,7 +28,7 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
             <tbody>
                 {leaderboardPlayers?.map((player, idx) => {
                     return (
-                        <tr>
+                        <tr key={player._id}>
                             <td
                                 className={
                                     auth.state.id === player._id
@@ -72,18 +72,17 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
                                 )}
                             </td>
                             <td style={{ padding: "1rem" }}>
-                                    <button
-                                        onClick={() => handleAttack(player._id)}
-                                        className={`leaderboard-button ${
-                                            player.attackers.length === 15 ||
-                                            auth.state.id === player._id
-                                                ? "disable-button"
-                                                : ""
-                                        }`}
-                                    >
-                                        Attack
-                                    </button>
-
+                                <button
+                                    onClick={() => handleAttack(player._id)}
+                                    className={`leaderboard-button ${
+                                        player.attackers.length === 15 ||
+                                        auth.state.id === player._id
+                                            ? "disable-button"
+                                            : ""
+                                    }`}
+                                >
+                                    Attack
+                                </button>
                             </td>
                         </tr>
                     )

@@ -28,17 +28,21 @@ export interface Iattacker {
     numberOfAttacks: number
 }
 
-interface props{
+interface props {
     currentPage: string
 }
 
-const LeaderboardPage = ({currentPage} : props) => {
+const LeaderboardPage = ({ currentPage }: props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
     const [tabState, setTabState] = useState<string>(currentPage)
-    const [attackersP, setAttackersP] = useState<Iattacker[] | undefined | null>(undefined)
-    const [leaderboardPlayers, setLeaderboardPlayers] = useState<IleaderboardPlayer[]>()
+    const [attackersP, setAttackersP] = useState<
+        Iattacker[] | undefined | null
+    >(undefined)
+    const [leaderboardPlayers, setLeaderboardPlayers] = useState<
+        IleaderboardPlayer[]
+    >()
     const [rank, setRank] = useState<number | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -55,24 +59,25 @@ const LeaderboardPage = ({currentPage} : props) => {
         // eslint-disable-next-line
     }, [auth.state.token])
 
-
     useEffect(() => {
-        if(auth.state.isStarted === false){
+        if (auth.state.isStarted === false) {
             setLoading(false)
-            return;
+            return
         }
         if (auth.state.id.length && auth.state.token !== "x") {
-            getLeaderboard(auth)
-            .then((data) => {
-                setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
-                    return {
-                        ...obj, 
-                        attackers : data.attackers[idx],
-                    }
-                }))
+            getLeaderboard(auth).then((data) => {
+                setLeaderboardPlayers(
+                    data.ranks.map((obj: any, idx: any) => {
+                        return {
+                            ...obj,
+                            attackers: data.attackers[idx],
+                        }
+                    })
+                )
                 setRank(
-                    data.ranks.findIndex((user: any) => user._id === auth.state.id) +
-                        1
+                    data.ranks.findIndex(
+                        (user: any) => user._id === auth.state.id
+                    ) + 1
                 )
             })
         }
@@ -81,35 +86,43 @@ const LeaderboardPage = ({currentPage} : props) => {
 
     useEffect(() => {
         if (leaderboardPlayers?.length) {
-            setAttackersP(
-                sortAttackers(leaderboardPlayers, auth)
-            )
+            setAttackersP(sortAttackers(leaderboardPlayers, auth))
         }
         // eslint-disable-next-line
     }, [leaderboardPlayers])
 
     useEffect(() => {
-        if(attackersP !== undefined){
+        if (attackersP !== undefined) {
             setLoading(false)
         }
     }, [attackersP])
 
-
     const handleAttack = (id: string) => {
-
-        if(auth.state.isEnded){
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Contest has ended", type : "fail"}})
+        if (auth.state.isEnded) {
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Contest has ended", type: "fail" },
+            })
             setTimeout(() => {
-                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
-                }, 3500)
-            return 
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3500)
+            return
         }
 
         if (contextPlayer.state.attacksLeft <= 0) {
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "You don't have attacks", type : "fail"}})
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "You don't have any attacks.", type: "fail" },
+            })
             setTimeout(() => {
-                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
-                }, 3500)
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3500)
             return
         }
         if (auth.state.token) {
@@ -124,59 +137,79 @@ const LeaderboardPage = ({currentPage} : props) => {
                 .catch((err) => console.log(err))
                 .then((data) => {
                     console.log(data, "ATTACK DATA")
-                    if(data.success){
-                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type : "success"}})
-                    contextPlayer.dispatch({
-                        type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
-                        payload: {attacksLeft: contextPlayer.state.attacksLeft - 1},
-                    })
-                    getLeaderboard(auth).then((data) => {
-                        setLeaderboardPlayers(data.ranks.map((obj:any, idx:any) => {
-                            return {
-                                ...obj, 
-                                attackers : data.attackers[idx],
-                            }
-                        }))
-                        setRank(
-                            data.ranks.findIndex((user: any) => user._id === auth.state.id) +
-                                1
-                        )
-                    })
-                }
-                else{
-                    auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : data.msg, type: "fail"}})
-                }
-                setTimeout(() => {
-                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                    if (data.success) {
+                        auth.dispatch({
+                            type: AuthActionTypes.SET_MESSAGE,
+                            payload: { msg: data.msg, type: "success" },
+                        })
+                        contextPlayer.dispatch({
+                            type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
+                            payload: {
+                                attacksLeft:
+                                    contextPlayer.state.attacksLeft - 1,
+                            },
+                        })
+                        getLeaderboard(auth).then((data) => {
+                            setLeaderboardPlayers(
+                                data.ranks.map((obj: any, idx: any) => {
+                                    return {
+                                        ...obj,
+                                        attackers: data.attackers[idx],
+                                    }
+                                })
+                            )
+                            setRank(
+                                data.ranks.findIndex(
+                                    (user: any) => user._id === auth.state.id
+                                ) + 1
+                            )
+                        })
+                    } else {
+                        auth.dispatch({
+                            type: AuthActionTypes.SET_MESSAGE,
+                            payload: { msg: data.msg, type: "fail" },
+                        })
+                    }
+                    setTimeout(() => {
+                        auth.dispatch({
+                            type: AuthActionTypes.CLEAR_MESSAGE,
+                            payload: {},
+                        })
                     }, 3500)
                 })
-                .catch((e) => console.log(e))   
+                .catch((e) => console.log(e))
         }
-    }    
+    }
 
-    if (loading) return <Loading/>
+    if (loading) return <Loading />
 
-    if(auth.state.isStarted === false){
+    if (auth.state.isStarted === false) {
         return <Redirect to="/rules" />
     }
 
     return (
         <div className="leaderboard-page">
-        <h2 className="mobile-message" >Switch to PC for a better experience</h2>    
-            <Navbar  removeButton={true}/>
+            <h2 className="mobile-message">
+                Switch to PC for a better experience
+            </h2>
+            <Navbar removeButton={true} />
             <div className="leaderboard-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>
                     <span
                         className={tabState !== "leaderboard" ? "fade" : ""}
-                        onClick={() => {setTabState("leaderboard")}}
+                        onClick={() => {
+                            setTabState("leaderboard")
+                        }}
                     >
                         Leaderboard
                     </span>
                     <span id="slash">/</span>
                     <span
                         className={tabState !== "attackers" ? "fade" : ""}
-                        onClick={() => {setTabState("attackers")}}
+                        onClick={() => {
+                            setTabState("attackers")
+                        }}
                     >
                         Attackers
                     </span>
@@ -189,12 +222,10 @@ const LeaderboardPage = ({currentPage} : props) => {
                 ) : (
                     <AttackersTable
                         handleAttack={handleAttack}
-                        attackersP={
-                            attackersP
-                        }
+                        attackersP={attackersP}
                     />
                 )}
-                {console.log(attackersP)}
+                {/* {console.log(attackersP)} */}
             </div>
             <PlayerInfoFooter rank={rank} active={true} />
         </div>

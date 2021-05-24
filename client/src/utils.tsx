@@ -34,7 +34,7 @@ export const getContestDetails = async (
                 }
                 return
             }
-            console.log("LOGGING CONTEST DATA:")
+            // console.log("LOGGING CONTEST DATA:")
             questions.dispatch({
                 type: QuestionActionTypes.GET_QUESTIONS,
                 payload: data.data.questions,
@@ -57,7 +57,7 @@ export const getContestDetails = async (
                     attacksLeft: data.data.user.remAttack,
                 },
             })
-            console.log("FETCHED CONTEST DETAILS")
+            // console.log("FETCHED CONTEST DETAILS")
         })
 }
 
@@ -189,7 +189,7 @@ export const SendAlert: React.FC = () => {
     if (auth.state.authAlertMessage)
         return (
             <div className="status-container">
-                {console.log(auth.state.alertMessageType)}
+                {/* {console.log(auth.state.alertMessageType)} */}
                 <p className={`status-message ${auth.state.alertMessageType}`}>
                     {auth.state.authAlertMessage}
                     <i

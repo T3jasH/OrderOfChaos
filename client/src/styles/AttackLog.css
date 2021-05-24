@@ -1,4 +1,4 @@
-#attack-nav{
+#attack-nav {
     position: absolute;
     padding: 0;
     height: 100%;
@@ -13,15 +13,14 @@
     transition: width 500ms ease-out;
 }
 
-.attack-list{
+.attack-list {
     list-style: none;
     padding: 0px;
     margin: 0px 0px 0px 5px;
-
 }
 
-.attack{
-    width: 18vw; 
+.attack {
+    width: 18vw;
     height: 5rem;
     margin-bottom: 0.5rem;
     display: none;

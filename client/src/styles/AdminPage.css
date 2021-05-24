@@ -1,4 +1,4 @@
-.admin{
+.admin {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
@@ -6,22 +6,22 @@
     background-image: url(../Backgrounds/MainBackground.png);
     background-size: cover;
     background-position: right bottom;
-    scrollbar-color: #6D30ED #090321;
+    scrollbar-color: #6d30ed #090321;
 }
 
-textarea{
+textarea {
     resize: none;
     margin-left: 3vw;
     border: 2px solid black;
-    box-shadow: none; 
+    box-shadow: none;
     outline: none;
     font-size: 20px;
 }
 
-.admin > h3{
+.admin > h3 {
     margin-left: 3vw;
 }
-.short{
+.short {
     width: 40vw;
     height: 1.5rem;
     border-radius: 25px;
@@ -30,7 +30,7 @@ textarea{
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.long{
+.long {
     width: 80vw;
     height: 20vh;
     border-radius: 30px;
@@ -39,14 +39,14 @@ textarea{
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.admin-submit{
+.admin-submit {
     position: relative;
     left: 5vw;
     margin-top: 2rem;
     margin-bottom: 4rem;
 }
 
-.admin-error{
+.admin-error {
     position: relative;
     left: 45vw;
 }

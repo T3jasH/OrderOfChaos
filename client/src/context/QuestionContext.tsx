@@ -1,14 +1,14 @@
-import {Question, QuestionAction, questionReducer} from "./QuestionReducer"
+import { Question, QuestionAction, questionReducer } from "./QuestionReducer"
 import React from "react"
 
-const questionDefaultState : Question[] = [
+const questionDefaultState: Question[] = [
     // {
     //     id: 0,
     //     level : 1,
     //     isLocked : true,
     //     isSolved : false,
     //     cost : 20,
-    //     tags : [""] 
+    //     tags : [""]
     // }
 ]
 
@@ -17,14 +17,18 @@ export interface QuestionContextModel {
     dispatch: React.Dispatch<QuestionAction>
 }
 
-export const QuestionContext = React.createContext<QuestionContextModel>( {} as QuestionContextModel)
+export const QuestionContext = React.createContext<QuestionContextModel>(
+    {} as QuestionContextModel
+)
 
-const QuestionListProvider: React.FC = ({children}) => {
-    
-    const [state, dispatch] = React.useReducer(questionReducer, questionDefaultState)
+const QuestionListProvider: React.FC = ({ children }) => {
+    const [state, dispatch] = React.useReducer(
+        questionReducer,
+        questionDefaultState
+    )
 
     return (
-        <QuestionContext.Provider value={{state, dispatch}}>
+        <QuestionContext.Provider value={{ state, dispatch }}>
             {children}
         </QuestionContext.Provider>
     )

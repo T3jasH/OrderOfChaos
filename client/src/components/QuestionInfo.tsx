@@ -26,7 +26,7 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
                                 ? "#FBFF35"
                                 : "#FF4A4A",
                         fontWeight: 600,
-                        fontSize: "1.3rem"
+                        fontSize: "1.3rem",
                     }}
                 >
                     {getDifficulty(questionData?.difficulty)}
@@ -51,7 +51,9 @@ const QuestionInfo = ({ questionData, attacksAvailable }: props) => {
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Attacks Available : </span>
+                <span className="question-info-label">
+                    Attacks Available :{" "}
+                </span>
                 <span className="question-info-purple">{attacksAvailable}</span>
             </div>
         </div>
