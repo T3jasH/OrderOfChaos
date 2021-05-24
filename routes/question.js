@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isRunning = require("../middleware/isRunning");
+const isNotEnded = require('../middleware/isNotEnded');
 const Question = require("../models/Question");
 const User = require("../models/User");
 
@@ -40,7 +41,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
 // @access    Private
 // Check the output and change score of the user as required.
 // In response send success (boolean).
-router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
+router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
     try {
         //TODO:compare IP before submitting
         //if first attempt and solved then attack given
@@ -174,7 +175,7 @@ router.post('/:id', isLoggedIn, isRunning, async (req, res) => {
 //ip in backend
 // When user unlocks first question, along with marking isActive, you need take ip.
 //Then for every submission, check if it's same ip.
-router.get("/locked/:id", isLoggedIn, isRunning, async (req, res) => {
+router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) => {
     try {
         let userid = req.user.id;
         // console.log(userid);

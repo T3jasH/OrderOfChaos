@@ -4,7 +4,8 @@ import React from "react";
 const authDefaultState: Auth = {
   token: null,
   isAdmin: false,
-  isStarted: true,
+  isStarted: null,
+  isEnded: null,
   id: "",
   username: ""
 };

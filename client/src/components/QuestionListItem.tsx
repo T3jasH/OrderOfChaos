@@ -32,23 +32,31 @@ const QuestionListItem : React.FC<props>  = ({question, index}) => {
     }, [question.name, question.isSolved, question.isLocked])
 
     const unlockQuestion = () => {
-        if(token && player.state.score >= question.unlockCost && question.isLocked)
-        fetch(`/api/question/locked/${question.quesId}`, {
-            method : "GET",
-            headers : {
-                "Content-type" : "application/json",
-                "x-auth-token" : token
+        if(token && player.state.score >= question.unlockCost && question.isLocked){
+            if(auth.state.isEnded){
+                auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Contest has ended", type : "fail"}})
+                setTimeout(() => {
+                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                }, 3000)
+                return;
             }
+            fetch(`/api/question/locked/${question.quesId}`, {
+                method : "GET",
+                headers : {
+                    "Content-type" : "application/json",
+                    "x-auth-token" : token
+                }
+            })
+            .then(resp => resp.json())
+            .catch(err => console.log(err))
+            .then(data => {
+                //console.log(data)
+                if(data.success){
+                    questions.dispatch({type : QuestionActionTypes.SET_UNLOCKED, payload : {id : question.quesId}})
+                    player.dispatch({type : PlayerActionTypes.UPDATE_SCORE, payload : {score : player.state.score - question.unlockCost}})
+                }
         })
-        .then(resp => resp.json())
-        .catch(err => console.log(err))
-        .then(data => {
-            console.log(data)
-            if(data.success){
-                questions.dispatch({type : QuestionActionTypes.SET_UNLOCKED, payload : {id : question.quesId}})
-                player.dispatch({type : PlayerActionTypes.UPDATE_SCORE, payload : {score : player.state.score - question.unlockCost}})
-            }
-        })
+        }
     }
 
     const handleClick = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {

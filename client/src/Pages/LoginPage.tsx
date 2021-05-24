@@ -34,15 +34,21 @@ const LoginPage: React.FC = () => {
                 },
                 body: JSON.stringify({ email: email, password: password }),
             })
-
             const data = await response.json()
-            console.log(data)
             if (data.success) {
                 auth.dispatch({
                     type: AuthActionTypes.LOGIN,
-                    payload: { token: data.data.token },
+                    payload: { 
+                        token: data.data.token, 
+                        isStarted: data.data.isStarted
+                    },
                 })
-                history.push("/")
+                if(data.data.isStarted){
+                    history.push("/")
+                }
+                else{
+                    history.push("/rules")
+                }
             } else if (data.errors) {
                 auth.dispatch({
                     type: AuthActionTypes.SET_MESSAGE,

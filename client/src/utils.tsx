@@ -26,11 +26,12 @@ export const getContestDetails = async (
     .catch((err) => console.log(err))
     .then((data) => {
       if (!data.success) {
+        if(data.isStarted === false){
+          auth.dispatch({type : AuthActionTypes.NOT_STARTED, payload : []})
+        }
         return;
       }
       console.log("LOGGING CONTEST DATA:");
-      console.log(data.data);
-
       questions.dispatch({
         type: QuestionActionTypes.GET_QUESTIONS,
         payload: data.data.questions,
@@ -38,7 +39,8 @@ export const getContestDetails = async (
       auth.dispatch({
         type: AuthActionTypes.GET_AUTH,
         payload: {
-          isStarted: true,
+          isStarted: data.data.isStarted,
+          isEnded: data.data.isEnded,
           isAdmin: data.data.user.isAdmin,
           id: data.data.user._id.toString(),
           username: data.data.user.username
@@ -78,7 +80,8 @@ export const getUser = async (auth : any, player?: any) => {
     auth.dispatch({type : AuthActionTypes.GET_AUTH, payload : {
       id : data.data.user._id,
       isAdmin : data.data.user.isAdmin,
-      isStarted : true,
+      isStarted : data.data.isStarted,
+      isEnded: data.data.isEnded,
       username: data.data.user.username
     }})
     if(player){

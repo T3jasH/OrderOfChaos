@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const isLoggedIn = require('../middleware/isLoggedIn');
 const isRunning = require('../middleware/isRunning');
+const isNotEnded = require('../middleware/isNotEnded');
 const User = require('../models/User');
 
 //To get Leaderboard
@@ -51,7 +52,7 @@ const attackUser = async (req, res) => {
         if (attackerid === id)
             return res.json({
                 success: false,
-                msg: 'Why do you want to attack yourself?!?',  
+                msg: 'You cannot attack yourself',  
             });
         // console.log(id);
         if (attacker.remAttack > 0) {
@@ -121,6 +122,6 @@ router.get('/', isLoggedIn, getLeaderboard);
 // @access    Private
 // Check if the user has an attack if yes then complete attack.
 // In response send success (boolean).
-router.post('/:id', isLoggedIn, isRunning, attackUser);
+router.post('/:id', isLoggedIn, isRunning, isNotEnded, attackUser);
 
 module.exports = router;

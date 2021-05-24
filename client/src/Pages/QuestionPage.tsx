@@ -55,12 +55,18 @@ const QuestionPage = () => {
     useEffect(() => {
         if (auth.state.token === null) {
             auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
+            getUser(auth, player)
         }
     })
 
     useEffect(() => {
+
+        if(auth.state.isStarted === false){
+            setLoading(false)
+            return
+        }
+
         if (auth.state.token) {
-            getUser(auth, player)
             fetch(`/api/question/${id}`, {
                 method: "GET",
                 headers: {
@@ -70,7 +76,6 @@ const QuestionPage = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data.success)
                     if (data.success) {
                         setQuestionData({
                             ...data.data.question,
@@ -78,7 +83,8 @@ const QuestionPage = () => {
                             isSolved: data.data.isSolved,
                         })
                         setAttemptState(data.data.attempts)
-                    } else {
+                    }
+                    else {
                         setLocked(true)
                     }
                 })
@@ -89,7 +95,7 @@ const QuestionPage = () => {
                 })
         }
         // eslint-disable-next-line
-    }, [auth.state.token])
+    }, [auth.state])
 
     useEffect(() => {
         if (questionData) {
@@ -99,7 +105,7 @@ const QuestionPage = () => {
 
     useEffect(() => {
         if (questionData?.isSolved) {
-            setAttemptsStatus("")
+            setAttemptsStatus("Question has been solved")
             return
         }
         if (questionData?.difficulty && attemptsState) {
@@ -123,6 +129,13 @@ const QuestionPage = () => {
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
+        if(auth.state.isEnded){
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Contest has ended", type : "fail"}})
+                setTimeout(() => {
+                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                }, 3000)
+            return;
+        }
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
                 method: "POST",
@@ -149,8 +162,9 @@ const QuestionPage = () => {
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: data.msg, type: "fail" },
+                            payload: { msg: data.msg, type: "success" },
                         })
+                        setAttemptsStatus("Question has been solved")
                     }
 
                     setTimeout(() => {
@@ -158,41 +172,24 @@ const QuestionPage = () => {
                             type: AuthActionTypes.CLEAR_MESSAGE,
                             payload: {},
                         })
-                    }, 3500)
+                    }, 3000)
                 })
                 .catch((e) => {
                     console.log(e)
-
-                    console.log("Am i getting an error")
                 })
         }
     }
 
-    // const CopyToClipboard = (text: String | undefined) => {
-    //     const ta = document.createElement("textarea")
-
-    //     if (text) ta.innerText = text as string
-    //     document.body.appendChild(ta)
-    //     ta.select()
-    //     document.execCommand("copy")
-    //     ta.remove()
-    //     auth.dispatch({
-    //         type: AuthActionTypes.SET_MESSAGE,
-    //         payload: { msg: "Copied to clipboard" },
-    //     })
-    //     setTimeout(() => {
-    //         auth.dispatch({
-    //             type: AuthActionTypes.SET_MESSAGE,
-    //             payload: { msg: null },
-    //         })
-    //     }, 3500)
-    // }
-
     if (locked) {
         return <Redirect to="/" />
     }
-
+   
     if (loading) return <Loading />
+
+    if(auth.state.isStarted === false){
+        return <Redirect to="/rules" />
+    }
+
     return (
         <div className="question-page">
             <h3 className="mobile-message">
@@ -206,12 +203,6 @@ const QuestionPage = () => {
                     questionData={questionData}
                     attacksAvailable={player.state.attacksLeft}
                 />
-                {/* {questionData?.statement && (
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                    {questionData?.statement}
-                </ReactMarkdown>
-                // <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
-            )} */}
                 <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}
                     children={String(questionData?.statement)}
@@ -316,11 +307,6 @@ const QuestionPage = () => {
                     <div className="answer-info">
                         <div
                             id="attempts-left"
-                            style={{
-                                display: questionData?.isSolved
-                                    ? "none"
-                                    : "block",
-                            }}
                         >
                             {attemptsStatus}
                         </div>
@@ -335,7 +321,7 @@ const QuestionPage = () => {
                         onClick={() => {
                             handleAnswerSubmit()
                         }}
-                        className="answer-button"
+                        className={`answer-button ${auth.state.isEnded? "disable-button" : ""}`}
                     >
                         Submit
                     </button>
@@ -343,7 +329,7 @@ const QuestionPage = () => {
             </div>
         </div>
     )
-}
+} 
 export default QuestionPage
 
 // eslint-disable-next-line

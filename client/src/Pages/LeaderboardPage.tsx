@@ -4,7 +4,7 @@ import { AuthActionTypes } from "../context/AuthReducer"
 import { getUser, getLeaderboard, sortAttackers, Loading } from "../utils"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
-import { useHistory } from "react-router-dom"
+import { Redirect, useHistory } from "react-router-dom"
 import LeaderboardTable from "../components/LeaderBoardTable"
 import "../styles/LeadboardPage.css"
 import Navbar from "../components/Navbar"
@@ -57,6 +57,10 @@ const LeaderboardPage = ({currentPage} : props) => {
 
 
     useEffect(() => {
+        if(auth.state.isStarted === false){
+            setLoading(false)
+            return;
+        }
         if (auth.state.id.length && auth.state.token !== "x") {
             getLeaderboard(auth)
             .then((data) => {
@@ -73,7 +77,7 @@ const LeaderboardPage = ({currentPage} : props) => {
             })
         }
         // eslint-disable-next-line
-    }, [auth.state.id])
+    }, [auth.state])
 
     useEffect(() => {
         if (leaderboardPlayers?.length) {
@@ -92,6 +96,15 @@ const LeaderboardPage = ({currentPage} : props) => {
 
 
     const handleAttack = (id: string) => {
+
+        if(auth.state.isEnded){
+            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "Contest has ended", type : "fail"}})
+            setTimeout(() => {
+                auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload : {}})
+                }, 3500)
+            return 
+        }
+
         if (contextPlayer.state.attacksLeft <= 0) {
             auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload: {msg : "You don't have attacks", type : "fail"}})
             setTimeout(() => {
@@ -142,6 +155,11 @@ const LeaderboardPage = ({currentPage} : props) => {
     }    
 
     if (loading) return <Loading/>
+
+    if(auth.state.isStarted === false){
+        return <Redirect to="/rules" />
+    }
+
     return (
         <div className="leaderboard-page">
         <h2 className="mobile-message" >Switch to PC for a better experience</h2>    

@@ -12,7 +12,11 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 router.get("/", isLoggedIn, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
-        res.json({ success: true, msg: "User found", data: { user } });
+        res.json({ success: true, msg: "User found", data: { 
+            user: user,
+            isStarted: process.env.isRunning == 1 ? true : false, 
+            isEnded: process.env.isEnded == 1 ? true : false 
+        } });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ success: false, msg: "Server Error." });
@@ -75,7 +79,10 @@ router.post(
             res.json({
                 success: true,
                 msg: "User successfully logged in!",
-                data: { token },
+                data: { 
+                    token: token,
+                    isStarted: process.env.isRunning == 1 ? true : false
+                },
             });
         } catch (err) {
             console.error(err.message);

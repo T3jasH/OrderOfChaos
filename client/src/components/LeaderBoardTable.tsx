@@ -72,7 +72,6 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
                                 )}
                             </td>
                             <td style={{ padding: "1rem" }}>
-                                {
                                     <button
                                         onClick={() => handleAttack(player._id)}
                                         className={`leaderboard-button ${
@@ -84,7 +83,7 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
                                     >
                                         Attack
                                     </button>
-                                }
+
                             </td>
                         </tr>
                     )

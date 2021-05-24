@@ -1,7 +1,8 @@
 export interface Auth {
   token: string | null;
   isAdmin: boolean;
-  isStarted: boolean;
+  isStarted: boolean | null;
+  isEnded: boolean | null;
   id: string;
   username: string
   authAlertMessage? :string | null
@@ -13,6 +14,7 @@ export enum AuthActionTypes {
   LOGOUT = "LOGOUT",
   GET_TOKEN = "GET_TOKEN",
   GET_AUTH = "GET_AUTH",
+  NOT_STARTED = "NOT_STARTED",
   SET_MESSAGE = "SET_MESSAGE",
   CLEAR_MESSAGE = "CLEAR_MESSAGE"
 }
@@ -28,7 +30,8 @@ export const authReducer = (state: Auth, action: AuthAction) => {
       localStorage.setItem("iecseOrderOfChaosUser", action.payload.token);
       return {
         ...state, 
-        token : action.payload.token
+        token : action.payload.token,
+        isStarted: action.payload.isStarted
       };
     case "LOGOUT":
       localStorage.removeItem("iecseOrderOfChaosUser");
@@ -51,6 +54,7 @@ export const authReducer = (state: Auth, action: AuthAction) => {
         ...state,
         isAdmin: action.payload.isAdmin,
         isStarted: action.payload.isStarted,
+        isEnded: action.payload.isEnded,
         id: action.payload.id,
         username: action.payload.username
       };
@@ -65,6 +69,11 @@ export const authReducer = (state: Auth, action: AuthAction) => {
         ...state,
         authAlertMessage: null,
         messageType: null
+      }
+    case "NOT_STARTED":
+      return{
+        ...state, 
+        isStarted: false
       }
     default:
       return state;

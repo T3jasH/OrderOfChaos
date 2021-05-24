@@ -47,7 +47,9 @@ const getContest = async (req, res) => {
 
         let resp = {
             questions: quesUser,
-            user : user
+            user : user,
+            isStarted : process.env.isRunning == 1 ? true : false,
+            isEnded: process.env.isEnded == 1 ? true : false 
         };
         // console.log(resp);
         res.send({

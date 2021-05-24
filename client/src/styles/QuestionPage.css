@@ -127,16 +127,22 @@ pre {
     font-weight: 600;
 }
 
-@media screen and (max-width: 1050px) {
-    .question-container {
-        display: none;
-    }
+.disable-button {
+    color: #9c9d8e;
+    cursor: not-allowed;
+    border-color: #9c9d8e;
 }
 
 .question-container h2 button i {
     color: #6d30ed !important;
     font-size: inherit;
     font-weight: bold;
+}
+
+@media screen and (max-width: 1050px) {
+    .question-container {
+        display: none;
+    }
 }
 
 .question-container h2 button {

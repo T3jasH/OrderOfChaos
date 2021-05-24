@@ -6,6 +6,6 @@ module.exports = function (req, res, next) {
     }
     else
     {
-        res.status(400).json({success:false,msg:"Contest is not up and running"});
+        res.status(400).json({success:false,msg:"Contest is not up and running", isStarted : false});
     }    
 };

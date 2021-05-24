@@ -1,9 +1,13 @@
 import React from "react"
+import { useContext } from "react"
 import { useHistory } from "react-router"
+import { AuthContext } from "../context/AuthContext"
+import {AuthActionTypes} from "../context/AuthReducer"
 import "../styles/Rules.css"
 
 const RulesPage : React.FC = ( ) => {
     const history = useHistory()
+    const auth = useContext(AuthContext)
 
     return <div className="rules">
         <div className="rules-container">
@@ -38,9 +42,19 @@ const RulesPage : React.FC = ( ) => {
             </ol>   
             <button
             onClick={() => history.goBack()}
+            className="back-btn"
             >
             {`<Back`}    
             </button> 
+            <button
+                className="logout-btn"
+                onClick={(e) => {
+                    auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: [] })
+                    history.push("/login")
+                }}
+            >
+                Logout
+            </button>
         </div>
     </div>
 }
