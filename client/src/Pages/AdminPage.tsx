@@ -7,6 +7,11 @@ import { getUser } from "../utils"
 
 const AdminPage: React.FC = () => {
     const [statement, handleStatement] = useState<string>("")
+    const [inpFormat, handleInpFormat] = useState<string>("")
+    const [outFormat, handleOutFormat] = useState<string>("")
+    const [samInput, handleSamInput] = useState<string>("")
+    const [samOutput, handleSamOutput] = useState<string>("")
+    const [constraints, handleconstraints] = useState<string>("")
     const [name, handleName] = useState<string>("")
     const [tcInput, handleTcInput] = useState<string>("")
     const [tcOutput, handleTcOuput] = useState<string>("")
@@ -45,11 +50,11 @@ const AdminPage: React.FC = () => {
                     name: name,
                     tags: "",
                     statement: statement,
-                    constraints: " ",
-                    inpFormat: "  ",
-                    outFormat: "  ",
-                    samInput: " ",
-                    samOutput: " ",
+                    constraints: constraints,
+                    inpFormat: inpFormat,
+                    outFormat: outFormat,
+                    samInput: samInput,
+                    samOutput: samOutput,
                     testcase: tcInput,
                     answer: tcOutput,
                     difficulty: difficulty,
@@ -75,12 +80,12 @@ const AdminPage: React.FC = () => {
                     } else if (data.errors) {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: data.errors[0], type: "success" },
+                            payload: { msg: data.errors[0], type: "fail" },
                         })
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
-                            payload: { msg: "Upload failed", type: "success" },
+                            payload: { msg: "Upload failed", type: "fail" },
                         })
                     }
                     setTimeout(() => {
@@ -115,56 +120,95 @@ const AdminPage: React.FC = () => {
 
     return (
         <div className="admin">
-            <h3>Name</h3>
-            <textarea
-                className="short"
-                name="name"
-                id="name"
-                onChange={(e) => handleName(e.target.value)}
-            />
-            <h3>Question Id</h3>
-            <textarea
-                className="short"
-                name="quesId"
-                id="quesId"
-                onChange={(e) =>
-                    handleQuesId((e.target.value as unknown) as number)
-                }
-            />
-            <h3>Difficulty</h3>
-            <textarea
-                className="short"
-                name="penalty"
-                id="penalty"
-                onChange={(e) =>
-                    handleDifficulty((e.target.value as unknown) as number)
-                }
-            />
-            <h3>Statement</h3>
-            <textarea
-                className="long"
-                name="statement"
-                id="statement"
-                onChange={(e) => handleStatement(e.target.value)}
-            />
-            <h3>Testcase Input</h3>
-            <textarea
-                className="long"
-                name="tc-input"
-                id="tc-input"
-                onChange={(e) => handleTcInput(e.target.value)}
-            />
-            <h3>Testcase Output</h3>
-            <textarea
-                className="long"
-                name="tc-output"
-                id="tc-output"
-                onChange={(e) => handleTcOuput(e.target.value)}
-            />
-            <br />
-            <button onClick={handleSubmit} className="admin-submit">
-                <h3>Submit</h3>
-            </button>
+            <div className="container">
+                <h1 className="heading">POST QUESTION</h1>
+                <label>Name</label>
+                <textarea
+                    className="short"
+                    name="name"
+                    id="name"
+                    onChange={(e) => handleName(e.target.value)}
+                />
+                <label>Question Id</label>
+                <textarea
+                    className="short"
+                    name="quesId"
+                    id="quesId"
+                    onChange={(e) =>
+                        handleQuesId((e.target.value as unknown) as number)
+                    }
+                />
+                <label>Difficulty</label>
+                <textarea
+                    className="short"
+                    name="penalty"
+                    id="penalty"
+                    onChange={(e) =>
+                        handleDifficulty((e.target.value as unknown) as number)
+                    }
+                />
+                <label>Statement</label>
+                <textarea
+                    className="long"
+                    name="statement"
+                    id="statement"
+                    onChange={(e) => handleStatement(e.target.value)}
+                />
+                <label>Constraints</label>
+                <textarea
+                    className="long"
+                    name="constraints"
+                    id="constraints"
+                    onChange={(e) => handleconstraints(e.target.value)}
+                />
+                <label>Input Format</label>
+                <textarea
+                    className="long"
+                    name="inpFormat"
+                    id="inpFormat"
+                    onChange={(e) => handleInpFormat(e.target.value)}
+                />
+                <label>Output Format</label>
+                <textarea
+                    className="long"
+                    name="outFormat"
+                    id="outFormat"
+                    onChange={(e) => handleOutFormat(e.target.value)}
+                />
+                <label>Sample Input</label>
+                <textarea
+                    className="long"
+                    name="samInput"
+                    id="samIntput"
+                    onChange={(e) => handleSamInput(e.target.value)}
+                />
+                <label>Sample Output</label>
+                <textarea
+                    className="long"
+                    name="samOutput"
+                    id="samOutput"
+                    onChange={(e) => handleSamOutput(e.target.value)}
+                />
+
+                <label>Testcase Input</label>
+                <textarea
+                    className="long"
+                    name="tc-input"
+                    id="tc-input"
+                    onChange={(e) => handleTcInput(e.target.value)}
+                />
+                <label>Testcase Output</label>
+                <textarea
+                    className="long"
+                    name="tc-output"
+                    id="tc-output"
+                    onChange={(e) => handleTcOuput(e.target.value)}
+                />
+                <br />
+                <button onClick={handleSubmit} className="admin-submit">
+                    <label>SUBMIT</label>
+                </button>
+            </div>
         </div>
     )
 }

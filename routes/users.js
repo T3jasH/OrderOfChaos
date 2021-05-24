@@ -82,7 +82,7 @@ router.post(
             const resetUrl = `${req.protocol}://localhost:3000/confirmation/${user.verifyToken}`;
             try {
                 await sendEmail(resp, user.email,user.name,resetUrl);
-                res.status(200).json({ success: true, msg: 'Email Sent.' });
+                res.status(200).json({ success: true, msg: 'Email sent for account verification.' });
             } catch (err) {
                 console.log(err);
                 user.verifyToken = undefined;
@@ -139,7 +139,7 @@ router.post('/resendEmail', async (req, res, next) => {
     if (!user) {
         return res.status(400).json({
             success: false,
-            msg: 'Unable to find a user with that email.',
+            msg: 'User is not registered.',
         });
     }
 
@@ -160,7 +160,7 @@ router.post('/resendEmail', async (req, res, next) => {
     const msg = `Hello Participant \n\n Please verify your account by clicking the link: \n ${resetUrl} \n\nThank You!\n`;
     try {
         await sendEmail(resp, user.email, user.name, resetUrl);
-        res.status(200).json({ success: true, msg: 'Email sent.' });
+        res.status(200).json({ success: true, msg: 'Email sent for account verification.' });
     } catch (err) {
         console.log(err);
         user.verifyToken = undefined;
@@ -183,7 +183,7 @@ router.post('/forgotpassword', async (req, res, next) => {
         if (!user) {
             return res.status(404).json({
                 success: false,
-                msg: 'There is no user with that email.',
+                msg: 'User is not registered.',
             });
         }
 

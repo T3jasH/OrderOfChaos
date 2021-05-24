@@ -37,9 +37,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
     const contextPlayer = useContext(PlayerContext)
     const history = useHistory()
     const [tabState, setTabState] = useState<string>(currentPage)
-    const [attackersP, setAttackersP] = useState<
-        Iattacker[] | undefined | null
-    >(undefined)
+    const [attackersP, setAttackersP] = useState<Iattacker[] | null>(null)
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
         IleaderboardPlayer[]
     >()

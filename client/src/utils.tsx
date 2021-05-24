@@ -180,7 +180,7 @@ export const sortAttackers = (
         })
         att = newAtt
     }
-    return att ? att : null
+    return att && att.length ? att : null
 }
 
 export const SendAlert: React.FC = () => {

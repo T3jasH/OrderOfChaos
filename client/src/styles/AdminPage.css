@@ -9,7 +9,85 @@
     scrollbar-color: #6d30ed #090321;
 }
 
-textarea {
+.admin .heading {
+    margin-top: 0;
+    font-size: 5vh;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.admin .container {
+    display: block;
+    margin: 0 auto;
+    width: 1250px;
+    padding-bottom: 130px;
+    /* min-height: 100%; */
+}
+
+@media (max-width: 1400px) {
+    .admin .container {
+        width: 1150px;
+    }
+}
+@media (max-width: 1300px) {
+    .admin .container {
+        width: 1050px;
+    }
+}
+@media (max-width: 1200px) {
+    .admin .container {
+        width: 950px;
+    }
+}
+
+.admin .container a{
+    text-decoration: none;
+    color: white;
+    font-size: 2.8vh;
+    font-weight: normal;
+}
+
+.admin .container label{
+    display: block;
+    font-size: 2.5vh;
+}
+
+.admin .container input,.admin .container textarea{
+    width: 100%;
+    font-size: 2vh;
+    border: 5px solid #8060ce;
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+}
+
+.admin .container textarea{
+    resize: none;
+    height: 150px;
+}
+
+.admin .container textarea:focus,.admin .container input:focus{
+    outline: none;
+}
+
+.admin button{
+    border: 5px solid #8060ce;
+    border-radius: 8px;
+    padding: 10px 40px;
+    margin: 0 auto;
+    display: block;
+}
+
+
+
+
+
+/* textarea {
     resize: none;
     margin-left: 3vw;
     border: 2px solid black;
@@ -49,4 +127,4 @@ textarea {
 .admin-error {
     position: relative;
     left: 45vw;
-}
+} */

@@ -74,16 +74,21 @@ const LoginPage: React.FC = () => {
                 },
             })
             const data = await response.json()
+            let msgType ="fail";
+            if(data.success)
+            {
+                msgType='success'
+            }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: data.msg, type: "success" },
+                payload: { msg: data.msg, type: msgType },
             })
             setTimeout(() => {
                 auth.dispatch({
-                    type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: null },
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
                 })
-            }, 3000)
+            }, 3500)
         } else {
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
@@ -92,10 +97,15 @@ const LoginPage: React.FC = () => {
                     "Content-type": "application/json",
                 },
             })
-            const data = await response.json()
+            const data = await response.json();
+            let msgType ="fail";
+            if(data.success)
+            {
+                msgType='success'
+            }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: data.msg, type: "success" },
+                payload: { msg: data.msg, type: msgType },
             })
             setTimeout(() => {
                 auth.dispatch({

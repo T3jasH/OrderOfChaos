@@ -107,8 +107,13 @@ pre {
     width: 92%;
     height: 20rem;
     border: none;
+    resize: none;
 }
 
+.answer-textarea:focus {
+    outline: none;
+    border: none;
+}
 .answer-button {
     position: relative;
     margin-top: 1rem;

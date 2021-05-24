@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { PlayerContext } from "../context/PlayerContext"
 import { PlayerActionTypes } from "../context/PlayerReducer"
@@ -6,20 +6,20 @@ import { Iattacker } from "../Pages/LeaderboardPage"
 import { getAttackersCount } from "../utils"
 
 interface props {
-    attackersP: Iattacker[] | null | undefined
+    attackersP: Iattacker[] | null 
     handleAttack: any
 }
 
 const AttackersTable = ({ attackersP, handleAttack }: props) => {
-    const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
-        undefined
-    )
+    // const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
+    //     undefined
+    // )
     const auth = useContext(AuthContext)
     const playerContext = useContext(PlayerContext)
 
-    useEffect(() => {
-        if (attackersP) setAttackers(attackersP)
-    }, [attackersP])
+    // useEffect(() => {
+    //     if (attackersP) setAttackers(attackersP)
+    // }, [attackersP])
 
     //Set all attacks as seen
 
@@ -67,15 +67,17 @@ const AttackersTable = ({ attackersP, handleAttack }: props) => {
     }
 
     // LOADING ANIMATION NEEDED
-    if (attackers === null) {
-        return (
-            <div>
-                <h2 id="no-attacks">There have been no attacks on you</h2>
-            </div>
-        )
+    if(attackersP === null){
+        return <div>
+                <h2 id="no-attacks" >There have been no attacks on you</h2>
+                </div>
     }
 
-    return attackers !== undefined && attackers?.length !== 0 ? (
+    if(attackersP === undefined){
+        return <div/>
+    }
+
+    return true ? (
         <table className="attackers-table">
             <thead>
                 <tr className="table-heading" style={{ color: "purple" }}>
@@ -90,7 +92,7 @@ const AttackersTable = ({ attackersP, handleAttack }: props) => {
                 </tr>
             </thead>
             <tbody>
-                {attackers?.map((attacker, idx) => {
+                {attackersP?.map((attacker, idx) => {
                     return (
                         <tr key={attacker._id}>
                             <td>{attacker.rank}</td>
