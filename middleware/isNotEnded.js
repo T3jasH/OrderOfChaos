@@ -6,6 +6,6 @@ module.exports = function (req, res, next) {
     }
     else
     {
-        res.status(400).json({success:false,msg:"Contest has ended", isEnded: true});
+        res.status(400).json({success:false,msg:"Contest has ended.", isEnded: true});
     }    
 };

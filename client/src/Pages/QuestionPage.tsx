@@ -60,8 +60,7 @@ const QuestionPage = () => {
     })
 
     useEffect(() => {
-
-        if(auth.state.isStarted === false){
+        if (auth.state.isStarted === false) {
             setLoading(false)
             return
         }
@@ -83,8 +82,7 @@ const QuestionPage = () => {
                             isSolved: data.data.isSolved,
                         })
                         setAttemptState(data.data.attempts)
-                    }
-                    else {
+                    } else {
                         setLocked(true)
                     }
                 })
@@ -105,36 +103,40 @@ const QuestionPage = () => {
 
     useEffect(() => {
         if (questionData?.isSolved) {
-            setAttemptsStatus("Question has been solved")
+            setAttemptsStatus("Question has already been solved.")
             return
         }
-        if (questionData?.difficulty && attemptsState) {
+        if (questionData?.difficulty && attemptsState !== undefined) {
             if (questionData?.difficulty - attemptsState > 0) {
                 if (player.state.attacksLeft === 3) {
-                    setAttemptsStatus("You have 3 attacks already")
+                    setAttemptsStatus("You already have 3 attacks.")
                 } else {
                     setAttemptsStatus(
-                        `Attempts left to get an attack: ${
-                            questionData?.difficulty - attemptsState
-                        }`
+                        ` ${questionData?.difficulty - attemptsState} attempts left to get an attack.`
                     )
                 }
             } else {
-                setAttemptsStatus("Attempts left to get an attack: 0")
+                setAttemptsStatus(`No more attempts left to get an attack.`)
             }
         }
         // eslint-disable-next-line
-    }, [attemptsState])
+    }, [attemptsState, questionData?.difficulty])
 
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
-        if(auth.state.isEnded){
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Contest has ended", type : "fail"}})
-                setTimeout(() => {
-                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload: {}})
-                }, 3000)
-            return;
+        if (auth.state.isEnded) {
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Contest has ended", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
         }
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
@@ -183,10 +185,10 @@ const QuestionPage = () => {
     if (locked) {
         return <Redirect to="/" />
     }
-   
+
     if (loading) return <Loading />
 
-    if(auth.state.isStarted === false){
+    if (auth.state.isStarted === false) {
         return <Redirect to="/rules" />
     }
 
@@ -305,11 +307,7 @@ const QuestionPage = () => {
                 <div className="answer-container">
                     <h2 style={{ marginBottom: "0.5rem" }}>Answer</h2>
                     <div className="answer-info">
-                        <div
-                            id="attempts-left"
-                        >
-                            {attemptsStatus}
-                        </div>
+                        <div id="attempts-left">{attemptsStatus}</div>
                     </div>
                     <textarea
                         className="answer-textarea"
@@ -321,7 +319,9 @@ const QuestionPage = () => {
                         onClick={() => {
                             handleAnswerSubmit()
                         }}
-                        className={`answer-button ${auth.state.isEnded? "disable-button" : ""}`}
+                        className={`answer-button ${
+                            auth.state.isEnded ? "disable-button" : ""
+                        }`}
                     >
                         Submit
                     </button>
@@ -329,7 +329,7 @@ const QuestionPage = () => {
             </div>
         </div>
     )
-} 
+}
 export default QuestionPage
 
 // eslint-disable-next-line

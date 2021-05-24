@@ -30,8 +30,9 @@
 
 .rules-container > .logout-btn {
     position: absolute;
-    right: 0.5rem;
+    right: 1rem;
     padding: 5px 0px;
+    font-weight: 500;
 }
 
 .rules-container > .back-btn {
