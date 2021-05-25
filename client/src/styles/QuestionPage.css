@@ -20,7 +20,7 @@ html {
     left: 10vw;
     padding-right: 10vw !important;
     box-sizing: border-box;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - 8.5rem);
     overflow: auto;
     scrollbar-color: #6d30ed #090321;
     line-height: 1.8rem;
@@ -41,6 +41,11 @@ html {
 
 .question-container button {
     font-size: 1.3rem;
+}
+
+.attack-warning {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
 }
 
 .answer-container,
@@ -66,7 +71,7 @@ pre {
 
 .testcase-container {
     width: 45vw;
-    height: 12rem;
+    max-height: 12rem;
     overflow-y: auto;
     overflow-x: hidden;
     background: rgba(196, 196, 196, 0.1);
@@ -107,8 +112,13 @@ pre {
     width: 92%;
     height: 20rem;
     border: none;
+    resize: none;
 }
 
+.answer-textarea:focus {
+    outline: none;
+    border: none;
+}
 .answer-button {
     position: relative;
     margin-top: 1rem;

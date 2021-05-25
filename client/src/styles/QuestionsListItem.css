@@ -1,8 +1,8 @@
 .question {
     height: 4.55rem;
-    width : 80vw;
+    width: 80vw;
     position: relative;
-    border: 3px solid #6D30ED;
+    border: 3px solid #6d30ed;
     box-sizing: border-box;
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.25));
     border-radius: 30px 0px;
@@ -11,10 +11,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    --lockRight : 1.5vw;
-    --lockWidth : 10rem;
+    --lockRight: 1.5vw;
+    --lockWidth: 10rem;
     --pointsRight: 2vw;
-    --solvedRight: 10vw; 
+    --solvedRight: 10vw;
 }
 
 .question > * {
@@ -22,17 +22,17 @@
     font-size: 1.3rem;
 }
 
-.question > .index{
+.question > .index {
     left: 2vw;
     font-weight: 700;
 }
 
-.question > .question-name{
+.question > .question-name {
     left: 5vw;
     font-weight: 500;
 }
 
-.question > .question-lock{
+.question > .question-lock {
     right: var(--lockRight);
     width: var(--lockWidth);
     font-size: 1.2rem;
@@ -42,36 +42,38 @@
     border-radius: 10px 0px;
     font-weight: 500;
     padding: 0.6rem 0.2rem;
-}
+    transition: all 0.3s ease;}
 
-.question > .question-points{
-    right: calc( var(--lockRight) + var(--lockWidth) + var(--pointsRight));
+.question > .question-points {
+    right: calc(var(--lockRight) + var(--lockWidth) + var(--pointsRight));
     font-weight: 700;
 }
 
-.question > .question-solved{
-    right: calc(var(--lockRight) + var(--lockWidth) + var(--pointsRight) + var(--solvedRight));
-    color: #9C9D8E ;
+.question > .question-solved {
+    right: calc(
+        var(--lockRight) + var(--lockWidth) + var(--pointsRight) +
+            var(--solvedRight)
+    );
+    color: #9c9d8e;
     font-weight: 500;
 }
 
-
-@media screen  and (max-width: 1000px) {
-    .question > *{
-        font-size: 1.2rem;;
+@media screen and (max-width: 1000px) {
+    .question > * {
+        font-size: 1.2rem;
     }
     .question > .question-lock {
         font-size: 1rem;
     }
 }
 
-@media screen and (max-width : 950px) {
-    .question{
-      width: 85vw;
-      --solvedRight: 10vw;
+@media screen and (max-width: 950px) {
+    .question {
+        width: 85vw;
+        --solvedRight: 10vw;
     }
 }
 
-.fa-user{
+.fa-user {
     color: inherit !important;
 }

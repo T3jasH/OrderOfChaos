@@ -13,11 +13,11 @@
     background: inherit;
     overflow: hidden;
 }
-   
+
 .footer:before {
     content: "";
     position: absolute;
-    background  : inherit;
+    background: inherit;
     z-index: -1;
     top: 0;
     left: 0;
@@ -58,12 +58,12 @@
     font-weight: 600;
 }
 
-#new-attacks-counter{
+#new-attacks-counter {
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 0.75rem;
     font-weight: 600;
-    background-color: #3F1A81;
+    background-color: #3f1a81;
     cursor: pointer;
     position: absolute;
     right: -0.2rem;
@@ -84,19 +84,19 @@
     -webkit-animation: glow 1s ease-in-out infinite alternate;
     -moz-animation: glow 1s ease-in-out infinite alternate;
     animation: glow 1s ease-in-out infinite alternate;
-  }
-  
+}
+
 @keyframes glow {
     from {
-      box-shadow: 0 0 10px #fff, 0 0 12px #fff, 0 0 15px #fff;
+        box-shadow: 0 0 10px #fff, 0 0 12px #fff, 0 0 15px #fff;
     }
     to {
-      box-shadow: 0 0 10px #fff, 0 0 5px #fff, 0 0 0px #fff;
+        box-shadow: 0 0 10px #fff, 0 0 5px #fff, 0 0 0px #fff;
     }
-  }
+}
 
 @media screen and (max-width: 1300px) {
-    .info-container{
+    .info-container {
         margin-left: 6vw;
     }
 }
@@ -108,7 +108,7 @@
 }
 
 @media screen and (max-width: 720px) {
-    .footer{
-      display: none;
+    .footer {
+        display: none;
     }
-  }
+}

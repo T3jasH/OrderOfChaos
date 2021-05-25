@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { PlayerContext } from "../context/PlayerContext"
 import { Redirect, useHistory, useParams } from "react-router-dom"
-import { getUser, Loading } from "../utils"
+import { getUser, getLeaderboard, Loading } from "../utils"
 import CopyToClipboard from "react-copy-to-clipboard"
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
@@ -17,6 +17,8 @@ import Navbar from "../components/Navbar"
 // import { getLeaderboard } from "../utils"
 
 import QuestionInfo from "../components/QuestionInfo"
+import PlayerInfoFooter from "../components/PlayerInfoFooter"
+import { PlayerActionTypes } from "../context/PlayerReducer"
 
 export interface IQuestion {
     constraints: string
@@ -35,7 +37,6 @@ export interface IQuestion {
     difficulty: number
     solved: number
     _id: string
-    attempts: number
     isSolved: boolean
 }
 
@@ -45,9 +46,9 @@ const QuestionPage = () => {
 
     const [userAnswer, setUserAnswer] = useState<string>("")
     const [questionData, setQuestionData] = useState<IQuestion | null>(null)
-    const [attemptsState, setAttemptState] = useState<number | undefined>(0)
-    const [attemptsStatus, setAttemptsStatus] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(true)
+    const [attemptsToGetAttack, setAttemptsData] = useState<number>(0)
+    const [rank, setRank] = useState<number | null>(null)
     const [locked, setLocked] = useState<boolean>(false)
 
     const history = useHistory()
@@ -55,18 +56,12 @@ const QuestionPage = () => {
     useEffect(() => {
         if (auth.state.token === null) {
             auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: [] })
-            getUser(auth, player)
         }
     })
 
     useEffect(() => {
-
-        if(auth.state.isStarted === false){
-            setLoading(false)
-            return
-        }
-
-        if (auth.state.token) {
+        if (auth.state.token !== "x" && auth.state.token !== null) {
+            getUser(auth, player)
             fetch(`/api/question/${id}`, {
                 method: "GET",
                 headers: {
@@ -79,21 +74,33 @@ const QuestionPage = () => {
                     if (data.success) {
                         setQuestionData({
                             ...data.data.question,
-                            attempts: data.data.attempts,
                             isSolved: data.data.isSolved,
                         })
-                        setAttemptState(data.data.attempts)
-                    }
-                    else {
+                        setAttemptsData(
+                            data.data.isSolved ? 0 :
+                            data.data.attempts >= data.data.question.difficulty ?
+                            0 : data.data.question.difficulty - data.data.attempts   
+                        )
+                    } else {
                         setLocked(true)
                     }
                 })
                 .catch((e) => {
                     console.log(e)
-
-                    console.log("Am i getting an error")
                 })
         }
+        // eslint-disable-next-line
+    }, [auth.state.token])
+
+    useEffect(() => {
+        if (auth.state.isStarted === false) {
+            setLoading(false)
+            return
+        }
+        if (auth?.state?.id?.length && auth.state.token !== "x" && rank === null) {
+            updateRank()
+        }
+
         // eslint-disable-next-line
     }, [auth.state])
 
@@ -103,38 +110,21 @@ const QuestionPage = () => {
         }
     }, [questionData])
 
-    useEffect(() => {
-        if (questionData?.isSolved) {
-            setAttemptsStatus("Question has been solved")
-            return
-        }
-        if (questionData?.difficulty && attemptsState !== undefined) {
-            if (questionData?.difficulty - attemptsState > 0) {
-                if (player.state.attacksLeft === 3) {
-                    setAttemptsStatus("You have 3 attacks already")
-                } else {
-                    setAttemptsStatus(
-                        `Attempts left to get an attack: ${
-                            questionData?.difficulty - attemptsState
-                        }`
-                    )
-                }
-            } else {
-                setAttemptsStatus("Attempts left to get an attack: 0")
-            }
-        }
-        // eslint-disable-next-line
-    }, [attemptsState, questionData?.difficulty])
-
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
-        if(auth.state.isEnded){
-            auth.dispatch({type : AuthActionTypes.SET_MESSAGE, payload : {msg : "Contest has ended", type : "fail"}})
-                setTimeout(() => {
-                    auth.dispatch({type : AuthActionTypes.CLEAR_MESSAGE, payload: {}})
-                }, 3000)
-            return;
+        if (auth.state.isEnded) {
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Contest has ended", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
         }
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
@@ -150,29 +140,34 @@ const QuestionPage = () => {
                 .catch((err) => console.log(err))
                 .then((data) => {
                     if (!data.success) {
-                        setAttemptState(
-                            attemptsState !== undefined
-                                ? attemptsState + 1
-                                : undefined
+                        setAttemptsData(
+                            attemptsToGetAttack - 1 > 0 ? attemptsToGetAttack - 1 : 0
                         )
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "fail" },
                         })
+                        if(questionData)
+                        player.dispatch({type: PlayerActionTypes.UPDATE_SCORE, payload: {score: player.state.score - questionData?.penalty}})
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "success" },
                         })
-                        setAttemptsStatus("Question has been solved")
+                        if(questionData)
+                        player.dispatch({type: PlayerActionTypes.UPDATE_SCORE, payload: {score: player.state.score + questionData.points}})
+                        if(data.attackAdded === true){
+                            player.dispatch({type: PlayerActionTypes.UPDATE_ATTACKS_LEFT, payload: {attacksLeft: player.state.attacksLeft + 1}})
+                        }
+                        setAttemptsData(0)
                     }
-
                     setTimeout(() => {
                         auth.dispatch({
                             type: AuthActionTypes.CLEAR_MESSAGE,
                             payload: {},
                         })
                     }, 3000)
+                    updateRank()
                 })
                 .catch((e) => {
                     console.log(e)
@@ -180,13 +175,24 @@ const QuestionPage = () => {
         }
     }
 
+    const updateRank = () => {
+        getLeaderboard(auth).then((data) => {
+            // console.log(data.attackers)
+            setRank(
+                data.ranks.findIndex(
+                    (user: any) => user._id === auth.state.id
+                ) + 1
+            )
+        })
+    }
+
     if (locked) {
         return <Redirect to="/" />
     }
-   
+
     if (loading) return <Loading />
 
-    if(auth.state.isStarted === false){
+    if (auth.state.isStarted === false) {
         return <Redirect to="/rules" />
     }
 
@@ -196,12 +202,13 @@ const QuestionPage = () => {
                 Switch to PC for a better experience
             </h3>
             <Navbar removeButton={false} />
+            <PlayerInfoFooter active={false} rank={rank}/>
             <div className="question-container" style={{ userSelect: "none" }}>
                 <button onClick={() => history.push("/")}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
                     questionData={questionData}
-                    attacksAvailable={player.state.attacksLeft}
+                    attemptsToGetAttack={attemptsToGetAttack}
                 />
                 <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}
@@ -304,13 +311,16 @@ const QuestionPage = () => {
 
                 <div className="answer-container">
                     <h2 style={{ marginBottom: "0.5rem" }}>Answer</h2>
-                    <div className="answer-info">
-                        <div
-                            id="attempts-left"
+                    {
+                        player.state.attacksLeft === 3 && attemptsToGetAttack !== 0 ?
+                        <p
+                        className="attack-warning"
                         >
-                            {attemptsStatus}
-                        </div>
-                    </div>
+                        You have 3 attacks, you won't get an attack on correct submission
+                        </p>
+                        :
+                        ""
+                    }
                     <textarea
                         className="answer-textarea"
                         onChange={(e) => {
@@ -321,7 +331,9 @@ const QuestionPage = () => {
                         onClick={() => {
                             handleAnswerSubmit()
                         }}
-                        className={`answer-button ${auth.state.isEnded? "disable-button" : ""}`}
+                        className={`answer-button ${
+                            auth.state.isEnded ? "disable-button" : ""
+                        }`}
                     >
                         Submit
                     </button>
@@ -329,7 +341,7 @@ const QuestionPage = () => {
             </div>
         </div>
     )
-} 
+}
 export default QuestionPage
 
 // eslint-disable-next-line

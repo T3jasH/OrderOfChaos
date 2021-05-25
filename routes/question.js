@@ -90,6 +90,7 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                         res.json({
                             success: true,
                             msg: `Question solved and Attack added`,
+                            attackAdded: true,
                         });
                     } else {
                         await User.updateOne(
@@ -110,6 +111,7 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                         res.json({
                             success: true,
                             msg: `Question Solved.`,
+                            attackAdded: false
                         });
                     }
                 } else {
@@ -131,6 +133,7 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                     res.json({
                         success: true,
                         msg: 'Question Solved. Maximum attack reached.',
+                        attackAdded: false
                     });
                 }
                 await Question.updateOne(

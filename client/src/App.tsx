@@ -14,22 +14,18 @@ import { SendAlert } from "./utils"
 const App: React.FC = () => {
     return (
         <div className="code-event">
-            <SendAlert/>
+            <SendAlert />
             <Switch>
                 <Route
                     path="/leaderboard"
                     component={() => (
-                        <LeaderboardPage
-                        currentPage="leaderboard"
-                        />
+                        <LeaderboardPage currentPage="leaderboard" />
                     )}
                 />
                 <Route
                     path="/attackers"
                     component={() => (
-                        <LeaderboardPage
-                        currentPage="attackers"
-                        />
+                        <LeaderboardPage currentPage="attackers" />
                     )}
                 />
                 <Route path="/register" component={() => <RegisterPage />} />

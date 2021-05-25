@@ -38,26 +38,25 @@ const LoginPage: React.FC = () => {
             if (data.success) {
                 auth.dispatch({
                     type: AuthActionTypes.LOGIN,
-                    payload: { 
-                        token: data.data.token, 
-                        isStarted: data.data.isStarted
+                    payload: {
+                        token: data.data.token,
+                        isStarted: data.data.isStarted,
                     },
                 })
-                if(data.data.isStarted){
+                if (data.data.isStarted) {
                     history.push("/")
-                }
-                else{
+                } else {
                     history.push("/rules")
                 }
             } else if (data.errors) {
                 auth.dispatch({
                     type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: data.errors[0].msg, type : "fail" },
+                    payload: { msg: data.errors[0].msg, type: "fail" },
                 })
             } else {
                 auth.dispatch({
                     type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: data.msg, type : "fail" },
+                    payload: { msg: data.msg, type: "fail" },
                 })
             }
             setTimeout(() => {
@@ -75,16 +74,21 @@ const LoginPage: React.FC = () => {
                 },
             })
             const data = await response.json()
+            let msgType ="fail";
+            if(data.success)
+            {
+                msgType='success'
+            }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: data.msg },
+                payload: { msg: data.msg, type: msgType },
             })
             setTimeout(() => {
                 auth.dispatch({
-                    type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: null },
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
                 })
-            }, 3000)
+            }, 3500)
         } else {
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
@@ -93,10 +97,15 @@ const LoginPage: React.FC = () => {
                     "Content-type": "application/json",
                 },
             })
-            const data = await response.json()
+            const data = await response.json();
+            let msgType ="fail";
+            if(data.success)
+            {
+                msgType='success'
+            }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg: data.msg, type : "default" },
+                payload: { msg: data.msg, type: msgType },
             })
             setTimeout(() => {
                 auth.dispatch({
