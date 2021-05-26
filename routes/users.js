@@ -14,7 +14,7 @@ router.post(
     '/',
     [
         check('name', 'Please enter a name.').not().isEmpty(),
-        check('email', 'Please enter a valid email.').isEmail(),
+        check('email', 'Please enter a valid email address.').isEmail(),
         check(
             'password',
             'Please enter a password with 8 or more characters.'

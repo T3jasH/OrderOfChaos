@@ -30,7 +30,7 @@ router.post(
     "/",
     [
         check("email", "Please enter a valid email address.").isEmail(),
-        check("password", "Please enter your password.").isLength({min: 8}),
+        check("password", "Incorrect Password").isLength({min: 8}),
     ],
     async (req, res) => {
         const errors = validationResult(req);
