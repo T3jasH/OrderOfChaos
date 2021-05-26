@@ -198,6 +198,7 @@ router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) =>
                 {
                     $set: {
                         isActive: true,
+                        ipaddress: req.ipInfo.ip
                     },
                 }
             );

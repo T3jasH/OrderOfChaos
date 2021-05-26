@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
     // Get the token fron header
     const token = req.header("x-auth-token");
 
@@ -17,6 +18,16 @@ module.exports = function (req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
+        const user = await User.findById(req.user.id).select("ipaddress");
+        // console.log(user.ipaddress);
+        if(user.ipaddress && user.ipaddress!==req.ipInfo.ip)
+        {
+            // console.log("tushar");
+            return res.status(400).json({
+                success: false,
+                msg: "You can log in from one computer only.",
+            });
+        }else
         next();
     } catch (err) {
         res.status(401).json({

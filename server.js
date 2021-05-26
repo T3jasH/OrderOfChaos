@@ -4,6 +4,7 @@ const fs = require("fs");
 const morgan = require("morgan");
 const path = require("path");
 const connectDB = require("./config/db");
+const expressip = require('express-ip');
 const app = express();
 
 // Load Config
@@ -14,6 +15,7 @@ connectDB();
 
 // Init middleware
 app.use(express.json({ extended: false }));
+app.use(expressip().getIpInfoMiddleware);
 
 app.use(
     morgan("dev", {
