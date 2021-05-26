@@ -72,12 +72,9 @@ const QuestionListItem: React.FC<props> = ({ question, index }) => {
                             type: QuestionActionTypes.SET_UNLOCKED,
                             payload: { id: question.quesId },
                         })
-                        player.dispatch({
-                            type: PlayerActionTypes.UPDATE_SCORE,
-                            payload: {
-                                score: player.state.score - question.unlockCost,
-                            },
-                        })
+                        // for (let i = 0; i < question.unlockCost; i++) {
+                        updateScore(question.unlockCost, true)
+                        // }
                     }
                     auth.dispatch({
                         type: AuthActionTypes.SET_MESSAGE,
@@ -93,6 +90,35 @@ const QuestionListItem: React.FC<props> = ({ question, index }) => {
                         })
                     }, 3000)
                 })
+        }
+    }
+
+    const updateScore = (x: Number, decr: boolean) => {
+        var i = 1,
+            k = player.state.score
+        if (decr) {
+            var interval = setInterval(() => {
+                player.dispatch({
+                    type: PlayerActionTypes.UPDATE_SCORE,
+                    payload: {
+                        score: k - i,
+                    },
+                })
+                i++
+                if (i > x) clearInterval(interval)
+            }, 20)
+        }
+        else{
+            var interval1 = setInterval( () => {
+                player.dispatch({
+                       type: PlayerActionTypes.UPDATE_SCORE,
+                       payload: {
+                           score: k + i,
+                       },
+                   })
+                   i++
+                   if (i > x) clearInterval(interval1   )
+               }, 10)
         }
     }
 

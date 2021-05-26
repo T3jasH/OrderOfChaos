@@ -134,7 +134,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
                 .then((response) => response.json())
                 .catch((err) => console.log(err))
                 .then((data) => {
-                    console.log(data, "ATTACK DATA")
+                    // console.log(data, "ATTACK DATA")
                     if (data.success) {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,

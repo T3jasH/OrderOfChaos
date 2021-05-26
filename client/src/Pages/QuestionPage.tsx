@@ -77,9 +77,13 @@ const QuestionPage = () => {
                             isSolved: data.data.isSolved,
                         })
                         setAttemptsData(
-                            data.data.isSolved ? 0 :
-                            data.data.attempts >= data.data.question.difficulty ?
-                            0 : data.data.question.difficulty - data.data.attempts   
+                            data.data.isSolved
+                                ? 0
+                                : data.data.attempts >=
+                                  data.data.question.difficulty
+                                ? 0
+                                : data.data.question.difficulty -
+                                  data.data.attempts
                         )
                     } else {
                         setLocked(true)
@@ -97,7 +101,11 @@ const QuestionPage = () => {
             setLoading(false)
             return
         }
-        if (auth?.state?.id?.length && auth.state.token !== "x" && rank === null) {
+        if (
+            auth?.state?.id?.length &&
+            auth.state.token !== "x" &&
+            rank === null
+        ) {
             updateRank()
         }
 
@@ -111,6 +119,35 @@ const QuestionPage = () => {
     }, [questionData])
 
     const { id }: any = useParams()
+
+    const updateScore = (x: Number, decr: boolean) => {
+        var i = 1,
+            k = player.state.score
+        if (decr) {
+            var interval = setInterval(() => {
+                player.dispatch({
+                    type: PlayerActionTypes.UPDATE_SCORE,
+                    payload: {
+                        score: k - i,
+                    },
+                })
+                i++
+                if (i > x) clearInterval(interval)
+            }, 20)
+        }
+        else{
+            var interval1 = setInterval( () => {
+                player.dispatch({
+                       type: PlayerActionTypes.UPDATE_SCORE,
+                       payload: {
+                           score: k + i,
+                       },
+                   })
+                   i++
+                   if (i > x) clearInterval(interval1)
+               }, 10)
+        }
+    }
 
     const handleAnswerSubmit = () => {
         if (auth.state.isEnded) {
@@ -141,23 +178,30 @@ const QuestionPage = () => {
                 .then((data) => {
                     if (!data.success) {
                         setAttemptsData(
-                            attemptsToGetAttack - 1 > 0 ? attemptsToGetAttack - 1 : 0
+                            attemptsToGetAttack - 1 > 0
+                                ? attemptsToGetAttack - 1
+                                : 0
                         )
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "fail" },
                         })
-                        if(questionData)
-                        player.dispatch({type: PlayerActionTypes.UPDATE_SCORE, payload: {score: player.state.score - questionData?.penalty}})
+                        if (questionData && data.msg==="Wrong answer.")
+                            updateScore(questionData?.penalty,true);
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "success" },
                         })
-                        if(questionData)
-                        player.dispatch({type: PlayerActionTypes.UPDATE_SCORE, payload: {score: player.state.score + questionData.points}})
-                        if(data.attackAdded === true){
-                            player.dispatch({type: PlayerActionTypes.UPDATE_ATTACKS_LEFT, payload: {attacksLeft: player.state.attacksLeft + 1}})
+                        if (questionData)
+                            updateScore(questionData.points,false);
+                        if (data.attackAdded === true) {
+                            player.dispatch({
+                                type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
+                                payload: {
+                                    attacksLeft: player.state.attacksLeft + 1,
+                                },
+                            })
                         }
                         setAttemptsData(0)
                     }
@@ -202,7 +246,7 @@ const QuestionPage = () => {
                 Switch to PC for a better experience
             </h3>
             <Navbar removeButton={false} />
-            <PlayerInfoFooter active={false} rank={rank}/>
+            <PlayerInfoFooter active={false} rank={rank} />
             <div className="question-container" style={{ userSelect: "none" }}>
                 <button onClick={() => history.push("/")}>{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
@@ -311,16 +355,15 @@ const QuestionPage = () => {
 
                 <div className="answer-container">
                     <h2 style={{ marginBottom: "0.5rem" }}>Answer</h2>
-                    {
-                        player.state.attacksLeft === 3 && attemptsToGetAttack !== 0 ?
-                        <p
-                        className="attack-warning"
-                        >
-                        You have 3 attacks, you won't get an attack on correct submission
+                    {player.state.attacksLeft === 3 &&
+                    attemptsToGetAttack !== 0 ? (
+                        <p className="attack-warning">
+                            You have 3 attacks, you won't get an attack on
+                            correct submission
                         </p>
-                        :
+                    ) : (
                         ""
-                    }
+                    )}
                     <textarea
                         className="answer-textarea"
                         onChange={(e) => {
