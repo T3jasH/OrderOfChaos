@@ -43,11 +43,6 @@ html {
     font-size: 1.3rem;
 }
 
-.attack-warning {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
 .answer-container,
 .test-case-container {
     margin-top: 2rem;

@@ -3,7 +3,7 @@ import { Redirect } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/AdminPage.css"
-import { getUser } from "../utils"
+import { getUser, Loading } from "../utils"
 
 const AdminPage: React.FC = () => {
     const [statement, handleStatement] = useState<string>("")
@@ -98,22 +98,17 @@ const AdminPage: React.FC = () => {
     }
 
     if (loading) {
-        return <div>insert loading animation here</div>
+        return <Loading/>
     }
 
     if (auth.state.token === "x") {
         return <Redirect to="/login" />
     }
-
-    if (!auth.state.isStarted) {
-        return <Redirect to="/rules" />
-    }
-
-    //CHECK ADMIN OR NOT
+    
     if (
         auth.state.token !== null &&
         auth.state.token !== "x" &&
-        !auth.state.isAdmin
+        auth.state.isAdmin === false
     ) {
         return <Redirect to="/" />
     }

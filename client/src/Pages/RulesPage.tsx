@@ -1,4 +1,5 @@
 import React from "react"
+import { useEffect } from "react"
 import { useContext } from "react"
 import { useHistory } from "react-router"
 import { AuthContext } from "../context/AuthContext"
@@ -8,7 +9,11 @@ import "../styles/Rules.css"
 const RulesPage: React.FC = () => {
     const history = useHistory()
     const auth = useContext(AuthContext);
-    // console.log(auth.state.token);
+   
+    useEffect(() => {
+        auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : {}})
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div className="rules">
@@ -17,8 +22,8 @@ const RulesPage: React.FC = () => {
                 <ol className="rules-list">
                     <li>This is an induvidual player contest</li>
                     <li>
-                        Registrations close on (date). Participants can log in
-                        after (date).
+                       The contest will be held on June 9, from 8 PM to 10 PM  IST.
+                       Registration will be open throughout the contest. 
                     </li>
                     <li>
                         Participants are required to save their code for all
@@ -28,12 +33,12 @@ const RulesPage: React.FC = () => {
                     <li>
                         Once the contest starts, participants must make all
                         submissions from the same device. This is to prevent
-                        cheating.
+                        multiple submissions from same account. 
                     </li>
                     <li>
                         Initially you have 200 points, and all questions are
-                        locked. You are to unlock questions using these 200
-                        points.
+                        locked. You are to unlock questions using these
+                        points (i.e, there is no currency of any sorts).
                     </li>
                     <li>
                         There is no limit on attempts on a question, but for
@@ -64,7 +69,7 @@ const RulesPage: React.FC = () => {
                         })
                         history.push("/login")
                     }}
-                    style={auth.state.token? {}:{display:"none"}}
+                    style={auth.state.token !== "x"? {}:{display:"none"}}
                 >
                     Logout
                 </button>

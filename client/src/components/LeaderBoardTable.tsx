@@ -5,13 +5,18 @@ import { IleaderboardPlayer } from "../Pages/LeaderboardPage"
 import { getAttackersCount } from "../utils"
 
 interface props {
-    leaderboardPlayers: IleaderboardPlayer[] | undefined
+    leaderboardPlayers: IleaderboardPlayer[] | undefined | null
     handleAttack: any
 }
 
 const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext).state
+
+    if(leaderboardPlayers === null){
+        return <h2 id="no-attacks">Start solving!</h2>
+    }
+
     return (
         <table className="leaderboard-table">
             <thead>

@@ -29,11 +29,7 @@ const QuestionPage: React.FC = () => {
     }, [auth.state.token])
 
     useEffect(() => {
-        if (auth.state.isStarted === false) {
-            setLoading(false)
-            return
-        }
-        if (auth?.state?.id?.length && auth.state.token !== "x" && rank === null) {
+        if (auth?.state?.id?.length !== 0) {
             getLeaderboard(auth).then((data) => {
                 // console.log(data.attackers)
                 setRank(
@@ -44,12 +40,21 @@ const QuestionPage: React.FC = () => {
             })
         }
         // eslint-disable-next-line
-    }, [auth.state])
+    }, [auth.state.id])
 
     useEffect(() => {
-        if (questions?.state?.length && rank !== null) {
+        if (auth.state.isStarted === false && loading === true) {
+            setLoading(false)
+            return
+        }
+        // eslint-disable-next-line
+    }, [auth.state])
+
+    useEffect(() => { 
+        if (questions?.state?.length && rank !== null && loading === true) {
             setLoading(false)
         }
+        // eslint-disable-next-line
     }, [questions.state, rank])
 
     if (auth.state.token === "x") {
@@ -60,7 +65,7 @@ const QuestionPage: React.FC = () => {
         return <Loading />
     }
 
-    if (auth.state.isStarted === false) {
+    if (auth.state.isStarted === false  && auth.state.isAdmin === false) {
         return <Redirect to="/rules" />
     }
 

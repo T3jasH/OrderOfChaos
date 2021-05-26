@@ -36,13 +36,14 @@
 }
 
 .rules-container > .back-btn {
-    padding: 5px 0px;
+    padding: 5px 0;
 }
 
 .rules-list {
     position: absolute;
     top: 4rem;
     word-spacing: 0.15rem;
+    margin-right: 1.5rem;
 }
 .rules-list > li {
     margin-top: 1rem;

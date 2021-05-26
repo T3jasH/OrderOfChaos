@@ -47,7 +47,8 @@ const QuestionPage = () => {
     const [userAnswer, setUserAnswer] = useState<string>("")
     const [questionData, setQuestionData] = useState<IQuestion | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
-    const [attemptsToGetAttack, setAttemptsData] = useState<number>(0)
+    const [attemptsToGetAttack, setAttemptsData] = useState<number>(-1)
+    const [attemptsStatus, setAttemptsStatus] = useState<string>("")
     const [rank, setRank] = useState<number | null>(null)
     const [locked, setLocked] = useState<boolean>(false)
 
@@ -59,6 +60,9 @@ const QuestionPage = () => {
         }
     })
 
+    // Get user (score, attacks left) 
+    // Get question
+    // Only token needed
     useEffect(() => {
         if (auth.state.token !== "x" && auth.state.token !== null) {
             getUser(auth, player)
@@ -92,22 +96,50 @@ const QuestionPage = () => {
         // eslint-disable-next-line
     }, [auth.state.token])
 
+    //updateRank needs ID of player so check auth.state.id
     useEffect(() => {
-        if (auth.state.isStarted === false) {
+        if (auth?.state?.id?.length !== 0) {
+            updateRank()
+        }
+ 
+        // eslint-disable-next-line
+    }, [auth.state.id])
+
+    useEffect(() => {
+        if (auth.state.isStarted === false && loading === true) {
             setLoading(false)
             return
         }
-        if (auth?.state?.id?.length && auth.state.token !== "x" && rank === null) {
-            updateRank()
-        }
-
         // eslint-disable-next-line
     }, [auth.state])
 
+    // Set message at bottom of page, to let user know if they can get an attack
     useEffect(() => {
-        if (questionData) {
+        if (questionData?.isSolved) {
+            setAttemptsStatus("You have solved this question")
+            return
+        }
+       if(attemptsToGetAttack > 0){
+            if(player.state.attacksLeft === 3){
+                setAttemptsStatus("You have 3 attacks already, you can't get an attack")
+            }
+            else{
+                setAttemptsStatus(`Attempts remaining to get an attack: ${attemptsToGetAttack}`)
+            }
+       }
+       else{
+           setAttemptsStatus("You can't get an attack")
+       }
+       console.log(attemptsToGetAttack)
+        // eslint-disable-next-line
+    }, [attemptsToGetAttack])
+
+
+    useEffect(() => {
+        if (questionData && loading === true)  {
             setLoading(false)
         }
+        // eslint-disable-next-line
     }, [questionData])
 
     const { id }: any = useParams()
@@ -177,7 +209,6 @@ const QuestionPage = () => {
 
     const updateRank = () => {
         getLeaderboard(auth).then((data) => {
-            // console.log(data.attackers)
             setRank(
                 data.ranks.findIndex(
                     (user: any) => user._id === auth.state.id
@@ -190,9 +221,13 @@ const QuestionPage = () => {
         return <Redirect to="/" />
     }
 
+    if(auth.state.token === "x"){
+        return <Redirect to="/login" />
+    }
+
     if (loading) return <Loading />
 
-    if (auth.state.isStarted === false) {
+    if (auth.state.isStarted === false && auth.state.isAdmin === false) {
         return <Redirect to="/rules" />
     }
 
@@ -311,16 +346,9 @@ const QuestionPage = () => {
 
                 <div className="answer-container">
                     <h2 style={{ marginBottom: "0.5rem" }}>Answer</h2>
-                    {
-                        player.state.attacksLeft === 3 && attemptsToGetAttack !== 0 ?
-                        <p
-                        className="attack-warning"
-                        >
-                        You have 3 attacks, you won't get an attack on correct submission
-                        </p>
-                        :
-                        ""
-                    }
+                    <b>
+                        {attemptsStatus}
+                    </b>
                     <textarea
                         className="answer-textarea"
                         onChange={(e) => {

@@ -39,7 +39,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
     const [tabState, setTabState] = useState<string>(currentPage)
     const [attackersP, setAttackersP] = useState<Iattacker[] | null | undefined>(undefined)
     const [leaderboardPlayers, setLeaderboardPlayers] = useState<
-        IleaderboardPlayer[]
+        IleaderboardPlayer[] | null
     >()
     const [rank, setRank] = useState<number | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
@@ -58,14 +58,10 @@ const LeaderboardPage = ({ currentPage }: props) => {
     }, [auth.state.token])
 
     useEffect(() => {
-        if (auth.state.isStarted === false) {
-            setLoading(false)
-            return
-        }
-        if (auth.state.id.length && auth.state.token !== "x") {
+        if (auth.state.id.length !== 0) {
             getLeaderboard(auth).then((data) => {
                 setLeaderboardPlayers(
-                    data.ranks.map((obj: any, idx: any) => {
+                    data.ranks?.map((obj: any, idx: any) => {
                         return {
                             ...obj,
                             attackers: data.attackers[idx],
@@ -80,20 +76,34 @@ const LeaderboardPage = ({ currentPage }: props) => {
             })
         }
         // eslint-disable-next-line
+    }, [auth.state.id])
+
+    useEffect(() => {
+        if (auth.state.isStarted === false && loading === true) {
+            setLoading(false)
+            return
+        }
+        
+        // eslint-disable-next-line
     }, [auth.state])
 
     useEffect(() => {
         if (leaderboardPlayers?.length) {
             setAttackersP(sortAttackers(leaderboardPlayers, auth))
         }
+        else if(leaderboardPlayers === null){
+            setAttackersP(null)
+        }
         // eslint-disable-next-line
     }, [leaderboardPlayers])
 
     useEffect(() => {
-        if (attackersP !== undefined) {
+        if (attackersP !== undefined || leaderboardPlayers === null) {
+            if(loading === true)
             setLoading(false)
         }
-    }, [attackersP])
+        // eslint-disable-next-line
+    }, [attackersP, leaderboardPlayers])
 
     const handleAttack = (id: string) => {
         if (auth.state.isEnded) {
@@ -181,7 +191,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
 
     if (loading) return <Loading />
 
-    if (auth.state.isStarted === false) {
+    if (auth.state.isStarted === false && auth.state.isAdmin === false) {
         return <Redirect to="/rules" />
     }
 
