@@ -43,6 +43,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
+    background-color: inherit !important;
 }
 .number {
     font-size: 1.2rem;
