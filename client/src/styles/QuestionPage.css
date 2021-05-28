@@ -108,6 +108,7 @@ pre {
     height: 20rem;
     border: none;
     resize: none;
+    margin-top: 20px;
 }
 
 .answer-textarea:focus {

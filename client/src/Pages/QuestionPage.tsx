@@ -136,7 +136,7 @@ const QuestionPage = () => {
                 setAttemptsStatus("You have 3 attacks already, you can't get an attack")
             }
             else{
-                setAttemptsStatus(`Attempts remaining to get an attack: ${attemptsToGetAttack}`)
+                setAttemptsStatus(`${attemptsToGetAttack} attempts remaining to get an attack.`)
             }
        }
        else{

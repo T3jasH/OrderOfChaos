@@ -1,7 +1,10 @@
-module.exports = function (req, res, next) {
-    if(process.env.isRunning==1)
+const User = require("../models/User");
+
+module.exports = async function (req, res, next) {
+    req.user = decoded.user;
+    const user = await User.findById(req.user.id).select("isAdmin");
+    if(process.env.isRunning==1 || user.isAdmin)
     {
-        // console.log("Contest is ongoing")
         next()
     }
     else

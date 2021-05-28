@@ -26,6 +26,7 @@ module.exports = async function (req, res, next) {
             return res.status(400).json({
                 success: false,
                 msg: "You can log in from one computer only.",
+                iperror: true
             });
         }else
         next();
