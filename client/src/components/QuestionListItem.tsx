@@ -1,23 +1,18 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Question, QuestionActionTypes } from "../context/QuestionReducer"
-import { AuthContext } from "../context/AuthContext"
+import { Question} from "../context/QuestionReducer"
 import "../styles/QuestionsListItem.css"
-import { QuestionContext } from "../context/QuestionContext"
 import { PlayerContext } from "../context/PlayerContext"
-import { PlayerActionTypes } from "../context/PlayerReducer"
 import { useHistory } from "react-router"
-import { AuthActionTypes } from "../context/AuthReducer"
+
 
 interface props {
     question: Question
     index: number
+    unlockQuestion: any 
 }
 
-const QuestionListItem: React.FC<props> = ({ question, index }) => {
-    const token = useContext(AuthContext).state.token
-    const questions = useContext(QuestionContext)
+const QuestionListItem: React.FC<props> = ({ question, index, unlockQuestion }) => {
     const player = useContext(PlayerContext)
-    const auth = useContext(AuthContext)
     const history = useHistory()
     const [lockStatus, setLockStatus] = useState<string>("")
 
@@ -37,90 +32,8 @@ const QuestionListItem: React.FC<props> = ({ question, index }) => {
         // eslint-disable-next-line
     }, [question.name, question.isSolved, question.isLocked])
 
-    const unlockQuestion = () => {
-        if (
-            token &&
-            player.state.score >= question.unlockCost &&
-            question.isLocked
-        ) {
-            if (auth.state.isEnded) {
-                auth.dispatch({
-                    type: AuthActionTypes.SET_MESSAGE,
-                    payload: { msg: "Contest has ended.", type: "fail" },
-                })
-                setTimeout(() => {
-                    auth.dispatch({
-                        type: AuthActionTypes.CLEAR_MESSAGE,
-                        payload: {},
-                    })
-                }, 3000)
-                return
-            }
-            fetch(`/api/question/locked/${question.quesId}`, {
-                method: "GET",
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
-            })
-                .then((resp) => resp.json())
-                .catch((err) => console.log(err))
-                .then((data) => {
-                    //console.log(data)
-                    if (data.success) {
-                        questions.dispatch({
-                            type: QuestionActionTypes.SET_UNLOCKED,
-                            payload: { id: question.quesId },
-                        })
-                        // for (let i = 0; i < question.unlockCost; i++) {
-                        updateScore(question.unlockCost, true)
-                        // }
-                    }
-                    auth.dispatch({
-                        type: AuthActionTypes.SET_MESSAGE,
-                        payload: {
-                            msg: `Unlocked question ${question.quesId}.`,
-                            type: "success",
-                        },
-                    })
-                    setTimeout(() => {
-                        auth.dispatch({
-                            type: AuthActionTypes.CLEAR_MESSAGE,
-                            payload: {},
-                        })
-                    }, 3000)
-                })
-        }
-    }
+    
 
-    const updateScore = (x: Number, decr: boolean) => {
-        var i = 1,
-            k = player.state.score
-        if (decr) {
-            var interval = setInterval(() => {
-                player.dispatch({
-                    type: PlayerActionTypes.UPDATE_SCORE,
-                    payload: {
-                        score: k - i,
-                    },
-                })
-                i++
-                if (i > x) clearInterval(interval)
-            }, 20)
-        }
-        else{
-            var interval1 = setInterval( () => {
-                player.dispatch({
-                       type: PlayerActionTypes.UPDATE_SCORE,
-                       payload: {
-                           score: k + i,
-                       },
-                   })
-                   i++
-                   if (i > x) clearInterval(interval1   )
-               }, 10)
-        }
-    }
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (question.isLocked) {
@@ -159,7 +72,9 @@ const QuestionListItem: React.FC<props> = ({ question, index }) => {
                             ? "1px solid white"
                             : "none",
                 }}
-                onClick={unlockQuestion}
+                onClick={() => {
+                    unlockQuestion(question)
+                } } 
                 onMouseEnter={() => {
                     if (
                         question.isLocked &&

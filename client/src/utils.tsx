@@ -25,12 +25,19 @@ export const getContestDetails = async (
         })
         .catch((err) => console.log(err))
         .then((data) => {
-            if (!data.success) {
+            if (data.success === false) {
                 if (data.isStarted === false) {
                     auth.dispatch({
                         type: AuthActionTypes.NOT_STARTED,
                         payload: [],
                     })
+                }
+                else if(data.iperror === true){
+                    auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
+                    auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: data.msg}})
+                    setTimeout(() => {
+                        auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                    }, 3500)
                 }
                 return
             }
@@ -76,31 +83,43 @@ export const getUser = async (auth: any, player?: any) => {
             return
         }
         const data = await resp.json()
-        if (data.success) {
-            auth.dispatch({
-                type: AuthActionTypes.GET_AUTH,
-                payload: {
-                    id: data.data.user._id,
-                    isAdmin: data.data.user.isAdmin,
-                    isStarted: data.data.isStarted,
-                    isEnded: data.data.isEnded,
-                    username: data.data.user.username,
-                },
-            })
-            if (player) {
-                player.dispatch({
-                    type: PlayerActionTypes.GET_USER,
-                    payload: {
-                        score: data.data.user.score,
-                        attacks: data.data.user.attackers,
-                        attacksLeft: data.data.user.remAttack,
-                    },
+        if (data.success === false) {
+            if (data.isStarted === false) {
+                auth.dispatch({
+                    type: AuthActionTypes.NOT_STARTED,
+                    payload: [],
                 })
             }
-        } else {
-            console.log(data)
+            else if(data.iperror === true){
+                auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
+                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: data.msg}})
+                setTimeout(() => {
+                    auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                }, 3500)
+            }
+            return null
         }
-        return data
+        auth.dispatch({
+            type: AuthActionTypes.GET_AUTH,
+            payload: {
+                id: data.data.user._id,
+                isAdmin: data.data.user.isAdmin,
+                isStarted: data.data.isStarted,
+                isEnded: data.data.isEnded,
+                username: data.data.user.username,
+            },
+        })
+        if (player) {
+            player.dispatch({
+                type: PlayerActionTypes.GET_USER,
+                payload: {
+                    score: data.data.user.score,
+                    attacks: data.data.user.attackers,
+                    attacksLeft: data.data.user.remAttack,
+                },
+            })
+        }
+    return data
     }
     return { success: false }
 }
@@ -115,10 +134,15 @@ export const getLeaderboard = async (auth: any) => {
     })
     if (resp.status === 401) {
         auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: [] })
-        return
+        return 
     }
     const data = await resp.json()
-    return data.data
+    return {
+        ...data.data, 
+        playerRank: data.data.ranks.findIndex(
+            (user: any) => user._id === auth.state.id
+        ) + 1
+    }
 }
 
 // To get count of attacks, from another player on current player
@@ -205,6 +229,39 @@ export const SendAlert: React.FC = () => {
         )
     return <div />
 }
+
+
+// Score increase/decrease animation
+export const updateScore = (x: Number, decr: boolean, player: any) => {
+    var i = x <= 50 ? 1 : 5,
+        k = player.state.score
+    
+    if (decr) {
+        var interval = setInterval(() => {
+            player.dispatch({
+                type: PlayerActionTypes.UPDATE_SCORE,
+                payload: {
+                    score: k - i,
+                },
+            })
+            i++
+            if (i > x) clearInterval(interval)
+        }, 20)
+    }
+    else{
+        var interval1 = setInterval( () => {
+            player.dispatch({
+                   type: PlayerActionTypes.UPDATE_SCORE,
+                   payload: {
+                       score: k + i,
+                   },
+               })
+               i+=5
+               if (i > x) clearInterval(interval1   )
+           }, 10)
+    }
+}
+
 
 export const Loading: React.FC = () => {
     return (

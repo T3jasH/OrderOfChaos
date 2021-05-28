@@ -14,6 +14,7 @@ const RegisterPage: React.FC = () => {
     const [name, handleName] = useState<string>("")
     const [phoneNo, handlePhoneNo] = useState<string>("")
     const history = useHistory()
+    const [btnDiasble, setBtnDisable] = useState<boolean>(false)
     const auth = useContext(AuthContext)
 
     useEffect(() => {
@@ -25,6 +26,7 @@ const RegisterPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(btnDiasble === true) return;
         if (password !== confirmPassword) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -50,6 +52,8 @@ const RegisterPage: React.FC = () => {
         // axios.post("/api/users", body)
         // .then(response => console.log(response))
         // .catch(err => console.log(err))
+        setBtnDisable(true)
+        setTimeout(() => setBtnDisable(false), 2500)
         fetch("/api/users", {
             method: "POST",
             body: JSON.stringify(body),
@@ -145,7 +149,7 @@ const RegisterPage: React.FC = () => {
                     <input
                         type="submit"
                         value="REGISTER"
-                        className="register-submit-btn"
+                        className={`register-submit-btn ${btnDiasble === true ? "disable-button" : ""}`}
                     />
                 </form>
 

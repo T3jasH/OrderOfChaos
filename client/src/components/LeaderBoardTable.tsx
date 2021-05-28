@@ -7,12 +7,14 @@ import { getAttackersCount } from "../utils"
 interface props {
     leaderboardPlayers: IleaderboardPlayer[] | undefined | null
     handleAttack: any
+    btnDisable: boolean
+    setBtnDisable: any
 }
 
-const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
+const LeaderBoardTable = ({ leaderboardPlayers, handleAttack, btnDisable, setBtnDisable }: props) => {
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext).state
-
+    
     if(leaderboardPlayers === null){
         return <h2 id="no-attacks">Start solving!</h2>
     }
@@ -78,10 +80,16 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack }: props) => {
                             </td>
                             <td style={{ padding: "1rem" }}>
                                 <button
-                                    onClick={() => handleAttack(player._id)}
+                                    onClick={() => {
+                                        if(player._id !== auth.state.id){
+                                            setTimeout(() => setBtnDisable(false), 2500)
+                                            setBtnDisable(true)
+                                        }
+                                        handleAttack(player._id)
+                                    }}
                                     className={`leaderboard-button ${
                                         player.attackers.length === 15 ||
-                                        auth.state.id === player._id
+                                        auth.state.id === player._id || btnDisable
                                             ? "disable-button"
                                             : ""
                                     }`}

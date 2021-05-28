@@ -133,12 +133,6 @@ pre {
     font-weight: 600;
 }
 
-.disable-button {
-    color: #9c9d8e;
-    cursor: not-allowed;
-    border-color: #9c9d8e;
-}
-
 .question-container h2 button i {
     color: #6d30ed !important;
     font-size: inherit;

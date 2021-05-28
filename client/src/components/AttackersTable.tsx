@@ -8,20 +8,13 @@ import { getAttackersCount } from "../utils"
 interface props {
     attackersP: Iattacker[] | null | undefined
     handleAttack: any
+    btnDisable: boolean
+    setBtnDisable: any
 }
 
-const AttackersTable = ({ attackersP, handleAttack }: props) => {
-    // const [attackers, setAttackers] = useState<Iattacker[] | undefined>(
-    //     undefined
-    // )
+const AttackersTable = ({ attackersP, handleAttack, btnDisable, setBtnDisable }: props) => {
     const auth = useContext(AuthContext)
     const playerContext = useContext(PlayerContext)
-
-    // useEffect(() => {
-    //     if (attackersP) setAttackers(attackersP)
-    // }, [attackersP])
-
-    //Set all attacks as seen
 
     useEffect(() => {
         if (auth.state.token && playerContext.state.attacks?.length) {
@@ -117,21 +110,18 @@ const AttackersTable = ({ attackersP, handleAttack }: props) => {
                             <td style={{ padding: "1rem" }}>
                                 {
                                     <button
-                                        onClick={() =>
+                                        onClick={() => 
+                                            {
                                             handleAttack(attacker._id)
+                                            setBtnDisable(true)
+                                            setTimeout(() => setBtnDisable(false), 2500)
+                                            }
                                         }
                                         className={`leaderboard-button ${
-                                            attacker.numberOfAttacks === 15
+                                            attacker.numberOfAttacks === 15 || btnDisable
                                                 ? "disable-button"
                                                 : ""
-                                        }`}
-                                        style={{
-                                            display:
-                                                auth.state.id !== attacker._id
-                                                    ? "block"
-                                                    : "none",
-                                        }}
-                                    >
+                                        }`}>
                                         Attack
                                     </button>
                                 }

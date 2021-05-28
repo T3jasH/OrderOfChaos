@@ -48,6 +48,16 @@ button {
     outline: 0;
 }
 
+.disable-button {
+    color: #9c9d8e;
+    cursor: not-allowed !important;
+    border-color: #9c9d8e !important;
+}
+
+.disable-button:hover {
+    transform: scale(1) !important;
+}
+
 input {
     outline: none;
     border: none;

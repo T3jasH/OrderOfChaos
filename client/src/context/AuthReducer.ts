@@ -41,7 +41,7 @@ export const authReducer = (state: Auth, action: AuthAction) => {
             }
         case "GET_TOKEN":
             let token = localStorage.getItem("iecseOrderOfChaosUser")
-            if (token === null) {
+            if (token === null || token.length === 0) {
                 token = "x"
             }
             return {

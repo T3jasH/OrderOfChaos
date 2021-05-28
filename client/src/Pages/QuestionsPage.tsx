@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react"
-import { QuestionContext } from "../context/QuestionContext"
+import { QuestionContext} from "../context/QuestionContext"
+import {Question, QuestionActionTypes} from "../context/QuestionReducer"
 import { AuthContext } from "../context/AuthContext"
 import { Redirect } from "react-router"
-import { getContestDetails, getLeaderboard, Loading } from "../utils"
+import { getContestDetails, getLeaderboard, Loading, updateScore } from "../utils"
 import "../styles/QuestionsPage.css"
 import { AuthActionTypes } from "../context/AuthReducer"
 import QuestionListItem from "../components/QuestionListItem"
@@ -57,6 +58,64 @@ const QuestionPage: React.FC = () => {
         // eslint-disable-next-line
     }, [questions.state, rank])
 
+    const unlockQuestion = (question: Question) => {
+        if (
+            auth.state.token &&
+            player.state.score >= question.unlockCost &&
+            question.isLocked
+        ) {
+            if (auth.state.isEnded) {
+                auth.dispatch({
+                    type: AuthActionTypes.SET_MESSAGE,
+                    payload: { msg: "Contest has ended.", type: "fail" },
+                })
+                setTimeout(() => {
+                    auth.dispatch({
+                        type: AuthActionTypes.CLEAR_MESSAGE,
+                        payload: {},
+                    })
+                }, 3000)
+                return
+            }
+            fetch(`/api/question/locked/${question.quesId}`, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "x-auth-token": auth.state.token,
+                },
+            })
+                .then((resp) => resp.json())
+                .catch((err) => console.log(err))
+                .then((data) => {
+                    //console.log(data)
+                    if (data.success) {
+                        questions.dispatch({
+                            type: QuestionActionTypes.SET_UNLOCKED,
+                            payload: { id: question.quesId },
+                        })
+                        // for (let i = 0; i < question.unlockCost; i++) {
+                        updateScore(question.unlockCost, true, player)
+                        // }
+                    }
+                    auth.dispatch({
+                        type: AuthActionTypes.SET_MESSAGE,
+                        payload: {
+                            msg: `Unlocked question ${question.quesId}.`,
+                            type: "success",
+                        },
+                    })
+                    getLeaderboard(auth)
+                    .then(data => setRank(data.playerRank))
+                    setTimeout(() => {
+                        auth.dispatch({
+                            type: AuthActionTypes.CLEAR_MESSAGE,
+                            payload: {},
+                        })
+                    }, 3000)
+                })
+        }
+    }
+
     if (auth.state.token === "x") {
         return <Redirect to="/login" />
     }
@@ -79,6 +138,7 @@ const QuestionPage: React.FC = () => {
                 <h3>QUESTIONS</h3>
                 {questions.state.map((item, index) => (
                     <QuestionListItem
+                        unlockQuestion={unlockQuestion}
                         question={item}
                         index={index}
                         key={item.name}

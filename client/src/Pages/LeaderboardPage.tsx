@@ -43,6 +43,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
     >()
     const [rank, setRank] = useState<number | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
+    const [btnDisable, setBtnDisable] = useState<boolean>(false)
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -69,9 +70,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
                     })
                 )
                 setRank(
-                    data.ranks.findIndex(
-                        (user: any) => user._id === auth.state.id
-                    ) + 1
+                    data.playerRank
                 )
             })
         }
@@ -106,6 +105,9 @@ const LeaderboardPage = ({ currentPage }: props) => {
     }, [attackersP, leaderboardPlayers])
 
     const handleAttack = (id: string) => {
+        if(btnDisable === true){
+            return;
+        }
         if (auth.state.isEnded) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -167,9 +169,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
                                 })
                             )
                             setRank(
-                                data.ranks.findIndex(
-                                    (user: any) => user._id === auth.state.id
-                                ) + 1
+                                data.playerRank
                             )
                         })
                     } else {
@@ -187,6 +187,10 @@ const LeaderboardPage = ({ currentPage }: props) => {
                 })
                 .catch((e) => console.log(e))
         }
+    }
+
+    if (auth.state.token === "x") {
+        return <Redirect to="/login" />
     }
 
     if (loading) return <Loading />
@@ -226,11 +230,15 @@ const LeaderboardPage = ({ currentPage }: props) => {
                     <LeaderboardTable
                         leaderboardPlayers={leaderboardPlayers}
                         handleAttack={handleAttack}
+                        btnDisable={btnDisable}
+                        setBtnDisable={setBtnDisable}
                     />
                 ) : (
                     <AttackersTable
                         handleAttack={handleAttack}
                         attackersP={attackersP}
+                        btnDisable={btnDisable}
+                        setBtnDisable={setBtnDisable}
                     />
                 )}
                 {/* {console.log(attackersP)} */}

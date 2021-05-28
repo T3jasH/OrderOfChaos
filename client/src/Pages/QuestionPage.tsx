@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import { PlayerContext } from "../context/PlayerContext"
 import { Redirect, useHistory, useParams } from "react-router-dom"
-import { getUser, getLeaderboard, Loading } from "../utils"
+import { getUser, getLeaderboard, Loading, updateScore } from "../utils"
 import CopyToClipboard from "react-copy-to-clipboard"
 import rehypeRaw from "rehype-raw"
 import ReactMarkdown from "react-markdown"
@@ -51,6 +51,7 @@ const QuestionPage = () => {
     const [attemptsStatus, setAttemptsStatus] = useState<string>("")
     const [rank, setRank] = useState<number | null>(null)
     const [locked, setLocked] = useState<boolean>(false)
+    const [btnDisable, setBtnDisable] = useState<boolean>(false)
 
     const history = useHistory()
 
@@ -111,7 +112,10 @@ const QuestionPage = () => {
             auth.state.token !== "x" &&
             rank === null
         ) {
-            updateRank()
+            getLeaderboard(auth)
+                    .then(data => {
+                        setRank(data.playerRank)
+                    })
         }
  
         // eslint-disable-next-line
@@ -136,7 +140,7 @@ const QuestionPage = () => {
                 setAttemptsStatus("You have 3 attacks already, you can't get an attack")
             }
             else{
-                setAttemptsStatus(`${attemptsToGetAttack} attempts remaining to get an attack.`)
+                setAttemptsStatus(`${attemptsToGetAttack} attempt${attemptsToGetAttack === 1 ? "" : "s"} remaining to get an attack.`)
             }
        }
        else{
@@ -156,35 +160,6 @@ const QuestionPage = () => {
 
     const { id }: any = useParams()
 
-    const updateScore = (x: Number, decr: boolean) => {
-        var i = 1,
-            k = player.state.score
-        if (decr) {
-            var interval = setInterval(() => {
-                player.dispatch({
-                    type: PlayerActionTypes.UPDATE_SCORE,
-                    payload: {
-                        score: k - i,
-                    },
-                })
-                i++
-                if (i > x) clearInterval(interval)
-            }, 20)
-        }
-        else{
-            var interval1 = setInterval( () => {
-                player.dispatch({
-                       type: PlayerActionTypes.UPDATE_SCORE,
-                       payload: {
-                           score: k + i,
-                       },
-                   })
-                   i++
-                   if (i > x) clearInterval(interval1)
-               }, 10)
-        }
-    }
-
     const handleAnswerSubmit = () => {
         if (auth.state.isEnded) {
             auth.dispatch({
@@ -199,6 +174,8 @@ const QuestionPage = () => {
             }, 3000)
             return
         }
+        setBtnDisable(true)
+        setTimeout(() => setBtnDisable(false), 1500)
         if (auth.state.token) {
             fetch(`/api/question/${id}`, {
                 method: "POST",
@@ -223,14 +200,14 @@ const QuestionPage = () => {
                             payload: { msg: data.msg, type: "fail" },
                         })
                         if (questionData && data.msg==="Wrong answer.")
-                            updateScore(questionData?.penalty,true);
+                            updateScore(questionData?.penalty,true, player);
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "success" },
                         })
                         if (questionData)
-                            updateScore(questionData.points,false);
+                            updateScore(questionData.points,false, player);
                         if (data.attackAdded === true) {
                             player.dispatch({
                                 type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
@@ -247,7 +224,10 @@ const QuestionPage = () => {
                             payload: {},
                         })
                     }, 3000)
-                    updateRank()
+                    getLeaderboard(auth)
+                    .then(data => {
+                        setRank(data.playerRank)
+                    })
                 })
                 .catch((e) => {
                     console.log(e)
@@ -255,15 +235,7 @@ const QuestionPage = () => {
         }
     }
 
-    const updateRank = () => {
-        getLeaderboard(auth).then((data) => {
-            setRank(
-                data.ranks.findIndex(
-                    (user: any) => user._id === auth.state.id
-                ) + 1
-            )
-        })
-    }
+    
 
     if (locked) {
         return <Redirect to="/" />
@@ -408,7 +380,7 @@ const QuestionPage = () => {
                             handleAnswerSubmit()
                         }}
                         className={`answer-button ${
-                            auth.state.isEnded ? "disable-button" : ""
+                            auth.state.isEnded || btnDisable ? "disable-button" : "" 
                         }`}
                     >
                         Submit

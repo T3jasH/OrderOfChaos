@@ -99,15 +99,6 @@ th {
     color: #9c9d8e;
 }
 
-.disable-button {
-    color: #9c9d8e;
-    cursor: not-allowed;
-    border-color: #9c9d8e;
-}
-.disable-button:hover {
-    transform: scale(1) !important;
-}
-
 #no-attacks {
     position: absolute;
     top: 25vh;
