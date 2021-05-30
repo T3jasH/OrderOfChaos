@@ -34,7 +34,7 @@ export const getContestDetails = async (
                 }
                 else if(data.iperror === true){
                     auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
-                    auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: data.msg}})
+                    auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: "Connection from only one IP allowed. Contact us"}})
                     setTimeout(() => {
                         auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
                     }, 3500)
@@ -92,7 +92,7 @@ export const getUser = async (auth: any, player?: any) => {
             }
             else if(data.iperror === true){
                 auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
-                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: data.msg}})
+                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: "Connection from only one IP allowed. Contact us"}})
                 setTimeout(() => {
                     auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
                 }, 3500)

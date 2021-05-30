@@ -1,4 +1,5 @@
 import React from "react"
+import { useState } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { useHistory } from "react-router"
@@ -9,16 +10,56 @@ import "../styles/Rules.css"
 const RulesPage: React.FC = () => {
     const history = useHistory()
     const auth = useContext(AuthContext);
+    const [days, setDays] = useState<number>(0)
+    const [hours, setHours] = useState<number>(0)
+    const [minutes, setMinutes] = useState<number>(0)
+    const [seconds, setSeconds] = useState<number>(0)
+   
    
     useEffect(() => {
         auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : {}})
+        var deadline = new Date("june9, 2021 20:00:00").getTime(); 
+  
+    var x = setInterval(function() { 
+  
+    var now = new Date().getTime(); 
+    var t = deadline - now; 
+    setDays(Math.floor(t / (1000 * 60 * 60 * 24))); 
+    setHours(Math.floor((t%(1000 * 60 * 60 * 24))/(1000 * 60 * 60))); 
+    setMinutes(Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))); 
+    setSeconds(Math.floor((t % (1000 * 60)) / 1000)); 
+    
+if (t < 0) { 
+        clearInterval(x); 
+        // Time Up
+    } 
+}, 1000);
+
         // eslint-disable-next-line
     }, [])
 
+
+
     return (
         <div className="rules">
-            <div className="rules-container">
-                <h2>RULES</h2>
+            
+            <div className="rules-page-container">
+                <h2>
+                    RULES
+                </h2>
+                <div className="contacts-container">
+                <ul className="contacts-list">
+                    <h3>
+                        Contact Us
+                    </h3>
+                    <li>
+                        Tushar - 727 7608 859
+                    </li>
+                    <li>
+                        Rhea - 953 8649 509
+                    </li>
+                </ul>
+                </div>
                 <ol className="rules-list">
                     <li>This is an induvidual player contest</li>
                     <li>
@@ -57,6 +98,7 @@ const RulesPage: React.FC = () => {
                         or attacker's list.
                     </li>
                 </ol>
+
                 <button onClick={() => history.goBack()} className="back-btn">
                     {`<Back`}
                 </button>
@@ -73,6 +115,23 @@ const RulesPage: React.FC = () => {
                 >
                     Logout
                 </button>
+            </div>
+            <div className="countdown-container">
+                <h2>
+                    CONTEST STARTS IN 
+                </h2>
+                <span>
+                {`${days} days : `}
+                 </span>
+                 <span>
+                     {`${hours <= 9 ? "0"+hours : hours}  hours : `}
+                 </span>
+                 <span>
+                     {`${minutes<=9 ? "0"+minutes :  minutes} minutes : `}
+                 </span>
+                 <span>
+                     {`${seconds <= 9 ? "0"+seconds : seconds} seconds`}
+                 </span>
             </div>
         </div>
     )

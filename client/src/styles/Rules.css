@@ -7,13 +7,16 @@
     background-position: right bottom;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    column-gap: 2rem;
+    overflow-y: auto;
+    overflow-x: none;
 }
 
-.rules-container {
+.rules-page-container {
     position: relative;
-    height: 75vh;
+    top: 2.5rem;
+    min-height: 35rem;
     width: 45vw;
     border: 2px solid #6d30ed;
     border-radius: 1.5rem;
@@ -21,27 +24,59 @@
     overflow-x: hidden;
 }
 
-.rules-container > h2 {
+.rules-page-container > h2 {
     font-size: 1.5rem;
     letter-spacing: 0.1em;
     position: absolute;
-    left: 42.5%;
 }
 
-.rules-container > .logout-btn {
+.rules-page-container > .logout-btn {
     position: absolute;
     right: 1rem;
-    padding: 5px 0px;
+    padding: 0.2rem 0px;
     font-weight: 500;
 }
 
-.rules-container > .back-btn {
-    padding: 5px 0;
+.rules-page-container > .contact-btn {
+    position: absolute;
+    right: 6rem;
+    padding: 0.2rem 0;
+    font-weight: 500;
+}
+
+.rules-page-container > .back-btn {
+    padding: 0.2rem 0;
+}
+
+.rules-page-container > h2 {
+    position: absolute;
+    left: 42%;
+}
+
+.contacts-container {
+    width: 92.5%;
+    position: absolute;
+    top: 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.contacts-list {
+    border: 1px solid #6d30ed;
+    border-radius: 1rem;
+    padding: 1rem;
+    list-style: none;
+}
+.contacts-list > h3 {
+    text-align: center;
+}
+.contacts-list > li {
+    font-size: 0.9rem;
 }
 
 .rules-list {
     position: absolute;
-    top: 4rem;
+    top: 9rem;
     word-spacing: 0.15rem;
     margin-right: 1.5rem;
 }
@@ -49,14 +84,40 @@
     margin-top: 1rem;
 }
 
+.countdown-container {
+    position: relative;
+    margin-top: 4.5rem;
+    width: 100vw;
+    text-align: center;
+}
+
+.countdown-container > h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.countdown-container > span {
+    color: #6d30ed;
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
+    font-weight: 800;
+}
+
 @media screen and (max-width: 1200px) {
-    .rules-container {
+    .rules-page-container {
         width: 60vw;
     }
 }
 
 @media screen and (max-width: 950px) {
-    .rules-container {
+    .rules-page-container {
         width: 80vw;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .countdown-container > span {
+        font-size: 1.2rem;
     }
 }
