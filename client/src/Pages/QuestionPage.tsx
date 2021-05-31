@@ -174,6 +174,33 @@ const QuestionPage = () => {
             }, 3000)
             return
         }
+        if (userAnswer==='') {
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Please enter an answer", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
+        if(questionData?.isSolved===true)
+        {
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Already Solved", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
         setBtnDisable(true)
         setTimeout(() => setBtnDisable(false), 1500)
         if (auth.state.token) {

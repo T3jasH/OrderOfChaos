@@ -6,7 +6,7 @@ import { useHistory } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/Rules.css"
-import { getUser, Loading } from "../utils"
+import { Loading } from "../utils"
 
 const RulesPage: React.FC = () => {
     const history = useHistory()
@@ -15,7 +15,6 @@ const RulesPage: React.FC = () => {
     const [hours, setHours] = useState<number>(0)
     const [minutes, setMinutes] = useState<number>(0)
     const [seconds, setSeconds] = useState<number | null>(0)
-    const [contestStatus, setContestStatus] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
@@ -36,25 +35,6 @@ const RulesPage: React.FC = () => {
         }, 1000)
         // eslint-disable-next-line
     }, [])
-    useEffect(() => {
-        if (auth.state.token)
-            getUser(auth).then((data) => {
-                if (data.data.isStarted === true) {
-                    setContestStatus(null)
-                } else {
-                    setContestStatus("CONTEST STARTS IN")
-                }
-            })
-        // eslint-disable-next-line
-    }, [auth.state.token])
-
-    useEffect(() => {
-        if (seconds === null) {
-            if (auth.state.isStarted === false)
-                setContestStatus("CONTEST HAS STARTED!")
-        }
-        // eslint-disable-next-line
-    }, [seconds])
 
     useEffect(() => {
         setTimeout(() => {
@@ -87,7 +67,7 @@ const RulesPage: React.FC = () => {
                             history.push("/login")
                         }}
                         style={
-                            auth.state.token !== "x" ? {} : { display: "none" }
+                            auth.state.token !== "x" ? {} : { color: "transparent" }
                         }
                     >
                         Logout
@@ -142,7 +122,7 @@ const RulesPage: React.FC = () => {
                 </div>
             </div>
             <div className="countdown-container">
-                <h2>{contestStatus}</h2>
+                <h2>{seconds!=null?'CONTEST STARTS IN':'CONTEST HAS STARTED'}</h2>
                 {seconds != null ? (
                     <>
                         <span>{`${days} days : `}</span>
@@ -161,8 +141,6 @@ const RulesPage: React.FC = () => {
                         </span>
                     </>
                 ) : null}
-
-                {/* <p>For any queries you may contact you may contact</p> */}
             </div>
         </div>
     )
