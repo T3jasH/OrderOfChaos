@@ -111,6 +111,12 @@ th {
     transform: scale(1.05);
 }
 
+@media screen and (max-width: 1010px) {
+    .leaderboard-container {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 950px) {
     .questions-container {
         left: 10vw;
@@ -118,11 +124,5 @@ th {
     }
     .leaderboard-button {
         padding: 0.6rem 1.5rem;
-    }
-}
-
-@media screen and (max-width: 1050px) {
-    .leaderboard-container {
-        display: none;
     }
 }

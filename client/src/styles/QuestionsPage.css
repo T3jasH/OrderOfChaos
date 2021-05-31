@@ -39,7 +39,7 @@ html {
     color: #6d30ed;
 }
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1010px) {
     .questions-container {
         display: none;
     }

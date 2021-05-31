@@ -161,6 +161,9 @@ const QuestionPage = () => {
     const { id }: any = useParams()
 
     const handleAnswerSubmit = () => {
+        if(btnDisable === true){
+            return;
+        }
         if (auth.state.isEnded) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -211,7 +214,7 @@ const QuestionPage = () => {
                     "Content-type": "application/json",
                 },
 
-                body: JSON.stringify({ answer: userAnswer }),
+                body: JSON.stringify({ answer: userAnswer.trim() }),
             })
                 .then((response) => response.json())
                 .catch((err) => console.log(err))

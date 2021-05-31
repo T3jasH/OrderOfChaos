@@ -15,6 +15,7 @@ const RegisterPage: React.FC = () => {
     const [phoneNo, handlePhoneNo] = useState<string>("")
     const history = useHistory()
     const [btnDiasble, setBtnDisable] = useState<boolean>(false)
+    const [regMsg, setRegMsg] = useState<null|string>(null)
     const auth = useContext(AuthContext)
 
     useEffect(() => {
@@ -40,14 +41,53 @@ const RegisterPage: React.FC = () => {
             }, 3000)
             return
         }
+        if(!(regno.trim().length === 9 || regno === "000")){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Invalid registration No.", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
+        if(phoneNo.trim().length <10){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Invalid phone No.", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
+        if(password.length === 0 || confirmPassword.length === 0 || username.trim().length === 0 || name.trim().length === 0 || email.trim().length === 0){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Please fill all fields", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
         const body = {
-            email: email,
-            name: name,
-            regno: regno,
+            email: email.trim(),
+            name: name.trim(),
+            regno: regno.trim(),
             password: password,
-            username: username,
+            username: username.trim(),
             college: "MIT",
-            phoneNo: phoneNo,
+            phoneNo: phoneNo.trim(),
         }
         // axios.post("/api/users", body)
         // .then(response => console.log(response))
@@ -136,20 +176,25 @@ const RegisterPage: React.FC = () => {
                     />
                     <input
                         type="text"
-                        placeholder="REGISTRATION NO"
-                        name="regno"
-                        onChange={(e) => handleRegno(e.target.value)}
-                    />
-                    <input
-                        type="text"
                         placeholder="PHONE NO"
                         name="phoneNo"
                         onChange={(e) => handlePhoneNo(e.target.value)}
                     />
                     <input
+                        type="text"
+                        placeholder="REGISTRATION NO"
+                        name="regno"
+                        onChange={(e) => handleRegno(e.target.value)}
+                        onFocus={() => setRegMsg("Enter 000 if not from MIT")}
+                        onBlur={() => setRegMsg(null)}
+                        
+                    />
+                        {<span id="regno-msg">{regMsg}</span>}
+                    <input
                         type="submit"
                         value="REGISTER"
                         className={`register-submit-btn ${btnDiasble === true ? "disable-button" : ""}`}
+                        style={{marginTop: "2.2rem"}}
                     />
                 </form>
 

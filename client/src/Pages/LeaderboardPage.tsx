@@ -62,7 +62,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
         if (auth.state.id.length !== 0) {
             getLeaderboard(auth).then((data) => {
                 setLeaderboardPlayers(
-                    data.ranks?.map((obj: any, idx: any) => {
+                    data.ranks.map((obj: any, idx: any) => {
                         return {
                             ...obj,
                             attackers: data.attackers[idx],

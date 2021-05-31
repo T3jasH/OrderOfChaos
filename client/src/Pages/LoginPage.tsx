@@ -10,8 +10,11 @@ const LoginPage: React.FC = () => {
     const [loginText, setLoginText] = useState<string>("LOGIN")
     const [loginBtnText, setLoginBtnText] = useState<string>("LOGIN")
     const [pageType, setPageType] = useState<string>("login")
+    const [btnDiasble, setBtnDisable] = useState<boolean>(false)
+
     const auth = useContext(AuthContext)
     const history = useHistory()
+    
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -27,12 +30,17 @@ const LoginPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (pageType === "login") {
+            if(btnDiasble === true){
+                return;
+            }
+            setBtnDisable(true)
+            setTimeout(() => setBtnDisable(false), 1500)
             const response = await fetch("/api/auth", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email: email, password: password }),
+                body: JSON.stringify({ email: email.trim(), password: password }),
             })
             const data = await response.json()
             if (data.success) {
@@ -68,7 +76,7 @@ const LoginPage: React.FC = () => {
         } else if (pageType === "forgotPassword") {
             const response = await fetch("/api/users/forgotpassword", {
                 method: "POST",
-                body: JSON.stringify({ email: email }),
+                body: JSON.stringify({ email: email.trim() }),
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -92,7 +100,7 @@ const LoginPage: React.FC = () => {
         } else {
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
-                body: JSON.stringify({ email: email }),
+                body: JSON.stringify({ email: email.trim() }),
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -177,7 +185,7 @@ const LoginPage: React.FC = () => {
                     <input
                         type="submit"
                         value={loginBtnText}
-                        className="login-submit-btn"
+                        className={`login-submit-btn ${btnDiasble === true ? "disable-button" : ""}`}
                     />
                 </form>
                 <button

@@ -22,7 +22,6 @@ html {
     box-sizing: border-box;
     height: calc(100vh - 8.5rem);
     overflow: auto;
-    scrollbar-color: #6d30ed #090321;
     line-height: 1.8rem;
 }
 
