@@ -103,7 +103,7 @@ const LeaderboardPage = ({ currentPage }: props) => {
         }
         // eslint-disable-next-line
     }, [attackersP, leaderboardPlayers])
-    console.log(leaderboardPlayers)
+    // console.log(leaderboardPlayers)
     const handleAttack = (id: string) => {
         if(btnDisable === true){
             return;

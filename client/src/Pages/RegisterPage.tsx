@@ -141,7 +141,7 @@ const RegisterPage: React.FC = () => {
         <div className="login-page">
             <div className="login-container">
                 <h2 style={{ marginTop: 25,textAlign:"center" }}>ORDER OF CHAOS</h2>
-                <h3>REGISTER</h3>
+                <h3 style={{ marginTop: 2 }}>REGISTER</h3>
                 <form
                     onSubmit={(e) => handleSubmit(e)}
                     className="login-form register-form"

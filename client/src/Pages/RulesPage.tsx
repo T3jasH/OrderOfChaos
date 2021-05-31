@@ -54,7 +54,7 @@ const RulesPage: React.FC = () => {
                         onClick={() => history.goBack()}
                         className="back-btn"
                     >
-                        {`< Back`}
+                        {`<Back`}
                     </button>
                     <h2>RULES</h2>
                     <button
