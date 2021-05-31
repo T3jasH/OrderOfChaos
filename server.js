@@ -9,7 +9,6 @@ const app = express();
 
 // Load Config
 dotenv.config({ path: "./.env" });
-
 // Connect Database
 connectDB();
 
