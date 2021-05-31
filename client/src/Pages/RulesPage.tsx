@@ -6,6 +6,7 @@ import { useHistory } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/Rules.css"
+import { getUser } from "../utils"
 
 const RulesPage: React.FC = () => {
     const history = useHistory()
@@ -13,13 +14,13 @@ const RulesPage: React.FC = () => {
     const [days, setDays] = useState<number>(0)
     const [hours, setHours] = useState<number>(0)
     const [minutes, setMinutes] = useState<number>(0)
-    const [seconds, setSeconds] = useState<number>(0)
+    const [seconds, setSeconds] = useState<number | null>(0)
+    const [contestStatus, setContestStatus] = useState<string | null>(null)
    
    
     useEffect(() => {
         auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : {}})
-        var deadline = new Date("june9, 2021 20:00:00").getTime(); 
-  
+        var deadline = new Date("june09, 2021 20:00:00").getTime(); 
     var x = setInterval(function() { 
   
     var now = new Date().getTime(); 
@@ -29,20 +30,39 @@ const RulesPage: React.FC = () => {
     setMinutes(Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))); 
     setSeconds(Math.floor((t % (1000 * 60)) / 1000)); 
     
-if (t < 0) { 
+if (t <= 0) {
         clearInterval(x); 
-        // Time Up
+        setSeconds(null)
     } 
 }, 1000);
 
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        if(auth.state.token)
+        getUser(auth)
+        .then((data) => {
+            if(data.data.isStarted === true){
+                setContestStatus(null)
+            }
+            else{
+                setContestStatus("CONTEST STARTS IN")
+            }
+        })
+        // eslint-disable-next-line
+    }, [auth.state.token])
 
+    useEffect(() => {
+        if(seconds === null){
+            if(auth.state.isStarted === false)
+            setContestStatus("CONTEST HAS STARTED!")
+        }
+        // eslint-disable-next-line
+    }, [seconds])
 
     return (
         <div className="rules">
-            
             <div className="rules-page-container">
                 <h2>
                     RULES
@@ -118,8 +138,11 @@ if (t < 0) {
             </div>
             <div className="countdown-container">
                 <h2>
-                    CONTEST STARTS IN 
+                    {contestStatus}
                 </h2>
+                {
+                seconds?
+                <>
                 <span>
                 {`${days} days : `}
                  </span>
@@ -132,6 +155,10 @@ if (t < 0) {
                  <span>
                      {`${seconds <= 9 ? "0"+seconds : seconds} seconds`}
                  </span>
+                </>
+                :
+                null
+                }
             </div>
         </div>
     )
