@@ -77,7 +77,7 @@ const RulesPage: React.FC = () => {
                     <div className="contactusbtn">
                         Contact Us <br />
                         Tushar - 7277608856 <br />
-                        Rhea - 123456790
+                        Rhea - 9538649509
                     </div>
                     <ol className="rules-list">
                         <li>This is an induvidual player contest</li>
