@@ -1,94 +1,68 @@
 .rules {
-    height: 100vh;
-    max-height: 100vh;
-    max-width: 100vw;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
     background: url("../Backgrounds/MainBackground.png") no-repeat;
     background-size: cover;
     background-position: right bottom;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    column-gap: 2rem;
-    overflow-y: auto;
-    overflow-x: none;
-}
-
-.rules-page-container {
-    position: relative;
-    top: 2.5rem;
-    min-height: 35rem;
-    width: 45vw;
-    border: 2px solid #6d30ed;
-    border-radius: 1.5rem;
-    padding: 1rem;
     overflow-x: hidden;
 }
 
-.rules-page-container > h2 {
-    font-size: 1.5rem;
-    letter-spacing: 0.1em;
-    position: absolute;
-}
-
-.rules-page-container > .logout-btn {
-    position: absolute;
-    right: 1rem;
-    padding: 0.2rem 0px;
-    font-weight: 500;
-}
-
-.rules-page-container > .contact-btn {
-    position: absolute;
-    right: 6rem;
-    padding: 0.2rem 0;
-    font-weight: 500;
-}
-
-.rules-page-container > .back-btn {
-    padding: 0.2rem 0;
-}
-
-.rules-page-container > h2 {
-    position: absolute;
-    left: 42%;
-}
-
-.contacts-container {
-    width: 92.5%;
-    position: absolute;
-    top: 4rem;
-    display: flex;
-    justify-content: center;
-}
-
-.contacts-list {
-    border: 1px solid #6d30ed;
-    border-radius: 1rem;
+.rules-page-container {
+    width: 75vw;
+    border-radius: 1.5rem;
     padding: 1rem;
-    list-style: none;
+    margin: 0 auto;
 }
-.contacts-list > h3 {
-    text-align: center;
+
+.rules-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 60px;
 }
-.contacts-list > li {
-    font-size: 0.9rem;
+.rules-nav> h2 {
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    color: #6d30ed;
+}
+
+.rules-nav> .logout-btn {
+    font-weight: 500;
+    font-size: 1.4rem;
+    width: 15vh;
+    text-align: right;
+}
+
+.rules-nav> .back-btn {
+    font-weight: 500;
+    font-size: 1.4rem;
+    width: 15vh;
+    text-align-last: left;
 }
 
 .rules-list {
-    position: absolute;
-    top: 9rem;
     word-spacing: 0.15rem;
-    margin-right: 1.5rem;
+    line-height: 1.8rem;
 }
+
 .rules-list > li {
     margin-top: 1rem;
+    font-size: 1.3rem;
+}
+
+.rules-list > li::marker {
+    font-weight: bold;
+    color: #6d30ed;
+    font-size: 1.8rem;
 }
 
 .countdown-container {
-    position: relative;
-    margin-top: 4.5rem;
-    width: 100vw;
+    padding-bottom: 40px;
     text-align: center;
+    margin: 0 auto;
+    margin-top: 60px;
 }
 
 .countdown-container > h2 {
@@ -104,20 +78,71 @@
     font-weight: 800;
 }
 
-@media screen and (max-width: 1200px) {
+.contactusbtn{
+    display: block;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    font-weight: 400;
+    border: 4px solid #6d30ed;
+    border-radius: 550px;
+    text-align: center;
+    width: fit-content;
+    letter-spacing: 0.2rem;
+    padding: 10px 30px;
+}
+
+
+@media screen and (max-width: 1530px) {
     .rules-page-container {
-        width: 60vw;
+        width: 85vw;
     }
 }
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 1200px) {
     .rules-page-container {
-        width: 80vw;
+        width: 90vw;
+    }
+    .rules{
+        background: #090909;
     }
 }
 
 @media screen and (max-width: 750px) {
     .countdown-container > span {
         font-size: 1.2rem;
+    }
+    .contactusbtn{
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .rules-list > li {
+        font-size: 1rem;
+    }
+    
+    .rules-list > li::marker {
+        font-size: 1.4rem;
+    }
+    .rules-list {
+        line-height: 1.5rem;
+    }
+    .rules-nav> h2 {
+        font-size: 2.3rem;
+    }
+    
+    .rules-nav> .logout-btn {
+        font-size: 1.3rem;
+    }
+    
+    .rules-nav> .back-btn {
+        font-size: 1.3rem;
+    }
+    .rules-nav{
+        margin-bottom: 30px;
+    }
+    .contactusbtn{
+        font-size: 1rem;
+        padding: 10px 20px;
     }
 }
