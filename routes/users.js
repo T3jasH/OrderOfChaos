@@ -79,7 +79,9 @@ router.post(
             const verifyToken = user.getVerifiedToken();
             await user.save({ validateBeforeSave: false });
             const resp = 'https://mail.iecsemanipal.com/codeevent/verifyaccount';
-            const resetUrl = `${req.protocol}://localhost:3000/confirmation/${user.verifyToken}`;
+            const resetUrl = `${req.protocol}://${req.get(
+                "host"
+            )}/confirmation/${user.verifyToken}`
             try {
                 await sendEmail(resp, user.email,user.name,resetUrl);
                 res.status(200).json({ success: true, msg: 'Email sent for account verification.' });
@@ -192,7 +194,9 @@ router.post('/forgotpassword', async (req, res, next) => {
         await user.save({ validateBeforeSave: false });
 
         //Create reset url
-        const resetUrl = `${req.protocol}://localhost:3000/resetpassword/${resetToken}`;
+        const resetUrl = `${req.protocol}://${req.get(
+            "host"
+        )}/resetpassword/${resetToken}`
 
         const msg = `You are recieving this email because you (or someone else) has requested the reset of password. Please click on the link ${resetUrl}`;
         const resp = 'https://mail.iecsemanipal.com/codeevent/resetpassword';

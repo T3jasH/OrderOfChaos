@@ -9,7 +9,7 @@ const sendEmail = async (resp,toEmail,name,resetUrl) => {
                  headers: {
                      Accept: 'application/json',
                      'Content-Type': 'application/json',
-                     Authorization: 'code-event!@$',
+                     Authorization: process.env.AUTHHEADER,
                  },
                  body: JSON.stringify({
                      toEmail: toEmail,
