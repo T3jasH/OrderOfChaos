@@ -6,7 +6,7 @@ import { useHistory } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/Rules.css"
-import { getUser } from "../utils"
+import { getUser, Loading } from "../utils"
 
 const RulesPage: React.FC = () => {
     const history = useHistory()
@@ -16,7 +16,7 @@ const RulesPage: React.FC = () => {
     const [minutes, setMinutes] = useState<number>(0)
     const [seconds, setSeconds] = useState<number | null>(0)
     const [contestStatus, setContestStatus] = useState<string | null>(null)
-   
+    const [loading, setLoading] = useState<boolean>(true)
    
     useEffect(() => {
         auth.dispatch({type : AuthActionTypes.GET_TOKEN, payload : {}})
@@ -60,6 +60,16 @@ if (t <= 0) {
         }
         // eslint-disable-next-line
     }, [seconds])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 500)
+    }, [])
+
+    if(loading === true){
+        return <Loading/>
+    }
 
     return (
         <div className="rules">
@@ -141,7 +151,7 @@ if (t <= 0) {
                     {contestStatus}
                 </h2>
                 {
-                seconds?
+                seconds!==null?
                 <>
                 <span>
                 {`${days} days : `}
