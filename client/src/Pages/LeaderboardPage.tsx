@@ -90,20 +90,20 @@ const LeaderboardPage = ({ currentPage }: props) => {
         if (leaderboardPlayers?.length) {
             setAttackersP(sortAttackers(leaderboardPlayers, auth))
         }
-        else if(leaderboardPlayers === null){
+        else if(leaderboardPlayers?.length === 0){
             setAttackersP(null)
         }
         // eslint-disable-next-line
     }, [leaderboardPlayers])
 
     useEffect(() => {
-        if (attackersP !== undefined || leaderboardPlayers === null) {
+        if (attackersP !== undefined || leaderboardPlayers?.length === 0) {
             if(loading === true)
             setLoading(false)
         }
         // eslint-disable-next-line
     }, [attackersP, leaderboardPlayers])
-
+    console.log(leaderboardPlayers)
     const handleAttack = (id: string) => {
         if(btnDisable === true){
             return;

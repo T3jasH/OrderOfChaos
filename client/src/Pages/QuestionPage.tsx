@@ -226,8 +226,6 @@ const QuestionPage = () => {
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "fail" },
                         })
-                        if (questionData && data.msg==="Wrong answer.")
-                            updateScore(questionData?.penalty,true, player);
                     } else {
                         auth.dispatch({
                             type: AuthActionTypes.SET_MESSAGE,
@@ -296,7 +294,6 @@ const QuestionPage = () => {
                     rehypePlugins={[rehypeRaw]}
                     children={String(questionData?.statement)}
                 />
-
                 <br />
                 <h2>Constraints</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>

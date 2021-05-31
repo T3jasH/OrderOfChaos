@@ -15,7 +15,7 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack, btnDisable, setBtn
     const auth = useContext(AuthContext)
     const contextPlayer = useContext(PlayerContext).state
     
-    if(leaderboardPlayers === null){
+    if(leaderboardPlayers?.length === 0){
         return <h2 id="no-attacks">Start solving!</h2>
     }
 
