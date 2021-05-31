@@ -52,8 +52,8 @@ router.post('/', isLoggedIn, isAdmin, async (req, res) => {
             success: true,
             msg: 'Question submitted successfully.',
         });
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: "Server Error" });
     }
 });

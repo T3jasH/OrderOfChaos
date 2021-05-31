@@ -58,7 +58,7 @@ const getContest = async (req, res) => {
             data: resp,
         });
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 };

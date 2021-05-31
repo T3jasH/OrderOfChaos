@@ -18,7 +18,7 @@ router.get("/", isLoggedIn, async (req, res) => {
             isEnded: process.env.isEnded == 1 ? true : false 
         } });
     } catch (err) {
-        console.error(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: "Server Error." });
     }
 });
@@ -85,7 +85,7 @@ router.post(
                 },
             });
         } catch (err) {
-            console.error(err.message);
+            console.log(`Error : ${err.message}`);
             res.status(500).json({ success: false, msg: "Server Error" });
         }
     }

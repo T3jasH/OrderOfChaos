@@ -31,7 +31,7 @@ router.get("/:id", isLoggedIn, isRunning, async (req, res) => {
             res.send({ success: false, msg: "Question is locked" });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: "Server Error" });
     }
 });
@@ -60,7 +60,6 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
         let attemptsTillNow = user.noOfAttempts[pos].attempts;
         let difficulty = selQues.difficulty;
         //if not solved then only shld be allowed to solve
-        //TODO:check if IP is matching
         if (user.noOfAttempts[pos].isLocked)
             return res.status(400).json({
                 success: false,
@@ -92,6 +91,7 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                             msg: `Question solved and Attack added`,
                             attackAdded: true,
                         });
+                        console.log(`${user.username} (${user.name}) solved ${selQues.name} and got an attack.`);
                     } else {
                         await User.updateOne(
                             {
@@ -113,6 +113,7 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                             msg: `Question Solved.`,
                             attackAdded: false
                         });
+                        console.log(`${user.username} (${user.name}) solved ${selQues.name}.`);
                     }
                 } else {
                     await User.updateOne(
@@ -141,7 +142,6 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                     { $set: { solved: selQues.solved + 1 } }
                 );
             } else {
-                //WA
                 await User.updateOne(
                     {
                         _id: req.user.id,
@@ -159,25 +159,15 @@ router.post('/:id', isLoggedIn, isRunning, isNotEnded, async (req, res) => {
                     msg: 'Wrong answer.',
                 });
             }
-            // console.log("currscore=" + currScore);
-            // console.log("remattack=" + user.remAttack);
-            // console.log("actual=" + actualPoints);
-            // console.log("penalty=" + deduction + "%");
-            // console.log("attempts=" + (attemptsTillNow + 1));
         } else {
-            //dont allow to click submit button ideally
             return res.json({ success: false, msg: 'Already solved.' });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 });
 
-
-//ip in backend
-// When user unlocks first question, along with marking isActive, you need take ip.
-//Then for every submission, check if it's same ip.
 router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) => {
     try {
         let userid = req.user.id;
@@ -190,7 +180,6 @@ router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) =>
             quesId: req.params.id,
         });
         if (!user.isActive) {
-            //TODO: take ip
             await User.updateOne(
                 {
                     _id: req.user.id,
@@ -204,7 +193,6 @@ router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) =>
             );
         }
         if (user.score >= selQues.unlockCost) {
-            // console.log(user.score + ">=" + selQues.unlockCost);
             let locked = user.noOfAttempts[pos].isLocked;
             if (locked) {
                 await User.updateOne(
@@ -218,8 +206,8 @@ router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) =>
                         },
                     }
                 );
-                //redirect to api/question/:id (GET)
                 res.send({ success: true, msg: "Unlocking the question" });
+                console.log(`${user.username} (${user.name}) unlocked ${selQues.name}.`);
             } else {
                 res.send({
                     success: false,
@@ -233,7 +221,7 @@ router.get("/locked/:id", isLoggedIn, isRunning, isNotEnded, async (req, res) =>
             });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: "Server Error" });
     }
 });
