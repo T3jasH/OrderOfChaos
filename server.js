@@ -16,13 +16,13 @@ connectDB();
 app.use(express.json({ extended: false }));
 app.use(expressip().getIpInfoMiddleware);
 
-app.use(
-    morgan("dev", {
-        skip: function (req, res) {
-            return res.statusCode < 400;
-        },
-    })
-);
+// app.use(
+//     morgan("dev", {
+//         skip: function (req, res) {
+//             return res.statusCode < 400;
+//         },
+//     })
+// );
 
 app.use(
     morgan("common", {
