@@ -18,6 +18,8 @@
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
+    overflow: auto;
+    overflow-X: hidden;
 }
 
 .login-container > h2 {
@@ -98,7 +100,7 @@
     }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1230px) {
     .login-container > h2 {
         font-size: 2rem;
     }

@@ -4,10 +4,12 @@
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    --rootFontSize: 20px;
+    --rootFontSize: 17px;
+    /* --rootFontSize: 20px; */
     font-size: var(--rootFontSize);
     scrollbar-color: #6d30ed #090321;
 }
+/* 1230 950 450 */
 
 @media screen and (max-width: 800px) {
     body {
@@ -187,7 +189,7 @@ input[type="submit"] {
     display: none;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1230px) {
     * {
         --rootFontSize: 18px;
     }
@@ -203,12 +205,12 @@ input[type="submit"] {
     }
 }
 
-@media screen and (max-width: 1010px) {
+@media screen and (max-width: 1023px) {
     .mobile-message {
         display: block;
     }
     .footer {
-        display: none;
+        display: none !important;
     }
 }
 
