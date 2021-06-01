@@ -80,6 +80,19 @@ const RegisterPage: React.FC = () => {
             }, 3000)
             return
         }
+        if(password.match(/\s/g)){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Password cannot contain spaces", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
         const body = {
             email: email.trim(),
             name: name.trim(),

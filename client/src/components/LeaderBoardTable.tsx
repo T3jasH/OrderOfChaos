@@ -16,7 +16,11 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack, btnDisable, setBtn
     const contextPlayer = useContext(PlayerContext).state
     
     if(leaderboardPlayers?.length === 0){
-        return <h2 id="no-attacks">Start solving!</h2>
+        return <div id="no-attacks">
+        <h2>
+            Start solving!
+            </h2>
+        </div>
     }
 
     return (

@@ -14,7 +14,7 @@
     top: 5rem;
     width: 95vw;
     height: calc(100vh - 10rem);
-    overflow: auto;
+    overflow-y: auto;
     scrollbar-color: #6d30ed #090321;
     /* border: 1px solid red; */
 }
@@ -101,8 +101,13 @@ th {
 
 #no-attacks {
     position: absolute;
-    top: 25vh;
-    left: 10vw;
+    height: 2rem;
+    width: 100%;
+    top: 10rem;
+    text-align: center;
+}
+
+#no-attacks h2 {
     font-size: 1.8rem;
     color: #6d30ed;
 }

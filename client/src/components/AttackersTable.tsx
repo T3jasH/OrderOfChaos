@@ -60,7 +60,11 @@ const AttackersTable = ({ attackersP, handleAttack, btnDisable, setBtnDisable }:
     }
 
     if(attackersP === null){
-        return <h2 id="no-attacks">There have been no attacks on you</h2>
+        return <div id="no-attacks">
+        <h2>
+            There have been no attacks on you
+            </h2>
+        </div>
     }
 
     if(attackersP === undefined){

@@ -12,7 +12,7 @@ const QuestionInfo = ({ questionData, attemptsToGetAttack }: props) => {
         if (diff === 2) return "Medium"
         if (diff === 3) return "Hard"
         return null
-    }
+    }  
     return (
         <div className="question-info">
             <div>
@@ -45,7 +45,7 @@ const QuestionInfo = ({ questionData, attemptsToGetAttack }: props) => {
                 </span>
             </div>
             <div>
-                <span className="question-info-label">Solved : </span>
+                <span className="question-info-label">Successful Submissions : </span>
                 <span className="question-info-purple">
                     {questionData?.solved}
                 </span>
