@@ -48,7 +48,7 @@ const getContest = async (req, res) => {
         let resp = {
             questions: quesUser,
             user : user,
-            isStarted : process.env.isRunning == 1 ? true : false,
+            isStarted : process.env.isRunning == 1 || user.isAdmin ? true : false,
             isEnded: process.env.isEnded == 1 ? true : false 
         };
         // console.log(resp);
@@ -58,7 +58,7 @@ const getContest = async (req, res) => {
             data: resp,
         });
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 };

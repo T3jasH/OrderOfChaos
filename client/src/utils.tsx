@@ -137,7 +137,7 @@ export const getLeaderboard = async (auth: any) => {
         return 
     }
     const data = await resp.json()
-    console.log(data)
+    // console.log(data)
     return {
         ...data.data, 
         playerRank: data.data.ranks.findIndex(

@@ -14,11 +14,11 @@ router.get("/", isLoggedIn, async (req, res) => {
         const user = await User.findById(req.user.id).select("-password");
         res.json({ success: true, msg: "User found", data: { 
             user: user,
-            isStarted: process.env.isRunning == 1 ? true : false, 
+            isStarted: process.env.isRunning == 1 || user.isAdmin ? true : false, 
             isEnded: process.env.isEnded == 1 ? true : false 
         } });
     } catch (err) {
-        console.error(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: "Server Error." });
     }
 });
@@ -81,11 +81,11 @@ router.post(
                 msg: "User successfully logged in!",
                 data: { 
                     token: token,
-                    isStarted: process.env.isRunning == 1 ? true : false
+                    isStarted: process.env.isRunning || user.isAdmin == 1 ? true : false
                 },
             });
         } catch (err) {
-            console.error(err.message);
+            console.log(`Error : ${err.message}`);
             res.status(500).json({ success: false, msg: "Server Error" });
         }
     }

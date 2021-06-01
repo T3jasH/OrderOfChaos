@@ -28,14 +28,14 @@ const getLeaderboard = async (req, res) => {
                 data: { ranks : ranks, attackers : attackers},
             });
         } catch (err) {
-            console.log(err);
+            console.log(`Error : ${err.message}`);
             res.send({
                 success: false,
                 msg: "Couldn't fetch latest leaderboard",
             });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 };
@@ -75,7 +75,7 @@ const attackUser = async (req, res) => {
                     await user.save();
                     attacker.remAttack = attacker.remAttack - 1;
                     await attacker.save();
-                    // console.log('Attack was successful');
+                    console.log(`${attacker.username} (${attacker.name}) attacked ${user.username} (${user.name}).`);
                     return res.send({
                         success: true,
                         msg: 'Attack was successful',
@@ -104,7 +104,7 @@ const attackUser = async (req, res) => {
             });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 };

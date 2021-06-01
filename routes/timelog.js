@@ -17,6 +17,7 @@ router.post('/', isLoggedIn, isRunning, async (req, res) => {
         await user.save();
         return res.json({ success: true, msg: 'Sucessfully Seen' });
     } catch (e) {
+        console.log(`Error : ${e.message}`)
         return res.status(500).json({ success: false, msg: 'Server Error' });
     }
 });

@@ -9,7 +9,6 @@ const connectDB = async () => {
             useFindAndModify: false,
             useUnifiedTopology: true,
         });
-	console.log(process.env.MONGO_URI);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (err) {
         console.error(err.message);

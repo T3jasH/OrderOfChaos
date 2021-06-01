@@ -86,13 +86,13 @@ router.post(
                 await sendEmail(resp, user.email,user.name,resetUrl);
                 res.status(200).json({ success: true, msg: 'Email sent for account verification.' });
             } catch (err) {
-                console.log(err);
+                console.log(`Error : ${err.message}`);
                 user.verifyToken = undefined;
 
                 await user.save();
             }
         } catch (err) {
-            console.error(err.message);
+            console.log(`Error : ${err.message}`);
             res.status(500).json({ success: false, msg: 'Server Error' });
         }
     }
@@ -164,7 +164,7 @@ router.post('/resendEmail', async (req, res, next) => {
         await sendEmail(resp, user.email, user.name, resetUrl);
         res.status(200).json({ success: true, msg: 'Email sent for account verification.' });
     } catch (err) {
-        console.log(err);
+        console.log(`Error : ${err.message}`);
         user.verifyToken = undefined;
         await user.save();
         res.status(500).json({
@@ -206,7 +206,7 @@ router.post('/forgotpassword', async (req, res, next) => {
                 .status(200)
                 .json({ success: true, msg: 'Email sent for password reset.' });
         } catch (err) {
-            console.log(err);
+            console.log(`Error : ${err.message}`);
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
 
@@ -218,7 +218,7 @@ router.post('/forgotpassword', async (req, res, next) => {
             });
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 });
@@ -245,7 +245,7 @@ router.get('/resetpassword/:resettoken', async (req, res) => {
             data: { resettoken: resetPasswordToken },
         });
     } catch (err) {
-        console.log(err.message);
+        console.log(`Error : ${err.message}`);
         res.status(500).json({ success: false, msg: 'Server Error' });
     }
 });
@@ -287,7 +287,7 @@ router.post(
                 msg: 'Reset Password successful.',
             });
         } catch (err) {
-            console.log(err.message);
+            console.log(`Error : ${err.message}`);
             res.status(500).json({ success: false, msg: 'Server Error' });
         }
     }

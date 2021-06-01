@@ -50,12 +50,12 @@ const QuestionInfo = ({ questionData, attemptsToGetAttack }: props) => {
                     {questionData?.solved}
                 </span>
             </div>
-            <div>
+            {/* <div>
                 <span className="question-info-label">
                     Attempts to get attack :{" "}
                 </span>
                 <span className="question-info-purple">{attemptsToGetAttack}</span>
-            </div>
+            </div> */}
         </div>
     )
 }

@@ -153,8 +153,8 @@ const RegisterPage: React.FC = () => {
     return (
         <div className="login-page">
             <div className="login-container">
-                <h2 style={{ marginTop: 25 }}>ORDER OF CHAOS</h2>
-                <h3>REGISTER</h3>
+                <h2 style={{ marginTop: 25,textAlign:"center" }}>ORDER OF CHAOS</h2>
+                <h3 style={{ marginTop: 2 }}>REGISTER</h3>
                 <form
                     onSubmit={(e) => handleSubmit(e)}
                     className="login-form register-form"
@@ -213,7 +213,7 @@ const RegisterPage: React.FC = () => {
 
                 <button
                     className="btn-login"
-                    style={{ marginTop: "2.5vh" }}
+                    style={{ marginTop: "2.5vh",marginBottom:"2.5vh" }}
                     onClick={() => {
                         history.push("/login")
                     }}
