@@ -14,7 +14,7 @@ router.get("/", isLoggedIn, async (req, res) => {
         const user = await User.findById(req.user.id).select("-password");
         res.json({ success: true, msg: "User found", data: { 
             user: user,
-            isStarted: process.env.isRunning == 1 ? true : false, 
+            isStarted: process.env.isRunning == 1 || user.isAdmin ? true : false, 
             isEnded: process.env.isEnded == 1 ? true : false 
         } });
     } catch (err) {
@@ -81,7 +81,7 @@ router.post(
                 msg: "User successfully logged in!",
                 data: { 
                     token: token,
-                    isStarted: process.env.isRunning == 1 ? true : false
+                    isStarted: process.env.isRunning || user.isAdmin == 1 ? true : false
                 },
             });
         } catch (err) {
