@@ -116,7 +116,7 @@ th {
     transform: scale(1.05);
 }
 
-@media screen and (max-width: 1010px) {
+@media screen and (max-width: 1023px) {
     .leaderboard-container {
         display: none;
     }

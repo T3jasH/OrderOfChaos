@@ -138,7 +138,7 @@ pre {
     font-weight: bold;
 }
 
-@media screen and (max-width: 1010px) {
+@media screen and (max-width: 1023px) {
     .question-container {
         display: none;
     }
