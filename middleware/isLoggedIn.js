@@ -23,6 +23,7 @@ module.exports = async function (req, res, next) {
         if(user.ipaddress && user.ipaddress!==req.ipInfo.ip)
         {
             console.log(`IpError: ${user.ipaddress} != ${req.ipInfo.ip}`);
+            console.log(req.ipInfo);
             return res.status(400).json({
                 success: false,
                 msg: "You can log in from one computer only.",
