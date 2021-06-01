@@ -81,7 +81,7 @@ router.post(
                 msg: "User successfully logged in!",
                 data: { 
                     token: token,
-                    isStarted: process.env.isRunning || user.isAdmin == 1 ? true : false
+                    isStarted: process.env.isRunning == 1 || user.isAdmin ? true : false
                 },
             });
         } catch (err) {
