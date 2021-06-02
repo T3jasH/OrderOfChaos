@@ -51,7 +51,7 @@ const QuestionListItem: React.FC<props> = ({ question, index, unlockQuestion }) 
             }}
             onClick={(e) => handleClick(e)}
         >
-            <p className="index">{index + 1}</p>
+            <p className="index">{question.quesId}</p>
             <p className="question-name">{question.name}</p>
             <button
                 className="question-lock"

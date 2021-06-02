@@ -78,6 +78,7 @@ router.post(
             //Get verify token
             const verifyToken = user.getVerifiedToken();
             await user.save({ validateBeforeSave: false });
+            console.log(`${user.name} resistered with ${user.email}.`)
             const resp = 'https://mail.iecsemanipal.com/codeevent/verifyaccount';
             const resetUrl = `${req.protocol}://${req.get(
                 "host"
@@ -124,6 +125,7 @@ router.get('/confirmation/:token', async (req, res, next) => {
                     .status(500)
                     .json({ success: false, msg: err.message });
             } else {
+                console.log(`${user.name} verified with ${user.email}.`)
                 return res.status(200).json({
                     success: true,
                     msg: 'Your account has successfully been verified.',
