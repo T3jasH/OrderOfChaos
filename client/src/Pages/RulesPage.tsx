@@ -45,12 +45,13 @@ const RulesPage: React.FC = () => {
     if (loading === true) {
         return <Loading />
     }
-    var dispD,dispH,dispM,dispS;
-    if(days===0)dispD="hide-ctdn";
-    if(days===0 && hours===0)dispH="hide-ctdn";
-    if(days===0 && hours===0 && minutes===0)dispM="hide-ctdn";
-    if(days===0 && hours===0 && minutes===0 && seconds===0)dispS="hide-ctdn";
-        
+    var dispD, dispH, dispM, dispS
+    if (days === 0) dispD = "hide-ctdn"
+    if (days === 0 && hours === 0) dispH = "hide-ctdn"
+    if (days === 0 && hours === 0 && minutes === 0) dispM = "hide-ctdn"
+    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0)
+        dispS = "hide-ctdn"
+
     return (
         <div className="rules">
             <div className="rules-page-container">
@@ -88,43 +89,161 @@ const RulesPage: React.FC = () => {
                         Rhea - 9538649509
                     </div>
                     <ol className="rules-list">
-                        <li>This is an induvidual player contest</li>
                         <li>
-                            The contest will be held on June 9, from 8 PM to 10
-                            PM IST. Registration will be open throughout the
-                            contest.
+                            This is an <b>induvidual player</b> contest.
+                        </li>
+                        <li>
+                            The contest will be held on{" "}
+                            <b>June 9, from 8 PM to 10 PM IST</b>. Registration
+                            will be open throughout the contest.
                         </li>
                         <li>
                             Participants are required to save their code for all
                             submissions, and can be asked to send it at the end
-                            of the contest.
+                            of the contest. In this contest you only have to{" "}
+                            <b>submit output</b> and not the code. It would be
+                            easy for you to submit output if you get input and
+                            output separately and not mixed up.
                         </li>
                         <li>
                             Once the contest starts, participants must make all
                             submissions from the same device. This is to prevent
-                            multiple submissions from same account.
+                            multiple users to submit from same account.
                         </li>
                         <li>
-                            Initially you have 200 points, and all questions are
-                            locked. You are to unlock questions using these
-                            points (i.e, there is no currency of any sorts).
+                            Initially you will have <b> 200 points</b>, and all
+                            questions will be locked. You have to unlock
+                            questions using these points only. Unlock cost will be
+                            <b
+                                style={{
+                                    color: "#7DFD7A",
+                                }}
+                            >
+                                {" "}
+                                20 points
+                            </b>{" "}
+                            for easy ,
+                            <b
+                                style={{
+                                    color: "#fbff35",
+                                }}
+                            >
+                                {" "}
+                                30 points
+                            </b>{" "}
+                            for medium and{" "}
+                            <b
+                                style={{
+                                    color: "#ff4a4a",
+                                }}
+                            >
+                                50 points
+                            </b>{" "}
+                            for hard question.
                         </li>
                         <li>
-                            There is no limit on attempts on a question, but for
+                            There will be three levels of questions easy, medium
+                            and hard. Solving an easy question gets you{" "}
+                            <b
+                                style={{
+                                    color: "#7DFD7A",
+                                }}
+                            >
+                                {" "}
+                                100 pts
+                            </b>
+                            , medium gets you{" "}
+                            <b
+                                style={{
+                                    color: "#fbff35",
+                                }}
+                            >
+                                {" "}
+                                200 pts
+                            </b>{" "}
+                            and hard gets you{" "}
+                            <b
+                                style={{
+                                    color: "#ff4a4a",
+                                }}
+                            >
+                                {" "}
+                                400 pts
+                            </b>
+                            .
+                        </li>
+                        <li>
+                            There is
+                            <b> no limit on attempts</b> on a question, but for
                             every wrong submission, you lose points. Penalty
                             depends on the level of difficulty of the question.
+                            Penalty will be
+                            <b
+                                style={{
+                                    color: "#7DFD7A",
+                                }}
+                            >
+                                {" "}
+                                5 points
+                            </b>{" "}
+                            for easy ,
+                            <b
+                                style={{
+                                    color: "#fbff35",
+                                }}
+                            >
+                                {" "}
+                                8 points
+                            </b>{" "}
+                            for medium and{" "}
+                            <b
+                                style={{
+                                    color: "#ff4a4a",
+                                }}
+                            >
+                                14 points
+                            </b>{" "}
+                            for hard question.
                         </li>
                         <li>
-                            A correct submission on first attempt on an easy
-                            question gives you an attack to use on another
-                            player. Similarly for a medium question you get an
-                            attack for a correct submission in one of the first
-                            2 attempts, and for a hard question on one of the
-                            first 3 attempts.
+                            A correct submission on{" "}
+                            <b
+                                style={{
+                                    color: "#7DFD7A",
+                                }}
+                            >
+                                {" "}
+                                first attempt
+                            </b>{" "}
+                            on an easy question gives you an attack to use on
+                            another player. Similarly for a medium question you
+                            get an attack for a correct submission in one of the{" "}
+                            <b
+                                style={{
+                                    color: "#fbff35",
+                                }}
+                            >
+                                first 2 attempts
+                            </b>{" "}
+                            , and for a hard question on one of the
+                            <b
+                                style={{
+                                    color: "#ff4a4a",
+                                }}
+                            >
+                                {" "}
+                                first 3 attempts
+                            </b>
+                            .
+                        </li>
+                        <li>
+                            You can store at max <b>3 attacks</b> at a time.
+                            When you attack a player that player loses{" "}
+                            <b>20 points</b>.
                         </li>
                         <li>
                             You can select a player to attack from the
-                            leaderboard or attacker's list.
+                            <b> leaderboard or attacker's list</b>.
                         </li>
                     </ol>
                 </div>
@@ -137,10 +256,10 @@ const RulesPage: React.FC = () => {
                 </h2>
                 {seconds != null ? (
                     <>
-                        <div  className={dispD}>{`${days} DAYS  `}</div>
-                        <div  className={dispH}>{`${hours}  HOURS  `}</div>
-                        <div  className={dispM}>{`${minutes} MINUTES  `}</div>
-                        <div  className={dispS}>{`${seconds} SECONDS`}</div>
+                        <div className={dispD}>{`${days} DAYS  `}</div>
+                        <div className={dispH}>{`${hours}  HOURS  `}</div>
+                        <div className={dispM}>{`${minutes} MINUTES  `}</div>
+                        <div className={dispS}>{`${seconds} SECONDS`}</div>
                     </>
                 ) : null}
             </div>

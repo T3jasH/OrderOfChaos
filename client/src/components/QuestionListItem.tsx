@@ -42,9 +42,12 @@ const QuestionListItem: React.FC<props> = ({ question, index, unlockQuestion }) 
         history.push(`question/${question.quesId}`)
     }
 
+    var qClass="question";
+    if(question.isLocked) qClass="question questionLocked"
+
     return (
         <div
-            className="question"
+            className={qClass}
             style={{
                 cursor: !question.isLocked ? "pointer" : "default",
                 background: question.isSolved ? "#6D30ED" : "inherit",

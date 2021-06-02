@@ -55,6 +55,10 @@
     font-size: 1.3rem;
 }
 
+.rules-list > li > b{
+    font-size: inherit;
+}
+
 .rules-list > li::marker {
     font-weight: bold;
     color: #6d30ed;

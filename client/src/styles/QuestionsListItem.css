@@ -17,6 +17,10 @@
     --solvedRight: 10vw;
 }
 
+.questionLocked{
+
+}
+
 .question > * {
     position: absolute;
     font-size: 1.3rem;
