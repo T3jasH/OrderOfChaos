@@ -14,7 +14,7 @@ const RegisterPage: React.FC = () => {
     const [name, handleName] = useState<string>("")
     const [phoneNo, handlePhoneNo] = useState<string>("")
     const history = useHistory()
-    const [btnDiasble, setBtnDisable] = useState<boolean>(false)
+    const [btnDisable, setBtnDisable] = useState<boolean>(false)
     const [regMsg, setRegMsg] = useState<null|string>(null)
     const auth = useContext(AuthContext)
 
@@ -27,7 +27,8 @@ const RegisterPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(btnDiasble === true) return;
+        if(btnDisable === true) return;
+        // Frontend validation
         if (password !== confirmPassword) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -102,9 +103,6 @@ const RegisterPage: React.FC = () => {
             college: "MIT",
             phoneNo: phoneNo.trim(),
         }
-        // axios.post("/api/users", body)
-        // .then(response => console.log(response))
-        // .catch(err => console.log(err))
         setBtnDisable(true)
         setTimeout(() => setBtnDisable(false), 2500)
         fetch("/api/users", {
@@ -206,7 +204,7 @@ const RegisterPage: React.FC = () => {
                     <input
                         type="submit"
                         value="REGISTER"
-                        className={`register-submit-btn ${btnDiasble === true ? "disable-button" : ""}`}
+                        className={`register-submit-btn ${btnDisable === true ? "disable-button" : ""}`}
                         style={{marginTop: "2.2rem"}}
                     />
                 </form>

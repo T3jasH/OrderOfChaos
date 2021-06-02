@@ -131,7 +131,8 @@ const QuestionPage = () => {
 
     // Set message at bottom of page, to let user know if they can get an attack
     useEffect(() => {
-        if (questionData?.isSolved) {
+        if (questionData?.isSolved === true){
+            document.getElementById("scroll-top")?.scrollIntoView()
             setAttemptsStatus("You have solved this question")
             return
         }
@@ -146,9 +147,8 @@ const QuestionPage = () => {
        else{
            setAttemptsStatus("You can't get an attack")
        }
-       console.log(attemptsToGetAttack)
         // eslint-disable-next-line
-    }, [attemptsToGetAttack])
+    }, [attemptsToGetAttack, questionData?.isSolved])
 
 
     useEffect(() => {
@@ -234,8 +234,15 @@ const QuestionPage = () => {
                             type: AuthActionTypes.SET_MESSAGE,
                             payload: { msg: data.msg, type: "success" },
                         })
-                        if (questionData)
+                        if (questionData !== null){
                             updateScore(questionData.points,false, player);
+                            setQuestionData((prevQuestionData:any) => {
+                               return  {
+                                   ...prevQuestionData,
+                                    isSolved: true
+                                }
+                             } )
+                        }
                         if (data.attackAdded === true) {
                             player.dispatch({
                                 type: PlayerActionTypes.UPDATE_ATTACKS_LEFT,
@@ -244,7 +251,6 @@ const QuestionPage = () => {
                                 },
                             })
                         }
-                        setAttemptsData(0)
                     }
                     setTimeout(() => {
                         auth.dispatch({
@@ -287,7 +293,7 @@ const QuestionPage = () => {
             <Navbar removeButton={false} />
             <PlayerInfoFooter active={false} rank={rank} />
             <div className="question-container" style={{ userSelect: "none" }}>
-                <button onClick={() => history.push("/")}>{"<Back"}</button>
+                <button onClick={() => history.push("/")} id="scroll-top">{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
                     questionData={questionData}
@@ -418,21 +424,3 @@ const QuestionPage = () => {
     )
 }
 export default QuestionPage
-
-// eslint-disable-next-line
-{
-    /* <textarea
-                    cols={30}
-                    rows={10}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                >
-                    Put your output here
-                </textarea>
-                <button
-                    style={{ backgroundColor: "cyan" }}
-                    onClick={handleAnswerSubmit}
-                >
-                    Submit Wisely
-                </button>
-                {submitMessage !== "" && <div>{submitMessage}</div>} */
-}

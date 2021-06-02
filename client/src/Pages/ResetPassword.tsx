@@ -8,12 +8,15 @@ const ResetPassword: React.FC = () => {
     const { token }: any = useParams()
     const [confirmPassword, handleConfirmPassword] = useState<string>("")
     const [password, handlePassword] = useState<string>("")
+    const [btnDisable, setBtnDisable] = useState<boolean>(false)
     const auth = useContext(AuthContext)
     const history = useHistory()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
+        if(btnDisable === true){
+            return;
+        }
         if (confirmPassword !== password) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -27,6 +30,23 @@ const ResetPassword: React.FC = () => {
             }, 3000)
             return
         }
+        if(password.match(/\s/g)){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg: "Password cannot contain spaces", type: "fail" },
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
+        setBtnDisable(true)
+        setTimeout(() => {
+            setBtnDisable(false)
+        }, 2000)
         fetch(`/api/users/resetpassword/${token}`, {
             method: "POST",
             body: JSON.stringify({ password: password }),
@@ -84,7 +104,7 @@ const ResetPassword: React.FC = () => {
                     />
                     <input
                         type="submit"
-                        className="login-submit-btn"
+                        className={`login-submit-btn ${btnDisable === true ? "disable-button" : ""}`}
                         value="SUBMIT"
                     />
                 </form>

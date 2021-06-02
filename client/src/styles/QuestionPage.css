@@ -6,6 +6,7 @@
     background: url("../Backgrounds/MainBackground.png") no-repeat;
     background-size: cover;
     background-position: right bottom;
+    word-spacing: 0.08rem;
 }
 
 html {
@@ -23,6 +24,7 @@ html {
     height: calc(100vh - 8.5rem);
     overflow: auto;
     line-height: 1.8rem;
+    scroll-behavior: smooth;
 }
 
 .question-markdown {

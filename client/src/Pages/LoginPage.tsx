@@ -10,7 +10,7 @@ const LoginPage: React.FC = () => {
     const [loginText, setLoginText] = useState<string>("LOGIN")
     const [loginBtnText, setLoginBtnText] = useState<string>("LOGIN")
     const [pageType, setPageType] = useState<string>("login")
-    const [btnDiasble, setBtnDisable] = useState<boolean>(false)
+    const [btnDisable, setBtnDisable] = useState<boolean>(false)
 
     const auth = useContext(AuthContext)
     const history = useHistory()
@@ -29,10 +29,23 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(btnDisable === true){
+            return;
+        }
+        if(email.trim().length===0){
+            auth.dispatch({
+                type: AuthActionTypes.SET_MESSAGE,
+                payload: { msg:"Please enter your email ID", type: "fail"},
+            })
+            setTimeout(() => {
+                auth.dispatch({
+                    type: AuthActionTypes.CLEAR_MESSAGE,
+                    payload: {},
+                })
+            }, 3000)
+            return
+        }
         if (pageType === "login") {
-            if(btnDiasble === true){
-                return;
-            }
             setBtnDisable(true)
             setTimeout(() => setBtnDisable(false), 1500)
             const response = await fetch("/api/auth", {
@@ -74,6 +87,8 @@ const LoginPage: React.FC = () => {
                 })
             }, 3000)
         } else if (pageType === "forgotPassword") {
+            setBtnDisable(true)
+            setTimeout(()=> {setBtnDisable(false)}, 2500)
             const response = await fetch("/api/users/forgotpassword", {
                 method: "POST",
                 body: JSON.stringify({ email: email.trim() }),
@@ -98,6 +113,8 @@ const LoginPage: React.FC = () => {
                 })
             }, 3500)
         } else {
+            setBtnDisable(true)
+            setTimeout(()=> {setBtnDisable(false)}, 2500)
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
                 body: JSON.stringify({ email: email.trim() }),
@@ -185,7 +202,7 @@ const LoginPage: React.FC = () => {
                     <input
                         type="submit"
                         value={loginBtnText}
-                        className={`login-submit-btn ${btnDiasble === true ? "disable-button" : ""}`}
+                        className={`login-submit-btn ${btnDisable === true ? "disable-button" : ""}`}
                     />
                 </form>
                 <button
