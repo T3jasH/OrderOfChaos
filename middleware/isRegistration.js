@@ -1,7 +1,9 @@
 module.exports = function (req, res, next) {
     if (process.env.isRegistration == 1) {
-        next();
+        next()
     } else {
-        res.send({ success: false, msg: "You are not registered" });
+        return res
+            .status(400)
+            .json({ success: false, msg: "Registration has not yet started." })
     }
-};
+}

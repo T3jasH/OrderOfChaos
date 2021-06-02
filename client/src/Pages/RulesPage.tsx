@@ -45,7 +45,12 @@ const RulesPage: React.FC = () => {
     if (loading === true) {
         return <Loading />
     }
-
+    var dispD,dispH,dispM,dispS;
+    if(days===0)dispD="hide-ctdn";
+    if(days===0 && hours===0)dispH="hide-ctdn";
+    if(days===0 && hours===0 && minutes===0)dispM="hide-ctdn";
+    if(days===0 && hours===0 && minutes===0 && seconds===0)dispS="hide-ctdn";
+        
     return (
         <div className="rules">
             <div className="rules-page-container">
@@ -56,7 +61,7 @@ const RulesPage: React.FC = () => {
                     >
                         {`<Back`}
                     </button>
-                    <h2>RULES</h2>
+                    {/* <h2>RULES</h2> */}
                     <button
                         className="logout-btn"
                         onClick={(e) => {
@@ -67,12 +72,15 @@ const RulesPage: React.FC = () => {
                             history.push("/login")
                         }}
                         style={
-                            auth.state.token !== "x" ? {} : { color: "transparent" }
+                            auth.state.token !== "x"
+                                ? {}
+                                : { color: "transparent" }
                         }
                     >
                         Logout
                     </button>
                 </div>
+                <h2>RULES</h2>
                 <div>
                     <div className="contactusbtn">
                         Contact Us <br />
@@ -122,23 +130,17 @@ const RulesPage: React.FC = () => {
                 </div>
             </div>
             <div className="countdown-container">
-                <h2>{seconds!=null?'CONTEST STARTS IN':'CONTEST HAS STARTED'}</h2>
+                <h2>
+                    {seconds != null
+                        ? "CONTEST STARTS IN"
+                        : "CONTEST HAS STARTED"}
+                </h2>
                 {seconds != null ? (
                     <>
-                        <span>{`${days} days : `}</span>
-                        <span>{`${
-                            hours <= 9 ? "0" + hours : hours
-                        }  hours : `}</span>
-                        <span>
-                            {`${
-                                minutes <= 9 ? "0" + minutes : minutes
-                            } minutes : `}
-                        </span>
-                        <span>
-                            {`${
-                                seconds <= 9 ? "0" + seconds : seconds
-                            } seconds`}
-                        </span>
+                        <div  className={dispD}>{`${days} DAYS  `}</div>
+                        <div  className={dispH}>{`${hours}  HOURS  `}</div>
+                        <div  className={dispM}>{`${minutes} MINUTES  `}</div>
+                        <div  className={dispS}>{`${seconds} SECONDS`}</div>
                     </>
                 ) : null}
             </div>
