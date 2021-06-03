@@ -12,18 +12,34 @@ router.post(
     "/",
     isRegistration,
     [
-        (check("name", "Please enter a name.").not().isEmpty(),
+        check("name", "Please enter a name.").not().isEmpty(),
         check("email", "Please enter a valid email address.").isEmail(),
         check(
             "password",
             "Please enter a password with 8 or more characters."
-        ).isLength({ min: 8 }),
+        ).isLength({ min: 8}),
+        check(
+            "password",
+            "Password can't contain more than 30 characters."
+        ).isLength({ max: 30}),
         check("regno", "Please enter your registration number.")
             .not()
             .isEmpty(),
         check("username", "Please enter a username.").not().isEmpty(),
         check("college", "Please enter a college name.").not().isEmpty(),
-        check("phoneNo", "Place enter you phone number").not().isEmpty()),
+        check("phoneNo", "Please enter you phone number").not().isEmpty(),
+        check(
+            "username",
+            "Username can't contain more than 30 characters."
+        ).isLength({ max: 30}),
+        check(
+            "name",
+            "Name can't contain more than 30 characters."
+        ).isLength({ max: 30}),
+        check(
+            "email",
+            "Email can't contain more than 500 characters."
+        ).isLength({ max: 500}),
     ],
     async (req, res) => {
         const errors = validationResult(req)

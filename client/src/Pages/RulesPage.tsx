@@ -19,7 +19,7 @@ const RulesPage: React.FC = () => {
 
     useEffect(() => {
         auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: {} })
-        var deadline = new Date("june09, 2021 20:00:00").getTime()
+        var deadline = new Date("june03, 2021 22:15:00").getTime()
         var x = setInterval(function () {
             var now = new Date().getTime()
             var t = deadline - now
@@ -27,11 +27,11 @@ const RulesPage: React.FC = () => {
             setHours(Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))
             setMinutes(Math.floor((t % (1000 * 60 * 60)) / (1000 * 60)))
             setSeconds(Math.floor((t % (1000 * 60)) / 1000))
-
             if (t <= 0) {
                 clearInterval(x)
                 setSeconds(null)
             }
+            if (t < 0 && t > -5000) history.push("/")
         }, 1000)
         // eslint-disable-next-line
     }, [])
@@ -45,13 +45,13 @@ const RulesPage: React.FC = () => {
     if (loading === true) {
         return <Loading />
     }
-    var dispD, dispH, dispM, dispS
+
+    var dispD, dispH, dispM, dispS;
     if (days === 0) dispD = "hide-ctdn"
     if (days === 0 && hours === 0) dispH = "hide-ctdn"
     if (days === 0 && hours === 0 && minutes === 0) dispM = "hide-ctdn"
     if (days === 0 && hours === 0 && minutes === 0 && seconds === 0)
         dispS = "hide-ctdn"
-
     return (
         <div className="rules">
             <div className="rules-page-container">
@@ -85,7 +85,7 @@ const RulesPage: React.FC = () => {
                 <div>
                     <div className="contactusbtn">
                         Contact Us <br />
-                        Tushar - 7277608856 <br />
+                        Tushar - 7277608859 <br />
                         Rhea - 9538649509
                     </div>
                     <ol className="rules-list">
@@ -106,14 +106,17 @@ const RulesPage: React.FC = () => {
                             output separately and not mixed up.
                         </li>
                         <li>
-                            Once the contest starts, participants must make all
-                            submissions from the same device. This is to prevent
-                            multiple users to submit from same account.
+                            Once you unlock any question and get registered to
+                            the leaderboard, you cannot change your network.
+                            This is implemented to prevent malpractice. You can
+                            contact us if you genuinely need to change your
+                            network.
                         </li>
                         <li>
                             Initially you will have <b> 200 points</b>, and all
                             questions will be locked. You have to unlock
-                            questions using these points only. Unlock cost will be
+                            questions using these points only. Unlock cost will
+                            be
                             <b
                                 style={{
                                     color: "#7DFD7A",
@@ -239,7 +242,8 @@ const RulesPage: React.FC = () => {
                         <li>
                             You can store at max <b>3 attacks</b> at a time.
                             When you attack a player that player loses{" "}
-                            <b>20 points</b>.
+                            <b>20 points</b>. Any player can be attacked{" "}
+                            <b>atmost 15 times</b>.
                         </li>
                         <li>
                             You can select a player to attack from the
@@ -249,19 +253,20 @@ const RulesPage: React.FC = () => {
                 </div>
             </div>
             <div className="countdown-container">
-                <h2>
-                    {seconds != null
-                        ? "CONTEST STARTS IN"
-                        : "CONTEST HAS STARTED"}
-                </h2>
                 {seconds != null ? (
                     <>
-                        <div className={dispD}>{`${days} DAYS  `}</div>
-                        <div className={dispH}>{`${hours}  HOURS  `}</div>
-                        <div className={dispM}>{`${minutes} MINUTES  `}</div>
-                        <div className={dispS}>{`${seconds} SECONDS`}</div>
+                        <h2>CONTEST STARTS IN</h2>
+
+                        <div className={dispD}>{`${days} `}DAY{days>1?"S":""}</div>
+                        <div className={dispH}>{`${hours} `}HOUR{hours>1?"S":""}</div>
+                        <div className={dispM}>{`${minutes} `}MINUTE{minutes>1?"S":""}</div>
+                        <div className={dispS}>{`${seconds} `}SECOND{seconds>1?"S":""}</div>
                     </>
-                ) : null}
+                ) : (
+                    <>
+                        <h2>CONTEST HAS STARTED</h2>
+                    </>
+                )}
             </div>
         </div>
     )
