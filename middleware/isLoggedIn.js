@@ -2,14 +2,14 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 const macaddress = require("macaddress")
 
-const getIP = (ip) => {
-    var ct = 0
-    for (i = 0; i < ip.length; i++) {
-        if (ip[i] == ":") ct++
-        if (ct === 4) return ip.substr(0, i)
-    }
-    return ip
-}
+// const getIP = (ip) => {
+//     var ct = 0
+//     for (i = 0; i < ip.length; i++) {
+//         if (ip[i] == ":") ct++
+//         if (ct === 4) return ip.substr(0, i)
+//     }
+//     return ip
+// }
 
 module.exports = async function (req, res, next) {
     // Get the token fron header
@@ -27,7 +27,6 @@ module.exports = async function (req, res, next) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded.user
         const user = await User.findById(req.user.id).select("ipaddress")
-        // console.log(user.ipaddress);
         const macadd = await macaddress.all().then(function (all) {
             return all.wlo1.mac
         })

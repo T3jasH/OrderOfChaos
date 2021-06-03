@@ -31,12 +31,21 @@ export const getContestDetails = async (
                         type: AuthActionTypes.NOT_STARTED,
                         payload: [],
                     })
-                }
-                else if(data.iperror === true){
-                    auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
-                    auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: "Connection from only one IP allowed. Contact us"}})
+                } else if (data.iperror === true) {
+                    auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: {} })
+                    auth.dispatch({
+                        type: AuthActionTypes.SET_MESSAGE,
+                        payload: {
+                            type: "fail",
+                            msg:
+                                "Connection from only one IP allowed. Contact us",
+                        },
+                    })
                     setTimeout(() => {
-                        auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                        auth.dispatch({
+                            type: AuthActionTypes.CLEAR_MESSAGE,
+                            payload: {},
+                        })
                     }, 3500)
                 }
                 return
@@ -89,12 +98,20 @@ export const getUser = async (auth: any, player?: any) => {
                     type: AuthActionTypes.NOT_STARTED,
                     payload: [],
                 })
-            }
-            else if(data.iperror === true){
-                auth.dispatch({type: AuthActionTypes.LOGOUT, payload: {}})
-                auth.dispatch({type: AuthActionTypes.SET_MESSAGE, payload: {type: "fail", msg: "Connection from only one IP allowed. Contact us"}})
+            } else if (data.iperror === true) {
+                auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: {} })
+                auth.dispatch({
+                    type: AuthActionTypes.SET_MESSAGE,
+                    payload: {
+                        type: "fail",
+                        msg: "Connection from only one IP allowed. Contact us",
+                    },
+                })
                 setTimeout(() => {
-                    auth.dispatch({type: AuthActionTypes.CLEAR_MESSAGE, payload: {}})
+                    auth.dispatch({
+                        type: AuthActionTypes.CLEAR_MESSAGE,
+                        payload: {},
+                    })
                 }, 3500)
             }
             return null
@@ -119,7 +136,7 @@ export const getUser = async (auth: any, player?: any) => {
                 },
             })
         }
-    return data
+        return data
     }
     return { success: false }
 }
@@ -134,15 +151,18 @@ export const getLeaderboard = async (auth: any) => {
     })
     if (resp.status === 401) {
         auth.dispatch({ type: AuthActionTypes.LOGOUT, payload: [] })
-        return 
+        return
     }
     const data = await resp.json()
     // console.log(data)
-    return {
-        ...data.data, 
-        playerRank: data.data.ranks.findIndex(
-            (user: any) => user._id === auth.state.id
-        ) + 1
+    if (data) {
+        return {
+            ...data.data,
+            playerRank:
+                data.data.ranks.findIndex(
+                    (user: any) => user._id === auth.state.id
+                ) + 1,
+        }
     }
 }
 
@@ -231,12 +251,11 @@ export const SendAlert: React.FC = () => {
     return <div />
 }
 
-
 // Score increase/decrease animation
 export const updateScore = (x: Number, decr: boolean, player: any) => {
     var i = x <= 50 ? 1 : 5,
         k = player.state.score
-    
+
     if (decr) {
         var interval = setInterval(() => {
             player.dispatch({
@@ -248,33 +267,75 @@ export const updateScore = (x: Number, decr: boolean, player: any) => {
             i++
             if (i > x) clearInterval(interval)
         }, 20)
-    }
-    else{
-        var interval1 = setInterval( () => {
+    } else {
+        var interval1 = setInterval(() => {
             player.dispatch({
-                   type: PlayerActionTypes.UPDATE_SCORE,
-                   payload: {
-                       score: k + i,
-                   },
-               })
-               i+=5
-               if (i > x) clearInterval(interval1   )
-           }, 10)
+                type: PlayerActionTypes.UPDATE_SCORE,
+                payload: {
+                    score: k + i,
+                },
+            })
+            i += 5
+            if (i > x) clearInterval(interval1)
+        }, 10)
     }
 }
-
 
 export const Loading: React.FC = () => {
     return (
         <div className="loading">
-            <svg version="1.1" id="L1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enableBackground="new 0 0 100 100" xmlSpace="preserve">
-        <circle fill="none" stroke="#6d30ed" strokeWidth={3} strokeMiterlimit={15} strokeDasharray="14.2472,14.2472" cx={50} cy={50} r={47}>
-          <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="5s" from="0 50 50" to="360 50 50" repeatCount="indefinite" />
-        </circle>
-        <circle fill="none" stroke="#6d30ed" strokeWidth={1} strokeMiterlimit={10} strokeDasharray="10,10" cx={50} cy={50} r={39}>
-          <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="5s" from="0 50 50" to="-360 50 50" repeatCount="indefinite" />
-        </circle>
-        {/* <g fill="#6d30ed">
+            <svg
+                version="1.1"
+                id="L1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                viewBox="0 0 100 100"
+                enableBackground="new 0 0 100 100"
+                xmlSpace="preserve"
+            >
+                <circle
+                    fill="none"
+                    stroke="#6d30ed"
+                    strokeWidth={3}
+                    strokeMiterlimit={15}
+                    strokeDasharray="14.2472,14.2472"
+                    cx={50}
+                    cy={50}
+                    r={47}
+                >
+                    <animateTransform
+                        attributeName="transform"
+                        attributeType="XML"
+                        type="rotate"
+                        dur="5s"
+                        from="0 50 50"
+                        to="360 50 50"
+                        repeatCount="indefinite"
+                    />
+                </circle>
+                <circle
+                    fill="none"
+                    stroke="#6d30ed"
+                    strokeWidth={1}
+                    strokeMiterlimit={10}
+                    strokeDasharray="10,10"
+                    cx={50}
+                    cy={50}
+                    r={39}
+                >
+                    <animateTransform
+                        attributeName="transform"
+                        attributeType="XML"
+                        type="rotate"
+                        dur="5s"
+                        from="0 50 50"
+                        to="-360 50 50"
+                        repeatCount="indefinite"
+                    />
+                </circle>
+                {/* <g fill="#6d30ed">
           <rect x={30} y={35} width={2} height={30}>
             <animateTransform attributeName="transform" dur="1s" type="translate" values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.1" />
           </rect>
@@ -291,7 +352,7 @@ export const Loading: React.FC = () => {
             <animateTransform attributeName="transform" dur="1s" type="translate" values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.5" />
           </rect>
         </g> */}
-      </svg>
+            </svg>
             {/* <div className="loader" /> */}
         </div>
     )
