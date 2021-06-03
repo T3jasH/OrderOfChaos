@@ -17,6 +17,7 @@ module.exports = async function (req, res, next) {
 
     // Check if not token
     if (!token) {
+        console.log("No token found. Please log in again.");
         return res.status(401).json({
             success: false,
             msg: "No token found. Please log in again.",
@@ -39,6 +40,7 @@ module.exports = async function (req, res, next) {
             })
         } else next()
     } catch (err) {
+        console.log("Token is not valid. Please log in again.");
         res.status(401).json({
             success: false,
             msg: "Token is not valid. Please log in again.",
