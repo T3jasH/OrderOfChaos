@@ -165,7 +165,7 @@ const RegisterPage: React.FC = () => {
                     />
                     <input
                         type="text"
-                        placeholder="NAME"
+                        placeholder="FULL NAME"
                         name="name"
                         onChange={(e) => handleName(e.target.value)}
                     />

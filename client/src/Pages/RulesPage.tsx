@@ -239,7 +239,7 @@ const RulesPage: React.FC = () => {
                         <li>
                             You can store at max <b>3 attacks</b> at a time.
                             When you attack a player that player loses{" "}
-                            <b>20 points</b>.
+                            <b>20 points</b>. Any player can be attacked <b>atmost 15 times</b>.
                         </li>
                         <li>
                             You can select a player to attack from the
