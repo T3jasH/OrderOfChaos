@@ -155,7 +155,6 @@ export const getLeaderboard = async (auth: any) => {
     }
     const data = await resp.json()
     // console.log(data)
-    if (data) {
         return {
             ...data.data,
             playerRank:
@@ -163,7 +162,7 @@ export const getLeaderboard = async (auth: any) => {
                     (user: any) => user._id === auth.state.id
                 ) + 1,
         }
-    }
+    
 }
 
 // To get count of attacks, from another player on current player
