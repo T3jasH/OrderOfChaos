@@ -28,9 +28,20 @@ module.exports = async function (req, res, next) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded.user
         const user = await User.findById(req.user.id).select("ipaddress")
+
+
+
+
+
         const macadd = await macaddress.all().then(function (all) {
-            return all.wlo1.mac
-        })
+            console.log(all);
+            return all.wlo1.mac;
+        }).catch(error => console.log(err));
+
+
+
+
+        
         if (user.ipaddress && user.ipaddress !== macadd) {
             console.log(`macError: ${user.ipaddress} != ${macadd}`)
             return res.status(400).json({
