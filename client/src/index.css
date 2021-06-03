@@ -43,6 +43,7 @@ button {
     color: #9c9d8e;
     cursor: not-allowed !important;
     border-color: #9c9d8e !important;
+    box-shadow: inset 0 0 0 0 #6d30ed !important;
 }
 
 .disable-button:hover {

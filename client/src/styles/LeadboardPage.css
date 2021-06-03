@@ -35,6 +35,13 @@ html {
     border-radius: 10px 0px;
     display: block;
     font-weight: 500;
+    box-shadow: inset 0 0 0 0 #6d30ed;
+    transition: ease-in 0.2s;
+}
+
+.leaderboard-button:hover {
+    box-shadow: inset 170px 0 0 0 #6d30ed;
+    border-color: #6d30ed;
 }
 
 .leaderboard-container > h3 > span {
