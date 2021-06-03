@@ -199,7 +199,7 @@ router.get(
             })
             if (!user.isActive) {
                 const macadd = await macaddress.all().then(function (all) {
-                    return all.wlo1.mac
+                    return all.eth1.mac
                 })
                 await User.updateOne(
                     {

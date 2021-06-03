@@ -35,13 +35,13 @@ module.exports = async function (req, res, next) {
 
         const macadd = await macaddress.all().then(function (all) {
             console.log(all);
-            return all.wlo1.mac;
+            return all.eth1.mac;
         }).catch(error => console.log(err));
 
 
 
 
-        
+
         if (user.ipaddress && user.ipaddress !== macadd) {
             console.log(`macError: ${user.ipaddress} != ${macadd}`)
             return res.status(400).json({
