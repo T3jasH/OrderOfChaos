@@ -34,9 +34,8 @@ module.exports = async function (req, res, next) {
 
 
         const macadd = await macaddress.all().then(function (all) {
-            console.log(all);
             return all.eth1.mac;
-        }).catch(error => console.log(err));
+        });
 
 
 
