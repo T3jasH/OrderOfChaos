@@ -5,7 +5,6 @@ const isRunning = require("../middleware/isRunning")
 const isNotEnded = require("../middleware/isNotEnded")
 const Question = require("../models/Question")
 const User = require("../models/User")
-const macaddress = require("macaddress")
 
 // @route     GET api/question
 // @desc      Get question
@@ -198,9 +197,6 @@ router.get(
                 quesId: req.params.id,
             })
             if (!user.isActive) {
-                const macadd = await macaddress.all().then(function (all) {
-                    return all.eth1.mac
-                })
                 await User.updateOne(
                     {
                         _id: req.user.id,
@@ -208,7 +204,7 @@ router.get(
                     {
                         $set: {
                             isActive: true,
-                            ipaddress: macadd,
+                            ipaddress: req.ipInfo.ip,
                         },
                     }
                 )

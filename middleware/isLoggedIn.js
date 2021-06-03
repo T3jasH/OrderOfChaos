@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
-const macaddress = require("macaddress")
 
 // const getIP = (ip) => {
 //     var ct = 0
@@ -17,7 +16,6 @@ module.exports = async function (req, res, next) {
 
     // Check if not token
     if (!token) {
-        console.log("No token found. Please log in again.");
         return res.status(401).json({
             success: false,
             msg: "No token found. Please log in again.",
@@ -27,22 +25,9 @@ module.exports = async function (req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded.user
-        const user = await User.findById(req.user.id).select("ipaddress")
-
-
-
-
-
-        const macadd = await macaddress.all().then(function (all) {
-            return all.eth1.mac;
-        });
-
-
-
-
-
-        if (user.ipaddress && user.ipaddress !== macadd) {
-            console.log(`macError: ${user.ipaddress} != ${macadd}`)
+        const user = await User.findById(req.user.id).select("ipaddress");
+        if (user.ipaddress && getIP(user.ipaddress) !== getIP(req.ipInfo.ip)) {
+            console.log(`macError: ${getIP(user.ipaddress)} != ${getIP(req.ipInfo.ip)}`)
             return res.status(400).json({
                 success: false,
                 msg: "You can log in from one computer only.",
@@ -50,7 +35,6 @@ module.exports = async function (req, res, next) {
             })
         } else next()
     } catch (err) {
-        console.log("Token is not valid. Please log in again.");
         res.status(401).json({
             success: false,
             msg: "Token is not valid. Please log in again.",
