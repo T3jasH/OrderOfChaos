@@ -24,13 +24,13 @@ app.use(expressip().getIpInfoMiddleware);
 //     })
 // );
 
-app.use(
-    morgan("common", {
-        stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
-            flags: "a",
-        }),
-    })
-);
+// app.use(
+//     morgan("common", {
+//         stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
+//             flags: "a",
+//         }),
+//     })
+// );
 
 // Routes
 app.use("/api/users", require("./routes/users"));
