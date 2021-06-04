@@ -44,10 +44,12 @@ button {
     cursor: not-allowed !important;
     border-color: #9c9d8e !important;
     box-shadow: inset 0 0 0 0 #6d30ed !important;
+    background: transparent !important;
 }
 
 .disable-button:hover {
     transform: scale(1) !important;
+    background: transparent !important;
 }
 
 input {

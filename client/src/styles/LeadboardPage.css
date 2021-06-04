@@ -36,11 +36,9 @@ html {
     display: block;
     font-weight: 500;
     box-shadow: inset 0 0 0 0 #6d30ed;
-    transition: ease-in 0.2s;
 }
 
-.leaderboard-button:hover {
-    box-shadow: inset 170px 0 0 0 #6d30ed;
+.leaderboard-button:hover{
     border-color: #6d30ed;
 }
 
@@ -54,6 +52,39 @@ html {
 .leaderboard-container button {
     font-size: 1.3rem;
 }
+
+  .hvr-bounce-to-right:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #6d30ed;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transform-origin: 0 50%;
+    transform-origin: 0 50%;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+  }
+  .hvr-bounce-to-right:hover, .hvr-bounce-to-right:focus, .hvr-bounce-to-right:active {
+    color: white;
+  }
+  .hvr-bounce-to-right:hover:before, .hvr-bounce-to-right:focus:before, .hvr-bounce-to-right:active:before {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+    -webkit-transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+    transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+  }
+
+
+
 
 td,
 th {

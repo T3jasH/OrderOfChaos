@@ -95,7 +95,7 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack, btnDisable, setBtn
                                         player.attackers.length === 15 ||
                                         auth.state.id === player._id || btnDisable
                                             ? "disable-button"
-                                            : ""
+                                            : "hvr-bounce-to-right"
                                     }`}
                                 >
                                     Attack

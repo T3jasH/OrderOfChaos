@@ -19,7 +19,7 @@ const RulesPage: React.FC = () => {
 
     useEffect(() => {
         auth.dispatch({ type: AuthActionTypes.GET_TOKEN, payload: {} })
-        var deadline = new Date("june03, 2021 22:15:00").getTime()
+        var deadline = new Date("june09, 2021 20:00:00").getTime()
         var x = setInterval(function () {
             var now = new Date().getTime()
             var t = deadline - now
@@ -102,8 +102,7 @@ const RulesPage: React.FC = () => {
                             submissions, and can be asked to send it at the end
                             of the contest. In this contest you only have to{" "}
                             <b>submit output</b> and not the code. It would be
-                            easy for you to submit output if you get input and
-                            output separately and not mixed up.
+                            easy for you to submit output if your code takes all input at once and displays all output after that.
                         </li>
                         <li>
                             Once you unlock any question and get registered to
@@ -113,7 +112,7 @@ const RulesPage: React.FC = () => {
                             network.
                         </li>
                         <li>
-                            Initially you will have <b> 200 points</b>, and all
+                            Initially you will have <b> 200 pts</b>, and all
                             questions will be locked. You have to unlock
                             questions using these points only. Unlock cost will
                             be
@@ -123,7 +122,7 @@ const RulesPage: React.FC = () => {
                                 }}
                             >
                                 {" "}
-                                20 points
+                                20 pts
                             </b>{" "}
                             for easy ,
                             <b
@@ -132,7 +131,7 @@ const RulesPage: React.FC = () => {
                                 }}
                             >
                                 {" "}
-                                30 points
+                                30 pts
                             </b>{" "}
                             for medium and{" "}
                             <b
@@ -140,7 +139,7 @@ const RulesPage: React.FC = () => {
                                     color: "#ff4a4a",
                                 }}
                             >
-                                50 points
+                                50 pts
                             </b>{" "}
                             for hard question.
                         </li>
@@ -187,7 +186,7 @@ const RulesPage: React.FC = () => {
                                 }}
                             >
                                 {" "}
-                                5 points
+                                5 pts
                             </b>{" "}
                             for easy ,
                             <b
@@ -196,7 +195,7 @@ const RulesPage: React.FC = () => {
                                 }}
                             >
                                 {" "}
-                                8 points
+                                8 pts
                             </b>{" "}
                             for medium and{" "}
                             <b
@@ -204,7 +203,7 @@ const RulesPage: React.FC = () => {
                                     color: "#ff4a4a",
                                 }}
                             >
-                                14 points
+                                14 pts
                             </b>{" "}
                             for hard question.
                         </li>
