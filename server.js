@@ -8,7 +8,7 @@ const expressip = require('express-ip');
 const app = express();
 
 // Load Config
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "./config.env" });
 // Connect Database
 connectDB();
 

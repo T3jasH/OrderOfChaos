@@ -4,6 +4,7 @@ const { check, validationResult } = require("express-validator")
 const User = require("../models/User")
 const sendEmail = require("../utils/sendEmail")
 const isRegistration = require("../middleware/isRegistration")
+const fetch = require('node-fetch')
 
 // @route     POST api/users
 // @desc      Register a user
@@ -57,7 +58,24 @@ router.post(
             username,
             college,
             phoneNo,
+            captchaToken
         } = req.body
+
+        //CAPTHA VERIFICATION
+         var VERIFY_URL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${captchaToken}`;
+        fetch(VERIFY_URL, { method: 'POST' })
+        .then(res => res.json())
+        .then(json => {
+            if(!json.success)
+            {
+                res.status(400).json({success: false, msg: "Captcha not verified"});
+            }
+        })
+        .catch(e => {
+            res.status(400).json({success: false, msg: "Captcha not verified"});
+        } );
+
+        
 
         try {
             let user = await User.findOne({ email })

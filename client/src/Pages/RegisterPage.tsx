@@ -1,9 +1,17 @@
+
 import React, { useContext, useEffect, useState } from "react"
 import "../styles/LoginPage.css"
 
 import { Redirect, useHistory } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 import { AuthActionTypes } from "../context/AuthReducer"
+
+
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 const RegisterPage: React.FC = () => {
     const [email, handleEmail] = useState<string>("")
@@ -17,6 +25,7 @@ const RegisterPage: React.FC = () => {
     const [btnDisable, setBtnDisable] = useState<boolean>(false)
     const [regMsg, setRegMsg] = useState<null|string>(null)
     const auth = useContext(AuthContext)
+    const SITE_KEY = '6LcIPhIbAAAAAG4Rn8C5IkFd5pkCTsjuHBkHG2iV'
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -25,6 +34,29 @@ const RegisterPage: React.FC = () => {
         // eslint-disable-next-line
     }, [])
 
+useEffect(() => {
+  const loadScriptByURL = (id: any, url: any, callback: any) => {
+    const isScriptExist = document.getElementById(id);
+ 
+    if (!isScriptExist) {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = url;
+      script.id = id;
+      script.onload = function () {
+        if (callback) callback();
+      };
+      document.body.appendChild(script);
+    }
+ 
+    if (isScriptExist && callback) callback();
+  }
+ 
+  // load the script by passing the URL
+  loadScriptByURL("recaptcha-key", `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`, function () {
+    console.log("Script loaded!");
+  });
+}, []);
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(btnDisable === true) return;
@@ -94,6 +126,12 @@ const RegisterPage: React.FC = () => {
             }, 3000)
             return
         }
+        setBtnDisable(true)
+        setTimeout(() => setBtnDisable(false), 2500)
+
+        window.grecaptcha.ready(() => {
+    window.grecaptcha.execute(SITE_KEY, { action: 'submit' }).then((token:any) => {
+
         const body = {
             email: email.trim(),
             name: name.trim(),
@@ -102,9 +140,16 @@ const RegisterPage: React.FC = () => {
             username: username.trim(),
             college: "MIT",
             phoneNo: phoneNo.trim(),
+            captchaToken: token
         }
-        setBtnDisable(true)
-        setTimeout(() => setBtnDisable(false), 2500)
+
+        submitData(body);
+
+    });
+  });
+
+
+    const submitData = (body: any) => {
         fetch("/api/users", {
             method: "POST",
             body: JSON.stringify(body),
@@ -140,6 +185,8 @@ const RegisterPage: React.FC = () => {
                     })
                 }, 3000)
             })
+    };
+
     }
 
     // console.log(auth.state.token)
