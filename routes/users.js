@@ -68,11 +68,11 @@ router.post(
         .then(json => {
             if(!json.success)
             {
-                res.status(400).json({success: false, msg: "Captcha not verified"});
+                return res.status(400).json({success: false, msg: "Captcha not verified"});
             }
         })
         .catch(e => {
-            res.status(400).json({success: false, msg: "Captcha not verified"});
+            return res.status(400).json({success: false, msg: "Captcha not verified"});
         } );
 
         
