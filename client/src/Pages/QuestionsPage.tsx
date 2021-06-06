@@ -130,11 +130,12 @@ const QuestionPage: React.FC = () => {
 
     return (
         <div className="questions-page">
-            <Navbar removeButton={false} />
+            <Navbar removeButton={false} scrollId="questions-container" />
             <h2 className="mobile-message">
                 Switch to PC for a better experience
             </h2>
-            <div className="questions-container">
+            <div className="questions-container" 
+                id="questions-container">
                 <h3>QUESTIONS</h3>
                 {questions.state.map((item, index) => (
                     <QuestionListItem

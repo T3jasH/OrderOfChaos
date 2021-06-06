@@ -204,8 +204,10 @@ const LeaderboardPage = ({ currentPage }: props) => {
             <h2 className="mobile-message">
                 Switch to PC for a better experience
             </h2>
-            <Navbar removeButton={true} />
-            <div className="leaderboard-container">
+            <Navbar 
+            scrollId="leaderboard-container"
+            removeButton={true} />
+            <div className="leaderboard-container" id="leaderboard-container">
                 <button onClick={() => history.goBack()}>{"<Back"}</button>
                 <h3>
                     <span

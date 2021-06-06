@@ -120,7 +120,7 @@ const AttackersTable = ({ attackersP, handleAttack, btnDisable, setBtnDisable }:
                                             }
                                         }
                                         className={`leaderboard-button ${
-                                            attacker.numberOfAttacks === 15 || btnDisable
+                                            attacker.numberOfAttacks === 15 || btnDisable || auth.state.isEnded
                                                 ? "disable-button"
                                                 : ""
                                         }`}>

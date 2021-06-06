@@ -5,15 +5,21 @@ import { AuthActionTypes } from "../context/AuthReducer"
 import "../styles/NavBar.css"
 
 interface props {
-    removeButton: boolean
+    removeButton: boolean,
+    scrollId: string
 }
 
-const Navbar: React.FC<props> = ({ removeButton }) => {
+const Navbar: React.FC<props> = ({ removeButton, scrollId }) => {
     const auth = useContext(AuthContext)
     const history = useHistory()
 
     return (
-        <div className="navbar">
+        <div className="navbar"
+        style={{
+            left: removeButton? "5vw" : "10vw",
+            width: removeButton? "95vw" : "90vw"
+    }}
+        >
             <button
                 style={{ marginRight: "10vw" }}
                 id="logout-btn"
@@ -42,30 +48,35 @@ const Navbar: React.FC<props> = ({ removeButton }) => {
                 Rules
             </button>
             <span></span>
+            <button 
+           className="event-name disable-btn-transform"
+           onClick={e => {
+               var ele = document.getElementById(scrollId)
+               console.log(ele?.scrollTop)
+               if(ele){
+                   ele.scrollTop = 0;
+                   ele.scrollIntoView()
+               }
+           }}
+           >
+           ORDER OF CHAOS
+           </button>
             <button
-                onClick={(e) => {
-                    history.push("/")
+                className="disable-btn-transform"
+                onClick={e => {
+                    var ele = document.getElementById(scrollId)
+                    console.log(ele?.scrollTop)
+                    if(ele){
+                        ele.scrollTop = 0;
+                        ele.scrollIntoView()
+                    }
                 }}
-                className='event-name'
             >
                 
-            
-            <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="plus"
-                className="svg-inline--fa fa-plus fa-w-14"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                style={{ marginLeft: removeButton ? "5vw" : "10vw" }}
-            >
-                <path
-                    fill="currentColor"
-                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                ></path>
-            </svg>ORDER OF CHAOS</button>
+           <img src="/Logo.svg" alt="" 
+           className="logo"
+           /> 
+           </button>
         </div>
     )
 }

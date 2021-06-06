@@ -29,7 +29,7 @@
     .btn-nav {
         display: none !important;
     }
-    #logout-btn{
+    #logout-btn {
         display: block !important;
     }
     .navbar .event-name {
@@ -37,7 +37,7 @@
     }
 }
 
-.svg-inline--fa{
+.svg-inline--fa {
     height: 4vh;
     width: 4vh;
     margin: 0;
@@ -46,10 +46,18 @@
     margin-right: 1vw;
 }
 
-.navbar span{
+.navbar span {
     flex-grow: 1;
 }
 
 .navbar .event-name {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.navbar .logo {
+    width: 3rem;
+    margin-right: 0.8em;
+}
+.navbar .disable-btn-transform:hover {
+    transform: none !important;
 }

@@ -18,7 +18,7 @@
 }
 
 button:hover {
-    transform: scale(1.05) !important;
+    transform: scale(1.05);
 }
 
 input[type="submit"]:hover {
@@ -254,9 +254,9 @@ input[type="submit"] {
     background: rgba(105, 48, 237, 0.8);
 }
 
-svg{
+svg {
     width: 120px;
     height: 120px;
     margin: 20px;
-    display:inline-block;
-  }
+    display: inline-block;
+}

@@ -93,7 +93,7 @@ const LeaderBoardTable = ({ leaderboardPlayers, handleAttack, btnDisable, setBtn
                                     }}
                                     className={`leaderboard-button ${
                                         player.attackers.length === 15 ||
-                                        auth.state.id === player._id || btnDisable
+                                        auth.state.id === player._id || btnDisable || auth.state.isEnded
                                             ? "disable-button"
                                             : "hvr-bounce-to-right"
                                     }`}

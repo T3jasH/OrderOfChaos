@@ -290,9 +290,11 @@ const QuestionPage = () => {
             <h3 className="mobile-message">
                 Switch to PC for a better experience
             </h3>
-            <Navbar removeButton={false} />
+            <Navbar removeButton={false} scrollId="question-container" />
             <PlayerInfoFooter active={false} rank={rank} />
-            <div className="question-container" style={{ userSelect: "none" }}>
+            <div className="question-container"
+                 id="question-container"
+            style={{ userSelect: "none" }}>
                 <button onClick={() => history.push("/")} id="scroll-top">{"<Back"}</button>
                 <h3>{questionData?.name}</h3>
                 <QuestionInfo
