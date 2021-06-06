@@ -334,8 +334,8 @@ export const Loading: React.FC = () => {
                         repeatCount="indefinite"
                     />
                 </circle>
-                {/* <g fill="#6d30ed">
-          <rect x={30} y={35} width={2} height={30}>
+                <g fill="#6d30ed">
+          {/* <rect x={30} y={35} width={2} height={30}>
             <animateTransform attributeName="transform" dur="1s" type="translate" values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.1" />
           </rect>
           <rect x={40} y={35} width={2} height={30}>
@@ -349,8 +349,8 @@ export const Loading: React.FC = () => {
           </rect>
           <rect x={70} y={35} width={2} height={30}>
             <animateTransform attributeName="transform" dur="1s" type="translate" values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.5" />
-          </rect>
-        </g> */}
+          </rect> */}
+        </g>
             </svg>
             {/* <div className="loader" /> */}
         </div>
