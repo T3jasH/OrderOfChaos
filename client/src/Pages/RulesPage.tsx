@@ -248,6 +248,9 @@ const RulesPage: React.FC = () => {
                             You can select a player to attack from the
                             <b> leaderboard or attacker's list</b>.
                         </li>
+                        <li>
+                            The cash prize is only for <b>MIT students</b>.
+                        </li>
                     </ol>
                 </div>
             </div>
