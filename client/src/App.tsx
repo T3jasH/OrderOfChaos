@@ -18,10 +18,8 @@ const App: React.FC = () => {
             var link = document.createElement("link")
             link.id="logo-icon"
             link.rel="icon"
-            console.log(window.matchMedia('(prefers-color-scheme: dark)'))
             link.href= window.matchMedia('(prefers-color-scheme: dark)').matches? "/LogoIcon.svg" : "/LogoIconBright.svg"
             document.head.appendChild(link)
-            console.log("Loaded icon")
         }
     }, [])
 
