@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Route, Switch } from "react-router-dom"
 import RegisterPage from "./Pages/RegisterPage"
 import MailVerificationPage from "./Pages/MailVerificationPage"
@@ -12,17 +12,6 @@ import NotFoundPage from "./Pages/NotFoundPage"
 import ResetPassword from "./Pages/ResetPassword"
 import { SendAlert } from "./utils"
 const App: React.FC = () => {
-
-    useEffect(() => {
-        if(!document.getElementById("logo-icon")){
-            var link = document.createElement("link")
-            link.id="logo-icon"
-            link.rel="icon"
-            link.href= window.matchMedia('(prefers-color-scheme: dark)').matches? "/LogoIcon.svg" : "/LogoIconBright.svg"
-            document.head.appendChild(link)
-        }
-    }, [])
-
     return (
         <div className="code-event">
             <SendAlert />
