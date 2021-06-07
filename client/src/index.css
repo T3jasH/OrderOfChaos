@@ -173,12 +173,15 @@ input[type="submit"] {
 
 .mobile-message {
     position: absolute;
-    top: 15vh;
-    left: 20vw;
+    top: 10rem;
+    width: 90%;
     font-size: 2rem;
     font-weight: 600;
     color: #6d30ed;
     display: none;
+    text-align: center;
+    margin: 0 5%;
+    box-sizing: content-box;
 }
 
 @media screen and (max-width: 1230px) {
@@ -209,6 +212,12 @@ input[type="submit"] {
 @media screen and (max-width: 450px) {
     * {
         --rootFontSize: 12.5px;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    * {
+        --rootFontSize: 12px;
     }
 }
 

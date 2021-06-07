@@ -14,7 +14,6 @@ const LoginPage: React.FC = () => {
 
     const auth = useContext(AuthContext)
     const history = useHistory()
-    
 
     useEffect(() => {
         if (auth.state.token === null) {
@@ -29,13 +28,13 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(btnDisable === true){
-            return;
+        if (btnDisable === true) {
+            return
         }
-        if(email.trim().length===0){
+        if (email.trim().length === 0) {
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
-                payload: { msg:"Please enter your email ID", type: "fail"},
+                payload: { msg: "Please enter your email ID", type: "fail" },
             })
             setTimeout(() => {
                 auth.dispatch({
@@ -53,7 +52,10 @@ const LoginPage: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email: email.trim(), password: password.trim() }),
+                body: JSON.stringify({
+                    email: email.trim(),
+                    password: password.trim(),
+                }),
             })
             const data = await response.json()
             if (data.success) {
@@ -88,7 +90,9 @@ const LoginPage: React.FC = () => {
             }, 3000)
         } else if (pageType === "forgotPassword") {
             setBtnDisable(true)
-            setTimeout(()=> {setBtnDisable(false)}, 2500)
+            setTimeout(() => {
+                setBtnDisable(false)
+            }, 2500)
             const response = await fetch("/api/users/forgotpassword", {
                 method: "POST",
                 body: JSON.stringify({ email: email.trim() }),
@@ -97,10 +101,9 @@ const LoginPage: React.FC = () => {
                 },
             })
             const data = await response.json()
-            let msgType ="fail";
-            if(data.success)
-            {
-                msgType='success'
+            let msgType = "fail"
+            if (data.success) {
+                msgType = "success"
             }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -114,7 +117,9 @@ const LoginPage: React.FC = () => {
             }, 3500)
         } else {
             setBtnDisable(true)
-            setTimeout(()=> {setBtnDisable(false)}, 2500)
+            setTimeout(() => {
+                setBtnDisable(false)
+            }, 2500)
             const response = await fetch("/api/users/resendEmail", {
                 method: "POST",
                 body: JSON.stringify({ email: email.trim() }),
@@ -122,11 +127,10 @@ const LoginPage: React.FC = () => {
                     "Content-type": "application/json",
                 },
             })
-            const data = await response.json();
-            let msgType ="fail";
-            if(data.success)
-            {
-                msgType='success'
+            const data = await response.json()
+            let msgType = "fail"
+            if (data.success) {
+                msgType = "success"
             }
             auth.dispatch({
                 type: AuthActionTypes.SET_MESSAGE,
@@ -184,7 +188,10 @@ const LoginPage: React.FC = () => {
     return (
         <div className="login-page">
             <div className="login-container">
-                <h2>ORDER OF CHAOS</h2>
+                <h2>
+                    <img src="/Logo.svg" alt="" className="logo-login" /> ORDER
+                    OF CHAOS
+                </h2>
                 <h3 id="login-text">{loginText}</h3>
                 <form onSubmit={(e) => handleSubmit(e)} className="login-form">
                     <input
@@ -202,7 +209,9 @@ const LoginPage: React.FC = () => {
                     <input
                         type="submit"
                         value={loginBtnText}
-                        className={`login-submit-btn ${btnDisable === true ? "disable-button" : ""}`}
+                        className={`login-submit-btn ${
+                            btnDisable === true ? "disable-button" : ""
+                        }`}
                     />
                 </form>
                 <button

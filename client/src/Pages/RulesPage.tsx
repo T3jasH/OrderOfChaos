@@ -46,7 +46,7 @@ const RulesPage: React.FC = () => {
         return <Loading />
     }
 
-    var dispD, dispH, dispM, dispS;
+    var dispD, dispH, dispM, dispS
     if (days === 0) dispD = "hide-ctdn"
     if (days === 0 && hours === 0) dispH = "hide-ctdn"
     if (days === 0 && hours === 0 && minutes === 0) dispM = "hide-ctdn"
@@ -90,7 +90,7 @@ const RulesPage: React.FC = () => {
                     </div>
                     <ol className="rules-list">
                         <li>
-                            This is an <b>induvidual player</b> contest.
+                            This is an <b>individual player</b> contest.
                         </li>
                         <li>
                             The contest will be held on{" "}
@@ -102,7 +102,8 @@ const RulesPage: React.FC = () => {
                             submissions, and can be asked to send it at the end
                             of the contest. In this contest you only have to{" "}
                             <b>submit output</b> and not the code. It would be
-                            easy for you to submit output if your code takes all input at once and displays all output after that.
+                            easy for you to submit output if your code takes all
+                            input at once and displays all output after that.
                         </li>
                         <li>
                             Once you unlock any question and get registered to
@@ -259,10 +260,18 @@ const RulesPage: React.FC = () => {
                     <>
                         <h2>CONTEST STARTS IN</h2>
 
-                        <div className={dispD}>{`${days} `}DAY{days>1?"S":""}</div>
-                        <div className={dispH}>{`${hours} `}HOUR{hours>1?"S":""}</div>
-                        <div className={dispM}>{`${minutes} `}MINUTE{minutes>1?"S":""}</div>
-                        <div className={dispS}>{`${seconds} `}SECOND{seconds>1?"S":""}</div>
+                        <div className={dispD}>
+                            {`${days} `}DAY{days > 1 ? "S" : ""}
+                        </div>
+                        <div className={dispH}>
+                            {`${hours} `}HOUR{hours > 1 ? "S" : ""}
+                        </div>
+                        <div className={dispM}>
+                            {`${minutes} `}MINUTE{minutes > 1 ? "S" : ""}
+                        </div>
+                        <div className={dispS}>
+                            {`${seconds} `}SECOND{seconds > 1 ? "S" : ""}
+                        </div>
                     </>
                 ) : (
                     <>
