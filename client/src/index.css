@@ -8,6 +8,7 @@
     /* --rootFontSize: 20px; */
     font-size: var(--rootFontSize);
     scrollbar-color: #6d30ed #090321;
+    /* scroll-behavior: smooth; */
 }
 /* 1230 950 450 */
 
