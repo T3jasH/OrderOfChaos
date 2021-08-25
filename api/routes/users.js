@@ -62,21 +62,18 @@ router.post(
         } = req.body
 
         //CAPTHA VERIFICATION
-         var VERIFY_URL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${captchaToken}`;
-        fetch(VERIFY_URL, { method: 'POST' })
-        .then(res => res.json())
-        .then(json => {
-            if(!json.success)
-            {
+
+        var VERIFY_URL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${captchaToken}`;
+        try{
+            const response = await fetch(VERIFY_URL, { method: 'POST' })
+            const data = await response.json()
+            if(!data.success){
                 return res.status(400).json({success: false, msg: "Captcha not verified"});
             }
-        })
-        .catch(e => {
+        }
+        catch(e) {
             return res.status(400).json({success: false, msg: "Captcha not verified"});
-        } );
-
-        
-
+        }
         try {
             let user = await User.findOne({ email })
 

@@ -1,0 +1,17 @@
+version: "2"
+services:
+    client:
+        build: ./client
+        container_name: chaosClient
+        ports:
+            - 80:80
+        depends_on:
+            - db
+    api:
+        build: ./api
+        container_name: chaosApi
+    db:
+        image: mongo
+        container_name: chaosDb
+        volumes:
+            - /var/lib/chaos:/data/db
