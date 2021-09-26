@@ -6,10 +6,12 @@ services:
         ports:
             - 80:80
         depends_on:
-            - db
+            - api
     api:
         build: ./api
         container_name: chaosApi
+        depends_on: 
+            - db
     db:
         image: mongo
         container_name: chaosDb

@@ -116,7 +116,7 @@ router.post(
             const verifyToken = user.getVerifiedToken()
             await user.save({ validateBeforeSave: false })
             // console.log(`${user.name} resistered with ${user.email}.`)
-            const resp = "https://mail.iecsemanipal.com/codeevent/verifyaccount"
+            const resp = process.env.MAIL_API
             const resetUrl = `${req.protocol}://${req.get(
                 "host"
             )}/confirmation/${user.verifyToken}`
